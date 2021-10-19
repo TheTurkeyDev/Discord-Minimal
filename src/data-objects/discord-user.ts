@@ -19,4 +19,8 @@ export default class DiscordUser {
     // public flags ? integer	the flags on a user's account	identify
     // public premium_type ? integer	the type of Nitro subscription on a user's account	identify
     // public public_flags ? integer	the public flags on a user's account	identify
+
+    public setActivity(activity: string) {
+        //TODO
+    }
 }

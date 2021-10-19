@@ -32,3 +32,9 @@ export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: 
         method: 'PUT'
     }).then(resp => { });
 }
+
+export function deleteuserReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string, userId: Snowflake): void {
+    fetch(`${URL_BASE}/channels/${channelId}/messages/${messagelId}/reactions/${encodeURIComponent(emoji)}/${userId}`, {
+        method: 'DELETE'
+    }).then(resp => { });
+}

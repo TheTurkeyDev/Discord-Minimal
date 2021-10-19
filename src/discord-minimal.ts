@@ -1,34 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import ReconnectingWebSocket, { CloseEvent, ErrorEvent } from 'reconnecting-websocket';
 import WS from 'ws';
+import events from 'events';
 import GatewayPayload from './payloads/gateway-paylod';
 import HeartBeatPayload from './payloads/heartbeat-payload';
 import IdentifyPayload from './payloads/identify-payload';
-import { DiscordEventListenerMap, DiscordEventMap } from './events';
 import DiscordMessage from './data-objects/discord-message';
+import { DiscordInteraction, DiscordMessageReactionAdd } from '.';
+import DiscordReady from './data-objects/discord-ready';
 
-export type ListenersMap = {
-    messageCreate: Array<DiscordEventListenerMap['messageCreate']>;
-    interactionCreate: Array<DiscordEventListenerMap['interactionCreate']>;
-    messageReactionAdd: Array<DiscordEventListenerMap['messageReactionAdd']>;
-};
-
-export default class DiscordMinimal {
-    private websocket;
+export default class DiscordMinimal extends events.EventEmitter {
+    private websocket?: ReconnectingWebSocket;
     private heartbeat: NodeJS.Timer | undefined;
     private previousSeq = -1;
-    private token: string;
+    private token?: string;
 
     private intents: number
 
-    private listeners: ListenersMap = {
-        messageCreate: [],
-        interactionCreate: [],
-        messageReactionAdd: [],
-    };
-
-    constructor(token: string, intents: number[]) {
-        this.token = token;
+    constructor(intents: number[]) {
+        super();
         this.intents = intents.reduce((sum, a) => sum + a, 0);
+    }
+
+    public login(token: string) {
+        this.token = token;
 
         this.websocket = new ReconnectingWebSocket('wss://gateway.discord.gg/?v=8&encoding=json', [], {
             WebSocket: WS,
@@ -56,7 +53,7 @@ export default class DiscordMinimal {
                 break; // fall through?
             case 10:
                 this.startHeartbeat(parseInt(message.d.heartbeat_interval));
-                this.sendPayload(new IdentifyPayload(this.token, this.intents));
+                this.sendPayload(new IdentifyPayload(this.token ?? '', this.intents));
                 break;
             case 11:
                 //Heartbeat ACK
@@ -81,18 +78,27 @@ export default class DiscordMinimal {
     }
 
     private initReconnect() {
-        setTimeout(() => this.websocket.reconnect(), 1000);
+        setTimeout(() => this.websocket?.reconnect(), 1000);
     }
 
     public sendPayload(message: GatewayPayload): void {
-        this.websocket.send(JSON.stringify(message));
+        this.websocket?.send(JSON.stringify(message));
     }
 
     private onEvent(json: GatewayPayload): void {
         const eventId = json.t;
         switch (eventId) {
+            case 'READY':
+                this.emit('ready', json.d as DiscordReady);
+                break;
             case 'MESSAGE_CREATE':
-                this.dispatch('messageCreate', json.d as DiscordMessage);
+                this.emit('messageCreate', json.d as DiscordMessage);
+                break;
+            case 'MESSAGE_REACTION_ADD':
+                this.emit('messageReactionAdd', json.d as DiscordMessageReactionAdd);
+                break;
+            case 'INTERACTION_CREATE':
+                this.emit('interactionCreate', json.d as DiscordInteraction);
                 break;
         }
     }
@@ -102,15 +108,5 @@ export default class DiscordMinimal {
             clearInterval(this.heartbeat);
 
         this.heartbeat = setInterval(() => this.sendPayload(new HeartBeatPayload(this.previousSeq)), heartbeatDelay);
-    }
-
-    public on<T extends keyof DiscordEventListenerMap>(type: T, listener: DiscordEventListenerMap[T]): void {
-        if (this.listeners[type])
-            this.listeners[type].push(listener);
-    }
-
-    public dispatch<T extends keyof DiscordEventListenerMap>(type: T, event: DiscordEventMap[T]): boolean {
-        this.listeners[type as keyof DiscordEventListenerMap]?.forEach(listener => listener(event));
-        return true;
     }
 }
