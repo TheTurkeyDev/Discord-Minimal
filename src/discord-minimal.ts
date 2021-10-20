@@ -15,7 +15,9 @@ export default class DiscordMinimal extends events.EventEmitter {
     private websocket?: ReconnectingWebSocket;
     private heartbeat: NodeJS.Timer | undefined;
     private previousSeq = -1;
-    private token?: string;
+    // This should proably be done better...
+    // Probably switch to some sort of Request Builder
+    public static token?: string;
 
     private intents: number
 
@@ -25,7 +27,7 @@ export default class DiscordMinimal extends events.EventEmitter {
     }
 
     public login(token: string) {
-        this.token = token;
+        DiscordMinimal.token = token;
 
         this.websocket = new ReconnectingWebSocket('wss://gateway.discord.gg/?v=8&encoding=json', [], {
             WebSocket: WS,
@@ -53,7 +55,7 @@ export default class DiscordMinimal extends events.EventEmitter {
                 break; // fall through?
             case 10:
                 this.startHeartbeat(parseInt(message.d.heartbeat_interval));
-                this.sendPayload(new IdentifyPayload(this.token ?? '', this.intents));
+                this.sendPayload(new IdentifyPayload(DiscordMinimal.token ?? '', this.intents));
                 break;
             case 11:
                 //Heartbeat ACK
@@ -89,16 +91,16 @@ export default class DiscordMinimal extends events.EventEmitter {
         const eventId = json.t;
         switch (eventId) {
             case 'READY':
-                this.emit('ready', json.d as DiscordReady);
+                this.emit('ready', new DiscordReady(json.d));
                 break;
             case 'MESSAGE_CREATE':
-                this.emit('messageCreate', json.d as DiscordMessage);
+                this.emit('messageCreate', new DiscordMessage(json.d));
                 break;
             case 'MESSAGE_REACTION_ADD':
-                this.emit('messageReactionAdd', json.d as DiscordMessageReactionAdd);
+                this.emit('messageReactionAdd', new DiscordMessageReactionAdd(json.d));
                 break;
             case 'INTERACTION_CREATE':
-                this.emit('interactionCreate', json.d as DiscordInteraction);
+                this.emit('interactionCreate', new DiscordInteraction(json.d));
                 break;
         }
     }

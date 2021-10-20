@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Snowflake } from '../custom-types/snowflake';
 import DiscordReaction from './discord-reaction';
 import DiscordUser from './discord-user';
-import * as DiscordAPI from '../discord-api';
+import * as DiscordAPI from '../api/discord-api';
 import DiscordMessageCreate from './discord-message-create';
 import DiscordMessageEdit from './discord-message-edit';
 
@@ -39,6 +41,18 @@ export default class DiscordMessage {
     //     public sticker_items ? array of message sticker item objects	sent if the message contains stickers
     //     public stickers ? array of sticker objects	Deprecated the stickers sent with the message
 
+    constructor(json: any) {
+        this.id = json.id;
+        this.channel_id = json.channel_id;
+        this.guild_id = json.guild_id;
+        this.author = new DiscordUser(json.author);
+        this.content = json.content;
+        this.timestamp = json.timestamp;
+        this.edited_timestamp = json.edited_timestamp;
+        this.tts = json.tts;
+        this.mention_everyone = json.mention_everyone;
+        this.mentions = json.mentions.map((men: any) => new DiscordUser(men));
+    }
 
     public reply(message: string): void {
         // TODO:

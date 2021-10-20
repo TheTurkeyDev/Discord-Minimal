@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { DiscordComponentType } from '../custom-types/discord-component-types';
 import { Snowflake } from '../custom-types/snowflake';
 import DiscordInteractionData from './discord-interaction-data';
 import DiscordUser from './discord-user';
-import * as DiscordAPI from '../discord-api';
+import * as DiscordAPI from '../api/discord-api';
 import { DiscordInteractionCallbackType } from '../custom-types/discord-interaction-callback-type';
 import DiscordInteractionResponseData from './discord-interaction-response-data';
 
@@ -19,6 +21,14 @@ export default class DiscordInteraction {
     public token!: string;                      // A continuation token for responding to the interaction
     // public version	integer	read - only property, always 1
     // public message ? message object	for components, the message they were attached to
+
+    constructor(json: any) {
+        this.id = json.id;
+        this.data = new DiscordInteractionData(json.data);
+        this.guild_id = json.guild_id;
+        this.user = new DiscordUser(json.user);
+        this.token = json.token;
+    }
 
     public isButton(): boolean {
         return this.data?.component_type == DiscordComponentType.Button;

@@ -1,4 +1,4 @@
-import { Snowflake } from '..';
+import { Snowflake } from '../custom-types/snowflake';
 import DiscordComponent from './discord-component';
 import DiscordEmbed from './discord-embed';
 

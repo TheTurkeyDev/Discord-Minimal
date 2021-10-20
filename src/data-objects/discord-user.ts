@@ -20,6 +20,12 @@ export default class DiscordUser {
     // public premium_type ? integer	the type of Nitro subscription on a user's account	identify
     // public public_flags ? integer	the public flags on a user's account	identify
 
+    constructor(json: any) {
+        this.id = json.id;
+        this.username = json.username;
+        this.discriminator = json.discriminator;
+    }
+
     public setActivity(activity: string) {
         //TODO
     }

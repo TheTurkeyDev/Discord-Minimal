@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default class DiscordGuildMember {
     // public user?	user object	the user this guild member represents
-    // public nick?	?string	this users guild nickname
+    public nick?: string;	                // This users guild nickname
     // public avatar?	?string	the member's guild avatar hash
     // public roles	array of snowflakes	array of role object ids
     // public joined_at	ISO8601 timestamp	when the user joined the guild
@@ -9,4 +11,8 @@ export default class DiscordGuildMember {
     // public mute	boolean	whether the user is muted in voice channels
     // public pending?	boolean	whether the user has not yet passed the guild's Membership Screening requirements
     // public permissions?	string	total permissions of the member in the channel, including overwrites, returned when in the interaction object
+
+    constructor(json: any) {
+        this.nick = json.nick;
+    }
 }

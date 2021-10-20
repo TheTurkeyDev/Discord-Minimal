@@ -27,7 +27,7 @@ export {
     DiscordUser,
 
     // Other
-    DiscordButtonStyle as ButtonStyle,
+    DiscordButtonStyle,
     INTENTS,
     Snowflake
 };

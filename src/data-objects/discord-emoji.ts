@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default class DiscordEmoji {
     // id	?snowflake	emoji id
     public name?: string                // (can be null only in reaction emoji objects)	emoji name
@@ -7,4 +9,8 @@ export default class DiscordEmoji {
     // managed?	boolean	whether this emoji is managed
     // animated?	boolean	whether this emoji is animated
     // available?	boolean	whether this emoji can be used, may be false due to loss of Server Boosts
+
+    constructor(json: any) {
+        this.name = json.name;
+    }
 }
