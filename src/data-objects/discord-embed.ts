@@ -35,7 +35,7 @@ export default class DiscordEmbed {
         return this;
     }
 
-    public setAuthor(name: string, url?: string, iconUrl?: string, proxyIconUrl?: string): DiscordEmbed {
+    public setAuthor(name: string, iconUrl?: string, url?: string, proxyIconUrl?: string): DiscordEmbed {
         this.author = new DiscordEmbedAuthor(name, url, iconUrl, proxyIconUrl);
         return this;
     }

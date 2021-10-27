@@ -11,7 +11,15 @@ import DiscordMessage from './data-objects/discord-message';
 import { DiscordInteraction, DiscordMessageReactionAdd } from '.';
 import DiscordReady from './data-objects/discord-ready';
 
-export default class DiscordMinimal extends events.EventEmitter {
+export declare interface DiscordMinimal {
+    on(event: 'ready', listener: (ready: DiscordReady) => void): this;
+    on(event: 'messageCreate', listener: (ready: DiscordMessage) => void): this;
+    on(event: 'messageReactionAdd', listener: (ready: DiscordMessageReactionAdd) => void): this;
+    on(event: 'interactionCreate', listener: (ready: DiscordInteraction) => void): this;
+    on(event: string, listener: () => void): this;
+}
+
+export class DiscordMinimal extends events.EventEmitter {
     private websocket?: ReconnectingWebSocket;
     private heartbeat: NodeJS.Timer | undefined;
     private previousSeq = -1;
@@ -112,3 +120,5 @@ export default class DiscordMinimal extends events.EventEmitter {
         this.heartbeat = setInterval(() => this.sendPayload(new HeartBeatPayload(this.previousSeq)), heartbeatDelay);
     }
 }
+
+export default DiscordMinimal;

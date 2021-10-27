@@ -7,6 +7,7 @@ import DiscordUser from './discord-user';
 import * as DiscordAPI from '../api/discord-api';
 import { DiscordInteractionCallbackType } from '../custom-types/discord-interaction-callback-type';
 import DiscordInteractionResponseData from './discord-interaction-response-data';
+import DiscordGuildMember from './discord-guild-memeber';
 
 export default class DiscordInteraction {
 
@@ -16,7 +17,7 @@ export default class DiscordInteraction {
     public data?: DiscordInteractionData;       // The command data payload
     public guild_id?: Snowflake	                //the guild it was sent from
     // public channel_id ? snowflake	the channel it was sent from
-    // public member ?** guild member object	guild member data for the invoking user, including permissions
+    public member?: DiscordGuildMember;         // Guild member data for the invoking user, including permissions
     public user?: DiscordUser;                  // User object for the invoking user, if invoked in a DM
     public token!: string;                      // A continuation token for responding to the interaction
     // public version	integer	read - only property, always 1
@@ -24,9 +25,10 @@ export default class DiscordInteraction {
 
     constructor(json: any) {
         this.id = json.id;
-        this.data = new DiscordInteractionData(json.data);
+        this.data = json.data ? new DiscordInteractionData(json.data) : undefined;
         this.guild_id = json.guild_id;
-        this.user = new DiscordUser(json.user);
+        this.member = json.member ? new DiscordGuildMember(json.member) : undefined;
+        this.user = json.user ? new DiscordUser(json.user) : undefined;
         this.token = json.token;
     }
 

@@ -54,8 +54,8 @@ export default class DiscordMessage {
         this.mentions = json.mentions.map((men: any) => new DiscordUser(men));
     }
 
-    public reply(message: string): void {
-        // TODO:
+    public reply(message: string): Promise<DiscordMessage> {
+        return DiscordAPI.createMessage(this.channel_id, { content: message, message_reference: { message_id: this.id, channel_id: this.channel_id, guild_id: this.guild_id } });
     }
 
     public sendMessageInChannel(message: string): Promise<DiscordMessage> {
@@ -75,6 +75,6 @@ export default class DiscordMessage {
     }
 
     public removeAllReactions(): void {
-        // TODO:
+        return DiscordAPI.deleteAllReactions(this.channel_id, this.id);
     }
 }

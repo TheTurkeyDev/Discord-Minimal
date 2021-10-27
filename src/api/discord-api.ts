@@ -16,7 +16,10 @@ export function interactionCallback(interactionId: number, interactionToken: str
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-    }).then(resp => resp.json()).then(json => console.log(json));
+    }).then(resp => {
+        if (!resp.ok)
+            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message); });
+    });
 }
 
 export function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
@@ -43,7 +46,12 @@ export function editMessage(channelId: Snowflake, messagelId: Snowflake, message
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(message),
-    }).then(resp => resp.json()).then(json => new DiscordMessage(json));
+    }).then(resp => {
+        if (resp.ok)
+            return resp.json().then(json => new DiscordMessage(json));
+        else
+            return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message); });
+    });
 }
 
 export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string): void {
@@ -53,7 +61,10 @@ export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: 
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         }
-    }).then(resp => { });
+    }).then(resp => {
+        if (!resp.ok)
+            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message); });
+    });
 }
 
 export function deleteuserReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string, userId: Snowflake): void {
@@ -63,5 +74,21 @@ export function deleteuserReaction(channelId: Snowflake, messagelId: Snowflake, 
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         }
-    }).then(resp => { });
+    }).then(resp => {
+        if (!resp.ok)
+            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message); });
+    });
+}
+
+export function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake): void {
+    fetch(`${URL_BASE}/channels/${channelId}/messages/${messagelId}/reactions`, {
+        method: 'DELETE',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        }
+    }).then(resp => {
+        if (!resp.ok)
+            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message); });
+    });
 }
