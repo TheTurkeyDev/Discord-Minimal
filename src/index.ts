@@ -6,6 +6,8 @@ import DiscordMessage from './data-objects/discord-message';
 import DiscordMessageActionRow from './data-objects/discord-message-action-row';
 import DiscordMessageButton from './data-objects/discord-message-button';
 import DiscordMessageCreate from './data-objects/discord-message-create';
+import DiscordMessageDelete from './data-objects/discord-message-delete';
+import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
 import DiscordMessageReactionAdd from './data-objects/discord-message-reaction-add';
 import DiscordReady from './data-objects/discord-ready';
 import DiscordUser from './data-objects/discord-user';
@@ -22,6 +24,8 @@ export {
     DiscordMessageActionRow,
     DiscordMessageButton,
     DiscordMessageCreate,
+    DiscordMessageDelete,
+    DiscordMessageDeleteBulk,
     DiscordMessageReactionAdd,
     DiscordReady,
     DiscordUser,

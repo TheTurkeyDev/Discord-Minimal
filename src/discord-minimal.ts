@@ -10,12 +10,16 @@ import IdentifyPayload from './payloads/identify-payload';
 import DiscordMessage from './data-objects/discord-message';
 import { DiscordInteraction, DiscordMessageReactionAdd } from '.';
 import DiscordReady from './data-objects/discord-ready';
+import DiscordMessageDelete from './data-objects/discord-message-delete';
+import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
 
 export declare interface DiscordMinimal {
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
-    on(event: 'messageCreate', listener: (ready: DiscordMessage) => void): this;
-    on(event: 'messageReactionAdd', listener: (ready: DiscordMessageReactionAdd) => void): this;
-    on(event: 'interactionCreate', listener: (ready: DiscordInteraction) => void): this;
+    on(event: 'messageCreate', listener: (message: DiscordMessage) => void): this;
+    on(event: 'messageDelete', listener: (message: DiscordMessageDelete) => void): this;
+    on(event: 'messageDeleteBulk', listener: (messages: DiscordMessageDeleteBulk) => void): this;
+    on(event: 'messageReactionAdd', listener: (messageReaction: DiscordMessageReactionAdd) => void): this;
+    on(event: 'interactionCreate', listener: (interaction: DiscordInteraction) => void): this;
     on(event: string, listener: () => void): this;
 }
 
@@ -103,6 +107,12 @@ export class DiscordMinimal extends events.EventEmitter {
                 break;
             case 'MESSAGE_CREATE':
                 this.emit('messageCreate', new DiscordMessage(json.d));
+                break;
+            case 'MESSAGE_DELETE':
+                this.emit('messageDelete', new DiscordMessageDelete(json.d));
+                break;
+            case 'MESSAGE_DELETE_BULK':
+                this.emit('messageDeleteBulk', new DiscordMessageDeleteBulk(json.d));
                 break;
             case 'MESSAGE_REACTION_ADD':
                 this.emit('messageReactionAdd', new DiscordMessageReactionAdd(json.d));
