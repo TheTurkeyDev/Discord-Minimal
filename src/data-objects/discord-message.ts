@@ -6,6 +6,7 @@ import DiscordUser from './discord-user';
 import * as DiscordAPI from '../api/discord-api';
 import DiscordMessageCreate from './discord-message-create';
 import DiscordMessageEdit from './discord-message-edit';
+import DiscordGuildMember from './discord-guild-memeber';
 
 export default class DiscordMessage {
 
@@ -13,7 +14,7 @@ export default class DiscordMessage {
     public channel_id!: Snowflake;              // Id of the channel the message was sent in
     public guild_id?: Snowflake;                // Id of the guild the message was sent in
     public author!: DiscordUser                 // The author of this message(not guaranteed to be a valid user, see below)
-    //public member ?** partial guild member object	member properties for this message's author
+    public member?: DiscordGuildMember          // Partial guild member object, member properties for this message's author
     public content!: string;                    // Contents of the message
     public timestamp!: string;                  // Timestamp when this message was sent
     public edited_timestamp?: string;           // Timestamp when this message was edited(or null if never)
@@ -46,6 +47,7 @@ export default class DiscordMessage {
         this.channel_id = json.channel_id;
         this.guild_id = json.guild_id;
         this.author = new DiscordUser(json.author);
+        this.member = new DiscordGuildMember(json.member ?? {}, this.author);
         this.content = json.content;
         this.timestamp = json.timestamp;
         this.edited_timestamp = json.edited_timestamp;

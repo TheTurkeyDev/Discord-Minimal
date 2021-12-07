@@ -12,6 +12,7 @@ import { DiscordInteraction, DiscordMessageReactionAdd } from '.';
 import DiscordReady from './data-objects/discord-ready';
 import DiscordMessageDelete from './data-objects/discord-message-delete';
 import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
+import DiscordGuild from './data-objects/discord-guild';
 
 export declare interface DiscordMinimal {
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
@@ -20,6 +21,9 @@ export declare interface DiscordMinimal {
     on(event: 'messageDeleteBulk', listener: (messages: DiscordMessageDeleteBulk) => void): this;
     on(event: 'messageReactionAdd', listener: (messageReaction: DiscordMessageReactionAdd) => void): this;
     on(event: 'interactionCreate', listener: (interaction: DiscordInteraction) => void): this;
+    on(event: 'guildCreate', listener: (interaction: DiscordGuild) => void): this;
+    on(event: 'guildDelete', listener: (interaction: DiscordGuild) => void): this;
+    on(event: 'guildUpdate', listener: (interaction: DiscordGuild) => void): this;
     on(event: string, listener: () => void): this;
 }
 
@@ -119,6 +123,15 @@ export class DiscordMinimal extends events.EventEmitter {
                 break;
             case 'INTERACTION_CREATE':
                 this.emit('interactionCreate', new DiscordInteraction(json.d));
+                break;
+            case 'GUILD_CREATE':
+                this.emit('guildCreate', new DiscordGuild(json.d));
+                break;
+            case 'GUILD_DELETE':
+                this.emit('guildDelete', new DiscordGuild(json.d));
+                break;
+            case 'GUILD_UPDATE':
+                this.emit('guildUpdate', new DiscordGuild(json.d));
                 break;
         }
     }
