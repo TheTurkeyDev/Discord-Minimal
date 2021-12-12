@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import ReconnectingWebSocket, { CloseEvent, ErrorEvent } from 'reconnecting-websocket';
-import WS from 'ws';
+import WebSocket from 'ws';
 import events from 'events';
 import GatewayPayload from './payloads/gateway-paylod';
 import HeartBeatPayload from './payloads/heartbeat-payload';
@@ -13,6 +12,23 @@ import DiscordReady from './data-objects/discord-ready';
 import DiscordMessageDelete from './data-objects/discord-message-delete';
 import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
 import DiscordGuild from './data-objects/discord-guild';
+import { cleanReqLog, getGatewayBot } from './api/discord-api';
+import DiscordGatewayBotInfo from './data-objects/discord-gateway-bot-info';
+import { WebSocketData } from './api/websocket-data';
+import ResumePayload from './payloads/resume-payload';
+
+type MessageEvent = {
+    data: any;
+    type: string;
+    target: WebSocket;
+}
+
+type CloseEvent = {
+    wasClean: boolean;
+    code: number;
+    reason: string;
+    target: WebSocket;
+}
 
 export declare interface DiscordMinimal {
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
@@ -28,50 +44,85 @@ export declare interface DiscordMinimal {
 }
 
 export class DiscordMinimal extends events.EventEmitter {
-    private websocket?: ReconnectingWebSocket;
-    private heartbeat: NodeJS.Timer | undefined;
-    private previousSeq = -1;
+    private websocket: WebSocketData[] = [];
+    private heartbeat: NodeJS.Timer[] = [];
     // This should proably be done better...
     // Probably switch to some sort of Request Builder
     public static token?: string;
 
-    private intents: number
+    private intents: number;
+    private shards = 1;
+    private gatewayUrl = '';
+
+    private wsReconnectQueue: number[] = [];
 
     constructor(intents: number[]) {
         super();
         this.intents = intents.reduce((sum, a) => sum + a, 0);
     }
 
-    public login(token: string) {
+    public async login(token: string) {
         DiscordMinimal.token = token;
 
-        this.websocket = new ReconnectingWebSocket('wss://gateway.discord.gg/?v=8&encoding=json', [], {
-            WebSocket: WS,
-            connectionTimeout: 1000,
-            maxRetries: 10,
-        });
+        const gatewayInfo = await getGatewayBot().catch(e => { console.log(e); return new DiscordGatewayBotInfo({}); });
 
-        this.websocket.addEventListener('message', (event) => this.onMessage(event));
-        this.websocket.addEventListener('close', (event) => this.onClose(event));
-        this.websocket.addEventListener('error', (error: ErrorEvent) => console.error(error.message));
+        this.gatewayUrl = gatewayInfo.url;
+        this.shards = gatewayInfo.shards;
+
+        const interval = setInterval(() => {
+            const startIndex = this.websocket.length;
+            for (let i = 0; i < Math.min(gatewayInfo.session_start_limit.max_concurrency, this.shards - startIndex); i++)
+                this.initGatewaySocket(this.gatewayUrl, startIndex + i);
+
+            if (this.websocket.length === this.shards)
+                clearInterval(interval);
+        }, 7000);
+
+        const reconnectInterval = setInterval(() => {
+            if (this.wsReconnectQueue.length > 0) {
+                const shard = this.wsReconnectQueue.pop();
+                if (shard !== undefined && shard !== -1)
+                    this.initGatewaySocket(gatewayInfo.url, shard);
+            }
+        }, 7000);
+
+        const apiRequestLogClean = setInterval(() => {
+            cleanReqLog();
+        }, 30000);
     }
 
-    private onMessage(event: MessageEvent) {
+    private initGatewaySocket(gatewayUrl: string, shardId: number) {
+        const ws = new WebSocket(`${gatewayUrl}/?v=8&encoding=json`);
+
+        const wsd = new WebSocketData(ws, shardId);
+        this.websocket[shardId] = wsd;
+
+        ws.addEventListener('message', (event) => this.onMessage(wsd, event, shardId));
+        ws.addEventListener('close', (event) => this.onClose(event, shardId));
+        ws.addEventListener('error', (error) => console.error(error));
+
+    }
+
+    private onMessage(wsd: WebSocketData, event: MessageEvent, shardNum: number) {
         const message: GatewayPayload = Object.assign(new GatewayPayload(), JSON.parse(event.data));
         if (message.s)
-            this.previousSeq = message.s;
+            wsd.seq = message.s;
 
         switch (message.op) {
             case 0:
-                this.onEvent(message);
+                this.onEvent(message, wsd);
                 break;
             case 7:
             case 9:
-                this.initReconnect();
-                break; // fall through?
+                //TODO, send through resume login instead of full reconnect
+                this.initReconnectFull();
+                break;
             case 10:
-                this.startHeartbeat(parseInt(message.d.heartbeat_interval));
-                this.sendPayload(new IdentifyPayload(DiscordMinimal.token ?? '', this.intents));
+                this.startHeartbeat(wsd, shardNum, parseInt(message.d.heartbeat_interval));
+                if (wsd.resume)
+                    this.sendPayload(wsd.ws, new ResumePayload(DiscordMinimal.token ?? '', wsd.session_id, wsd.seq));
+                else
+                    this.sendPayload(wsd.ws, new IdentifyPayload(DiscordMinimal.token ?? '', this.intents, [shardNum, this.shards]));
                 break;
             case 11:
                 //Heartbeat ACK
@@ -81,36 +132,67 @@ export class DiscordMinimal extends events.EventEmitter {
         }
     }
 
-    private onClose(event: CloseEvent) {
+    private onClose(event: CloseEvent, shardId: number) {
         const code = event.code;
-        if (code == -1)
-            this.initReconnect();
-        else if (code == 1001)
-            this.initReconnect();
-        else if (code == 1006)
-            this.initReconnect();
-        else if (code == 4008)
-            this.initReconnect();
-        else
-            console.log('[DISCORD] Closed: ' + code + ' - ' + event.reason);
+        if (event.reason === 'Clientside closed!')
+            return;
+
+        switch (code) {
+            case -1:
+            case 1000:
+            case 1001:
+            case 1006:
+            case 4000:
+            case 4008:
+            case 4009:
+                this.initReconnectFull();
+                break;
+            default:
+                console.log('[DISCORD] Closed: ' + code + ' - ' + event.reason);
+                break;
+        }
     }
 
-    private initReconnect() {
-        setTimeout(() => this.websocket?.reconnect(), 1000);
+    private initReconnect(shardId: number) {
+        const socketData = this.websocket.find(wsd => wsd.shard === shardId);
+        if (socketData) {
+            socketData.resume = true;
+            socketData.ws.close(1002);
+
+            const ws = new WebSocket(`${this.gatewayUrl}/?v=8&encoding=json`);
+            socketData.ws = ws;
+            ws.addEventListener('message', (event) => this.onMessage(socketData, event, shardId));
+            ws.addEventListener('close', (event) => this.onClose(event, shardId));
+            ws.addEventListener('error', (error) => console.error(error));
+        }
     }
 
-    public sendPayload(message: GatewayPayload): void {
-        this.websocket?.send(JSON.stringify(message));
+    private initReconnectFull() {
+        for (let i = 0; i < this.websocket.length; i++) {
+            this.websocket[i].ws.close(1001, 'Clientside closed!');
+        }
+        this.websocket = [];
+        this.login(DiscordMinimal.token ?? '');
     }
 
-    private onEvent(json: GatewayPayload): void {
+    public sendPayload(ws: WebSocket, message: GatewayPayload): void {
+        ws.send(JSON.stringify(message));
+    }
+
+    private onEvent(json: GatewayPayload, wsd: WebSocketData): void {
         const eventId = json.t;
         switch (eventId) {
             case 'READY':
-                this.emit('ready', new DiscordReady(json.d));
+                // eslint-disable-next-line no-case-declarations
+                const ready = new DiscordReady(json.d);
+                wsd.session_id = ready.session_id;
+                this.emit('ready', ready);
                 break;
             case 'MESSAGE_CREATE':
                 this.emit('messageCreate', new DiscordMessage(json.d));
+                break;
+            case 'MESSAGE_UPDATE':
+                //TODO!
                 break;
             case 'MESSAGE_DELETE':
                 this.emit('messageDelete', new DiscordMessageDelete(json.d));
@@ -120,6 +202,15 @@ export class DiscordMinimal extends events.EventEmitter {
                 break;
             case 'MESSAGE_REACTION_ADD':
                 this.emit('messageReactionAdd', new DiscordMessageReactionAdd(json.d));
+                break;
+            case 'MESSAGE_REACTION_REMOVE':
+                //TODO!
+                break;
+            case 'MESSAGE_REACTION_REMOVE_EMOJI':
+                //TODO!
+                break;
+            case 'MESSAGE_REACTION_REMOVE_ALL':
+                //TODO!
                 break;
             case 'INTERACTION_CREATE':
                 this.emit('interactionCreate', new DiscordInteraction(json.d));
@@ -133,14 +224,55 @@ export class DiscordMinimal extends events.EventEmitter {
             case 'GUILD_UPDATE':
                 this.emit('guildUpdate', new DiscordGuild(json.d));
                 break;
+            case 'GUILD_MEMBER_UPDATE':
+                //TODO!
+                break;
+            case 'GUILD_ROLE_CREATE':
+                //TODO!
+                break;
+            case 'GUILD_ROLE_UPDATE':
+                //TODO!
+                break;
+            case 'GUILD_ROLE_DELETE':
+                //TODO!
+                break;
+            case 'GUILD_JOIN_REQUEST_UPDATE':
+                //TODO!
+                break;
+            case 'GUILD_JOIN_REQUEST_DELETE':
+                //TODO!
+                break;
+            case 'CHANNEL_CREATE':
+                //TODO!
+                break;
+            case 'CHANNEL_UPDATE':
+                //TODO!
+                break;
+            case 'CHANNEL_DELETE':
+                //TODO!
+                break;
+            case 'CHANNEL_PINS_UPDATE':
+                //TODO!
+                break;
+            case 'APPLICATION_COMMAND_PERMISSIONS_UPDATE':
+                //TODO!
+                break;
+            case 'STAGE_INSTANCE_CREATE':
+                //TODO!
+                break;
+            case 'STAGE_INSTANCE_DELETE':
+                //TODO!
+                break;
+            default:
+                console.log('UNKOWN EVENT!', eventId);
         }
     }
 
-    private startHeartbeat(heartbeatDelay: number) {
-        if (this.heartbeat)
-            clearInterval(this.heartbeat);
+    private startHeartbeat(wsd: WebSocketData, shardNum: number, heartbeatDelay: number) {
+        if (this.heartbeat[shardNum])
+            clearInterval(this.heartbeat[shardNum]);
 
-        this.heartbeat = setInterval(() => this.sendPayload(new HeartBeatPayload(this.previousSeq)), heartbeatDelay);
+        this.heartbeat[shardNum] = setInterval(() => this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq)), heartbeatDelay);
     }
 }
 
