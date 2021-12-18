@@ -263,6 +263,9 @@ export class DiscordMinimal extends events.EventEmitter {
             case 'STAGE_INSTANCE_DELETE':
                 //TODO!
                 break;
+            case 'STAGE_INSTANCE_UPDATE':
+                //TODO!
+                break;
             default:
                 console.log('UNKOWN EVENT!', eventId);
         }
