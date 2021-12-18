@@ -3,7 +3,7 @@
 
 import WebSocket from 'ws';
 import events from 'events';
-import GatewayPayload from './payloads/gateway-paylod';
+import GatewayPayload from './payloads/gateway-payload';
 import HeartBeatPayload from './payloads/heartbeat-payload';
 import IdentifyPayload from './payloads/identify-payload';
 import DiscordMessage from './data-objects/discord-message';
@@ -12,7 +12,7 @@ import DiscordReady from './data-objects/discord-ready';
 import DiscordMessageDelete from './data-objects/discord-message-delete';
 import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
 import DiscordGuild from './data-objects/discord-guild';
-import { cleanReqLog, getGatewayBot } from './api/discord-api';
+import { getGatewayBot } from './api/discord-api';
 import DiscordGatewayBotInfo from './data-objects/discord-gateway-bot-info';
 import { WebSocketData } from './api/websocket-data';
 import ResumePayload from './payloads/resume-payload';
@@ -85,10 +85,6 @@ export class DiscordMinimal extends events.EventEmitter {
                     this.initGatewaySocket(gatewayInfo.url, shard);
             }
         }, 7000);
-
-        const apiRequestLogClean = setInterval(() => {
-            cleanReqLog();
-        }, 30000);
     }
 
     private initGatewaySocket(gatewayUrl: string, shardId: number) {
@@ -114,8 +110,8 @@ export class DiscordMinimal extends events.EventEmitter {
                 break;
             case 7:
             case 9:
-                //TODO, send through resume login instead of full reconnect
-                this.initReconnectFull();
+                if (message.d)
+                    this.sendPayload(wsd.ws, new ResumePayload(DiscordMinimal.token ?? '', wsd.session_id, wsd.seq));
                 break;
             case 10:
                 this.startHeartbeat(wsd, shardNum, parseInt(message.d.heartbeat_interval));
@@ -145,10 +141,11 @@ export class DiscordMinimal extends events.EventEmitter {
             case 4000:
             case 4008:
             case 4009:
-                this.initReconnectFull();
+                this.initReconnect(shardId);
                 break;
             default:
                 console.log('[DISCORD] Closed: ' + code + ' - ' + event.reason);
+                this.initReconnectFull();
                 break;
         }
     }
@@ -157,6 +154,7 @@ export class DiscordMinimal extends events.EventEmitter {
         const socketData = this.websocket.find(wsd => wsd.shard === shardId);
         if (socketData) {
             socketData.resume = true;
+            socketData.ws.removeAllListeners();
             socketData.ws.close(1002);
 
             const ws = new WebSocket(`${this.gatewayUrl}/?v=8&encoding=json`);
@@ -168,9 +166,8 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     private initReconnectFull() {
-        for (let i = 0; i < this.websocket.length; i++) {
-            this.websocket[i].ws.close(1001, 'Clientside closed!');
-        }
+        for (let i = 0; i < this.websocket.length; i++)
+            this.websocket[i].ws.removeAllListeners();
         this.websocket = [];
         this.login(DiscordMinimal.token ?? '');
     }
@@ -187,6 +184,9 @@ export class DiscordMinimal extends events.EventEmitter {
                 const ready = new DiscordReady(json.d);
                 wsd.session_id = ready.session_id;
                 this.emit('ready', ready);
+                break;
+            case 'RESUMED':
+                //TODO!
                 break;
             case 'MESSAGE_CREATE':
                 this.emit('messageCreate', new DiscordMessage(json.d));

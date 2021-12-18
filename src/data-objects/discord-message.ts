@@ -72,11 +72,11 @@ export default class DiscordMessage {
         return DiscordAPI.editMessage(this.channel_id, this.id, message);
     }
 
-    public react(emoji: string): void {
+    public react(emoji: string): Promise<void> {
         return DiscordAPI.addReaction(this.channel_id, this.id, emoji);
     }
 
-    public removeAllReactions(): void {
+    public removeAllReactions(): Promise<void> {
         return DiscordAPI.deleteAllReactions(this.channel_id, this.id);
     }
 }

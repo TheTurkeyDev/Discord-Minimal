@@ -1,4 +1,4 @@
-import GatewayPayload from './gateway-paylod';
+import GatewayPayload from './gateway-payload';
 
 export default class IdentifyPayload extends GatewayPayload {
 

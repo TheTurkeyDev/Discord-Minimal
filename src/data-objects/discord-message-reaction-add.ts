@@ -22,11 +22,11 @@ export default class DiscordMessageReactionAdd {
         this.emoji = new DiscordEmoji(json.emoji);
     }
 
-    public removeUser(userId: Snowflake): void {
-        DiscordAPI.deleteuserReaction(this.channel_id, this.message_id, this.emoji.name ?? '', userId);
+    public removeUser(userId: Snowflake): Promise<void> {
+        return DiscordAPI.deleteUserReaction(this.channel_id, this.message_id, this.emoji.name ?? '', userId);
     }
 
-    public remove(): void {
-        DiscordAPI.deleteuserReaction(this.channel_id, this.message_id, this.emoji.name ?? '', this.user_id);
+    public remove(): Promise<void> {
+        return DiscordAPI.deleteUserReaction(this.channel_id, this.message_id, this.emoji.name ?? '', this.user_id);
     }
 }
