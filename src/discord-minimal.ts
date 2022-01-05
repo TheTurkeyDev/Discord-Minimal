@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import WebSocket from 'ws';
+import WebSocket, { OPEN } from 'ws';
 import events from 'events';
 import GatewayPayload from './payloads/gateway-payload';
 import HeartBeatPayload from './payloads/heartbeat-payload';
@@ -173,7 +173,8 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     public sendPayload(ws: WebSocket, message: GatewayPayload): void {
-        ws.send(JSON.stringify(message));
+        if (ws.readyState == OPEN)
+            ws.send(JSON.stringify(message));
     }
 
     private onEvent(json: GatewayPayload, wsd: WebSocketData): void {
