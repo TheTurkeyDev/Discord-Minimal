@@ -130,6 +130,9 @@ export class DiscordMinimal extends events.EventEmitter {
 
     private onClose(event: CloseEvent, shardId: number) {
         const code = event.code;
+
+        clearInterval(this.heartbeat[shardId]);
+
         if (event.reason === 'Clientside closed!')
             return;
 
@@ -173,7 +176,7 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     public sendPayload(ws: WebSocket, message: GatewayPayload): void {
-        if (ws.readyState == OPEN)
+        if (ws.readyState === OPEN)
             ws.send(JSON.stringify(message));
     }
 
