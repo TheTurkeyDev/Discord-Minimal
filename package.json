@@ -2,8 +2,8 @@
   "name": "discord-minimal",
   "version": "0.1.17",
   "description": "Minimal Discord API library",
-  "main": "output/index.js",
-  "types": "output/index.d.ts",
+  "main": "output/src/index.js",
+  "types": "output/src/index.d.ts",
   "scripts": {
     "build": "npx tsc",
     "test": "npx tsc & node output/test/test-bot.js"
