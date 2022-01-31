@@ -104,8 +104,9 @@ export function interactionCallback(interactionId: number, interactionToken: str
         },
         body: JSON.stringify(data),
     }).then(resp => {
-        if (!resp.ok)
-            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        if (resp.ok)
+            return resp.json().then(json => { });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
 
@@ -150,8 +151,9 @@ export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: 
             'Content-Type': 'application/json',
         }
     }).then(resp => {
-        if (!resp.ok)
-            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        if (resp.ok)
+            return resp.json().then(json => { });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
 
@@ -164,8 +166,9 @@ export function deleteUserReaction(channelId: Snowflake, messagelId: Snowflake, 
             'Content-Type': 'application/json',
         }
     }).then(resp => {
-        if (!resp.ok)
-            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        if (resp.ok)
+            return resp.json().then(json => { });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
 
@@ -178,7 +181,8 @@ export function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake):
             'Content-Type': 'application/json',
         }
     }).then(resp => {
-        if (!resp.ok)
-            resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        if (resp.ok)
+            return resp.json().then(json => { });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }

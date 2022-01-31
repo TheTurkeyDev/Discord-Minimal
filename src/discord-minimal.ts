@@ -54,8 +54,6 @@ export class DiscordMinimal extends events.EventEmitter {
     private shards = 1;
     private gatewayUrl = '';
 
-    private wsReconnectQueue: number[] = [];
-
     constructor(intents: number[]) {
         super();
         this.intents = intents.reduce((sum, a) => sum + a, 0);
@@ -76,14 +74,6 @@ export class DiscordMinimal extends events.EventEmitter {
 
             if (this.websocket.length === this.shards)
                 clearInterval(interval);
-        }, 7000);
-
-        const reconnectInterval = setInterval(() => {
-            if (this.wsReconnectQueue.length > 0) {
-                const shard = this.wsReconnectQueue.pop();
-                if (shard !== undefined && shard !== -1)
-                    this.initGatewaySocket(gatewayInfo.url, shard);
-            }
         }, 7000);
     }
 
