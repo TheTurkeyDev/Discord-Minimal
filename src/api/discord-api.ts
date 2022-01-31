@@ -105,7 +105,7 @@ export function interactionCallback(interactionId: number, interactionToken: str
         body: JSON.stringify(data),
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => { });
+            return new Promise<void>(resolve => resolve());
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
@@ -152,7 +152,7 @@ export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: 
         }
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => { });
+            return new Promise<void>(resolve => resolve());
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
@@ -167,7 +167,7 @@ export function deleteUserReaction(channelId: Snowflake, messagelId: Snowflake, 
         }
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => { });
+            return new Promise<void>(resolve => resolve());
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
@@ -182,7 +182,7 @@ export function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake):
         }
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => { });
+            return new Promise<void>(resolve => resolve());
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
