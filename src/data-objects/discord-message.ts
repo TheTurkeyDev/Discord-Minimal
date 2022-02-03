@@ -42,18 +42,19 @@ export default class DiscordMessage {
     //     public sticker_items ? array of message sticker item objects	sent if the message contains stickers
     //     public stickers ? array of sticker objects	Deprecated the stickers sent with the message
 
+
     constructor(json: any) {
         this.id = json.id;
         this.channel_id = json.channel_id;
         this.guild_id = json.guild_id;
-        this.author = new DiscordUser(json.author);
-        this.member = new DiscordGuildMember(json.member ?? {}, this.author);
+        this.author = DiscordUser.fromJson(json.author);
+        this.member = DiscordGuildMember.fromJson(json.member ?? {}, this.author);
         this.content = json.content;
         this.timestamp = json.timestamp;
         this.edited_timestamp = json.edited_timestamp;
         this.tts = json.tts;
         this.mention_everyone = json.mention_everyone;
-        this.mentions = json.mentions.map((men: any) => new DiscordUser(men));
+        this.mentions = json.mentions.map(DiscordUser.fromJson);
     }
 
     public reply(message: string): Promise<DiscordMessage> {

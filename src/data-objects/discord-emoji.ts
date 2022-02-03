@@ -10,7 +10,10 @@ export default class DiscordEmoji {
     // animated?	boolean	whether this emoji is animated
     // available?	boolean	whether this emoji can be used, may be false due to loss of Server Boosts
 
-    constructor(json: any) {
-        this.name = json.name;
+
+    static fromJson(json: any): DiscordEmoji {
+        const newInst = new DiscordEmoji();
+        newInst.name = json.name;
+        return newInst;
     }
 }

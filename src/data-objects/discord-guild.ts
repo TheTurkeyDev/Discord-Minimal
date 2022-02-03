@@ -21,7 +21,7 @@ export default class DiscordGuild {
     // verification_level	integer	verification level required for the guild
     // default_message_notifications	integer	default message notifications level
     // explicit_content_filter	integer	explicit content filter level
-    public roles: DiscordRole[];            // Roles in the guild
+    public roles: DiscordRole[] = [];            // Roles in the guild
     // emojis	array of emoji objects	custom guild emojis
     // features	array of guild feature strings	enabled guild features
     // mfa_level	integer	required MFA level for the guild
@@ -57,13 +57,18 @@ export default class DiscordGuild {
     // guild_scheduled_events? *	array of guild scheduled event objects	the scheduled events in the guild
     // premium_progress_bar_enabled	boolean	whether the guild has the boost progress bar enabled
 
-    constructor(json: any) {
-        this.id = json.id;
-        this.name = json.name;
-        this.icon = json.icon;
-        this.icon_hash = json.icon_hash;
-        this.owner_id = json.owner_id;
-        this.roles = json.roles?.map((r: any) => new DiscordRole(r));
-        this.unavailable = json.unavailable;
+    constructor(id: Snowflake, name: string, owner_id: Snowflake) {
+        this.id = id;
+        this.name = name;
+        this.owner_id = owner_id;
+    }
+
+    static fromJson(json: any): DiscordGuild {
+        const newInst = new DiscordGuild(json.id, json.name, json.owner_id);
+        newInst.icon = json.icon;
+        newInst.icon_hash = json.icon_hash;
+        newInst.roles = json.roles?.map(DiscordRole.fromJson);
+        newInst.unavailable = json.unavailable;
+        return newInst;
     }
 }

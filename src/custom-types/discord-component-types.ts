@@ -1,5 +1,5 @@
 export enum DiscordComponentType {
-    Action_Row = 1,     // A container for other components
-    Button = 2,         // A button object
-    Select_Menu = 3,    // A select menu for picking from choices
+    ACTION_ROW = 1,     // A container for other components
+    BUTTON = 2,         // A button object
+    SELECT_MENU = 3,    // A select menu for picking from choices
 }

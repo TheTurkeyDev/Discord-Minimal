@@ -17,9 +17,14 @@ export default class DiscordRole {
     // managed	boolean	whether this role is managed by an integration
     // mentionable	boolean	whether this role is mentionable
     // tags?	role tags object	the tags this role has
-    constructor(json: any) {
-        this.id = json.id;
-        this.name = json.name;
-        this.permissions = json.permissions;
+    constructor(id: Snowflake, name: string, permissions: number) {
+        this.id = id;
+        this.name = name;
+        this.permissions = permissions;
+    }
+
+    static fromJson(json: any): DiscordRole {
+        const newInst = new DiscordRole(json.id, json.name, json.permissions);
+        return newInst;
     }
 }

@@ -18,8 +18,8 @@ export default class DiscordMessageReactionAdd {
         this.channel_id = json.channel_id;
         this.message_id = json.message_id;
         this.guild_id = json.guild_id;
-        this.member = new DiscordGuildMember(json.member);
-        this.emoji = new DiscordEmoji(json.emoji);
+        this.member = DiscordGuildMember.fromJson(json.member);
+        this.emoji = DiscordEmoji.fromJson(json.emoji);
     }
 
     public removeUser(userId: Snowflake): Promise<void> {

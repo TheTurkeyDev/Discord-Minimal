@@ -20,10 +20,15 @@ export default class DiscordUser {
     // public premium_type ? integer	the type of Nitro subscription on a user's account	identify
     // public public_flags ? integer	the public flags on a user's account	identify
 
-    constructor(json: any) {
-        this.id = json.id;
-        this.username = json.username;
-        this.discriminator = json.discriminator;
+    constructor(id: Snowflake, username: string, discriminator: string) {
+        this.id = id;
+        this.username = username;
+        this.discriminator = discriminator;
+    }
+
+    static fromJson(json: any): DiscordUser {
+        const newInst = new DiscordUser(json.id, json.username, json.discriminator);
+        return newInst;
     }
 
     public setActivity(activity: string) {

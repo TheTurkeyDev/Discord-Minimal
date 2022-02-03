@@ -5,7 +5,7 @@ export default class DiscordMessageActionRow extends DiscordComponent {
 
     constructor() {
         super();
-        super.type = DiscordComponentType.Action_Row;
+        super.type = DiscordComponentType.ACTION_ROW;
     }
 
     public addComponents(components: DiscordComponent[]): DiscordMessageActionRow {

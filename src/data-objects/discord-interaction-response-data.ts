@@ -3,10 +3,10 @@ import DiscordEmbed from './discord-embed';
 import DiscordComponent from './discord-component';
 
 export default class DiscordInteractionResponseData {
-    public tts?: boolean;                       // Is the response TTS
-    public content?: string;	                // Message content
-    public embeds?: DiscordEmbed[];               // Supports up to 10 embeds
+    public tts?: boolean;                           // Is the response TTS
+    public content?: string;	                    // Message content
+    public embeds?: DiscordEmbed[];                 // Supports up to 10 embeds
     //public allowed_mentions? allowed mentions	allowed mentions object
-    public flags?: number;	                    // Interaction callback data flags
-    public components?: DiscordComponent[];       // Message components
+    public flags?: number;	                        // Interaction callback data flags
+    public components?: DiscordComponent[];         // Message components
 }

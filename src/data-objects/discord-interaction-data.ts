@@ -1,20 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { Snowflake } from '..';
 import { DiscordComponentType } from '../custom-types/discord-component-types';
+import DiscordApplicationCommandInteractionDataOption from './discord-application-command-interaction-data-option';
+import DiscordInteractionResolvedData from './discord-interaction-resolved-data';
+import DiscordSelectOption from './discord-select-option';
 
 export default class DiscordInteractionData {
-    // public id	snowflake	the ID of the invoked command	Application Command
-    // public name	string	the name of the invoked command	Application Command
-    // public type integer	the type of the invoked command	Application Command
-    // public resolved ? resolved data	converted users + roles + channels	Application Command
-    // public options ? array of application command interaction data option	the params + values from the user	Application Command
-    public custom_id?: string;	                    // The custom_id of the component	Component
-    public component_type?: DiscordComponentType;          // The type of the component	Component
-    // public values ? array of select option values	the values the user selected	Component(Select)
-    // public target_id ? snowflake	id the of user or message targetted by a user or message command	User Command, Message Command
+    public id: Snowflake                                                    // The ID of the invoked command
+    public name: string;	                                                // The name of the invoked command
+    public type: number;                                                    // The type of the invoked command
+    public resolved?: DiscordInteractionResolvedData;                       // Converted users + roles + channels
+    public options: DiscordApplicationCommandInteractionDataOption[] = [];  // The params + values from the user
+    public custom_id?: string;	                                            // The custom_id of the component
+    public component_type?: DiscordComponentType;                           // The type of the component
+    public values: DiscordSelectOption[] = [];                              // The values the user selected
+    public target_id?: Snowflake;                                           // Id the of user or message targetted by a user or message command
 
-    constructor(json: any) {
-        this.custom_id = json.custom_id;
-        this.component_type = json.component_type;
+    constructor(id: Snowflake, name: string, type: number) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
+    static fromJson(json: any): DiscordInteractionData {
+        const newInst = new DiscordInteractionData(json.id, json.name, json.type);
+        newInst.resolved = json.resolved && DiscordInteractionResolvedData.fromJson(json.resolved);
+        newInst.options = json.options?.map(DiscordApplicationCommandInteractionDataOption.fromJson) ?? [];
+        newInst.custom_id = json.custom_id;
+        newInst.component_type = json.component_type;
+        newInst.values = json.values?.map(DiscordSelectOption.fromJson) ?? [];
+        newInst.target_id = json.target_id;
+        return newInst;
     }
 }

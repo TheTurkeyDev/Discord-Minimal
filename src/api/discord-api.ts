@@ -8,6 +8,7 @@ import DiscordMessage from '../data-objects/discord-message';
 import { DiscordAPIError, DiscordMinimal } from '..';
 import DiscordGatewayBotInfo from '../data-objects/discord-gateway-bot-info';
 import RateLimitBucket from './rate-limit-bucket';
+import DiscordApplicationCommand from '../data-objects/discord-application-command';
 
 const URL_BASE = 'https://discord.com/api/v8';
 
@@ -94,9 +95,9 @@ export function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
     });
 }
 
-export function interactionCallback(interactionId: number, interactionToken: string, data: DiscordInteractionResponse): void {
+export function interactionCallback(interactionId: number, interactionToken: string, data: DiscordInteractionResponse): Promise<void> {
     const url = `${URL_BASE}/interactions/${interactionId}/${interactionToken}/callback`;
-    fetch(url, {
+    return fetch(url, {
         method: 'POST',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
@@ -182,7 +183,23 @@ export function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake):
         }
     }).then(resp => {
         if (resp.ok)
-            return new Promise<void>(resolve => resolve());
+            return new Promise(resolve => resolve());
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+    });
+}
+
+export function createGlobalApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
+    const url = `/applications/${command.application_id}/commands`;
+    return sendFetch(url, `/applications/${command.application_id}/commands`, {
+        method: 'POST',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(command),
+    }).then(resp => {
+        if (resp.ok)
+            return new Promise(resolve => resolve());
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }

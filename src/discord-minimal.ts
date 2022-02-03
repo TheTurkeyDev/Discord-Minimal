@@ -207,16 +207,16 @@ export class DiscordMinimal extends events.EventEmitter {
                 //TODO!
                 break;
             case 'INTERACTION_CREATE':
-                this.emit('interactionCreate', new DiscordInteraction(json.d));
+                this.emit('interactionCreate', DiscordInteraction.fromJson(json.d));
                 break;
             case 'GUILD_CREATE':
-                this.emit('guildCreate', new DiscordGuild(json.d));
+                this.emit('guildCreate', DiscordGuild.fromJson(json.d));
                 break;
             case 'GUILD_DELETE':
-                this.emit('guildDelete', new DiscordGuild(json.d));
+                this.emit('guildDelete', DiscordGuild.fromJson(json.d));
                 break;
             case 'GUILD_UPDATE':
-                this.emit('guildUpdate', new DiscordGuild(json.d));
+                this.emit('guildUpdate', DiscordGuild.fromJson(json.d));
                 break;
             case 'GUILD_MEMBER_UPDATE':
                 //TODO!

@@ -23,22 +23,34 @@ export default class DiscordInteraction {
     // public version	integer	read - only property, always 1
     // public message ? message object	for components, the message they were attached to
 
-    constructor(json: any) {
-        this.id = json.id;
-        this.data = json.data ? new DiscordInteractionData(json.data) : undefined;
-        this.guild_id = json.guild_id;
-        this.member = json.member ? new DiscordGuildMember(json.member) : undefined;
-        this.user = json.user ? new DiscordUser(json.user) : undefined;
-        this.token = json.token;
+    constructor(id: Snowflake, token: string) {
+        this.id = id;
+        this.token = token;
+    }
+
+    static fromJson(json: any): DiscordInteraction {
+        const newInst = new DiscordInteraction(json.id, json.token);
+        newInst.data = json.data && DiscordInteractionData.fromJson(json.data);
+        newInst.guild_id = json.guild_id;
+        newInst.member = json.member && DiscordGuildMember.fromJson(json.member);
+        newInst.user = json.user && DiscordUser.fromJson(json.user);
+        return newInst;
     }
 
     public isButton(): boolean {
-        return this.data?.component_type == DiscordComponentType.Button;
+        return this.data?.component_type == DiscordComponentType.BUTTON;
     }
 
-    public update(data: DiscordInteractionResponseData): void {
-        DiscordAPI.interactionCallback(this.id, this.token, {
+    public update(data: DiscordInteractionResponseData): Promise<void> {
+        return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.UPDATE_MESSAGE,
+            data
+        });
+    }
+
+    public respond(data: DiscordInteractionResponseData): Promise<void> {
+        return DiscordAPI.interactionCallback(this.id, this.token, {
+            type: DiscordInteractionCallbackType.CHANNEL_MESSAGE_WITH_SOURCE,
             data
         });
     }

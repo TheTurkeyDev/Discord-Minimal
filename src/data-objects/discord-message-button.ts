@@ -6,7 +6,7 @@ export default class DiscordMessageButton extends DiscordComponent {
 
     constructor() {
         super();
-        super.type = DiscordComponentType.Button;
+        super.type = DiscordComponentType.BUTTON;
     }
 
     public setCustomId(id: string): DiscordMessageButton {
