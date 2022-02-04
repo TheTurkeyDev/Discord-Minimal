@@ -13,13 +13,18 @@ export default class DiscordMessageReactionAdd {
     public member?: DiscordGuildMember; // The member who reacted if this happened in a guild
     public emoji!: DiscordEmoji;     	// A partial emoji object, the emoji used to react
 
-    constructor(json: any) {
-        this.user_id = json.user_id;
-        this.channel_id = json.channel_id;
-        this.message_id = json.message_id;
-        this.guild_id = json.guild_id;
-        this.member = DiscordGuildMember.fromJson(json.member);
-        this.emoji = DiscordEmoji.fromJson(json.emoji);
+    constructor(user_id: Snowflake, channel_id: Snowflake, message_id: Snowflake, emoji: DiscordEmoji) {
+        this.user_id = user_id;
+        this.channel_id = channel_id;
+        this.message_id = message_id;
+        this.emoji = emoji;
+    }
+
+    static fromJson(json: any): DiscordMessageReactionAdd {
+        const newInst = new DiscordMessageReactionAdd(json.user_id, json.channel_id, json.message_id, DiscordEmoji.fromJson(json.emoji));
+        newInst.guild_id = json.guild_id;
+        newInst.member = DiscordGuildMember.fromJson(json.member);
+        return newInst;
     }
 
     public removeUser(userId: Snowflake): Promise<void> {

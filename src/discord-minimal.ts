@@ -183,19 +183,19 @@ export class DiscordMinimal extends events.EventEmitter {
                 //TODO!
                 break;
             case 'MESSAGE_CREATE':
-                this.emit('messageCreate', new DiscordMessage(json.d));
+                this.emit('messageCreate', DiscordMessage.fromJson(json.d));
                 break;
             case 'MESSAGE_UPDATE':
                 //TODO!
                 break;
             case 'MESSAGE_DELETE':
-                this.emit('messageDelete', new DiscordMessageDelete(json.d));
+                this.emit('messageDelete', DiscordMessageDelete.fromJson(json.d));
                 break;
             case 'MESSAGE_DELETE_BULK':
-                this.emit('messageDeleteBulk', new DiscordMessageDeleteBulk(json.d));
+                this.emit('messageDeleteBulk', DiscordMessageDeleteBulk.fromJson(json.d));
                 break;
             case 'MESSAGE_REACTION_ADD':
-                this.emit('messageReactionAdd', new DiscordMessageReactionAdd(json.d));
+                this.emit('messageReactionAdd', DiscordMessageReactionAdd.fromJson(json.d));
                 break;
             case 'MESSAGE_REACTION_REMOVE':
                 //TODO!

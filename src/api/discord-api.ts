@@ -122,7 +122,7 @@ export function createMessage(channelId: Snowflake, message: DiscordMessageCreat
         body: JSON.stringify(message),
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => new DiscordMessage(json));
+            return resp.json().then(json => DiscordMessage.fromJson(json));
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
@@ -138,7 +138,7 @@ export function editMessage(channelId: Snowflake, messagelId: Snowflake, message
         body: JSON.stringify(message),
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => new DiscordMessage(json));
+            return resp.json().then(DiscordMessage.fromJson);
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }

@@ -9,9 +9,15 @@ export default class DiscordMessageDeleteBulk {
     public channel_id!: Snowflake;      // The id of the channel
     public guild_id?: Snowflake;	    // The id of the guild
 
-    constructor(json: any) {
-        this.ids = json.ids;
-        this.channel_id = json.channel_id;
-        this.guild_id = json.guild_id;
+    constructor(ids: Snowflake[], channel_id: Snowflake) {
+        this.ids = ids;
+        this.channel_id = channel_id;
     }
+
+    static fromJson(json: any): DiscordMessageDeleteBulk {
+        const newInst = new DiscordMessageDeleteBulk(json.id, json.channel_id);
+        newInst.guild_id = json.guild_id;
+        return newInst;
+    }
+
 }

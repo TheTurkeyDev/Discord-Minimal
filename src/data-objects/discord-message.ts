@@ -9,7 +9,6 @@ import DiscordMessageEdit from './discord-message-edit';
 import DiscordGuildMember from './discord-guild-memeber';
 
 export default class DiscordMessage {
-
     public id!: Snowflake;	                    // Id of the message
     public channel_id!: Snowflake;              // Id of the channel the message was sent in
     public guild_id?: Snowflake;                // Id of the guild the message was sent in
@@ -42,19 +41,23 @@ export default class DiscordMessage {
     //     public sticker_items ? array of message sticker item objects	sent if the message contains stickers
     //     public stickers ? array of sticker objects	Deprecated the stickers sent with the message
 
+    constructor(id: Snowflake, channel_id: Snowflake, author: DiscordUser, content: string, timestamp: string) {
+        this.id = id;
+        this.channel_id = channel_id;
+        this.author = author;
+        this.content = content;
+        this.timestamp = timestamp;
+    }
 
-    constructor(json: any) {
-        this.id = json.id;
-        this.channel_id = json.channel_id;
-        this.guild_id = json.guild_id;
-        this.author = DiscordUser.fromJson(json.author);
-        this.member = DiscordGuildMember.fromJson(json.member ?? {}, this.author);
-        this.content = json.content;
-        this.timestamp = json.timestamp;
-        this.edited_timestamp = json.edited_timestamp;
-        this.tts = json.tts;
-        this.mention_everyone = json.mention_everyone;
-        this.mentions = json.mentions.map(DiscordUser.fromJson);
+    static fromJson(json: any): DiscordMessage {
+        const newInst = new DiscordMessage(json.id, json.channel_id, DiscordUser.fromJson(json.author), json.content, json.timestamp);
+        newInst.guild_id = json.guild_id;
+        newInst.member = DiscordGuildMember.fromJson(json.member ?? {}, newInst.author);
+        newInst.edited_timestamp = json.edited_timestamp;
+        newInst.tts = json.tts;
+        newInst.mention_everyone = json.mention_everyone;
+        newInst.mentions = json.mentions.map(DiscordUser.fromJson);
+        return newInst;
     }
 
     public reply(message: string): Promise<DiscordMessage> {

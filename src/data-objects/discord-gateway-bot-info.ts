@@ -8,7 +8,6 @@ export default class DiscordGatewayBotInfo {
     constructor(json: any) {
         this.url = json.url;
         this.shards = json.shards;
-        this.url = json.url;
         this.session_start_limit = new DiscordGatewaySessionStartLimit(json.session_start_limit ?? {});
     }
 }

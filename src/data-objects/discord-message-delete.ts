@@ -9,9 +9,14 @@ export default class DiscordMessageDelete {
     public channel_id!: Snowflake;      // The id of the channel
     public guild_id?: Snowflake;	    // The id of the guild
 
-    constructor(json: any) {
-        this.id = json.id;
-        this.channel_id = json.channel_id;
-        this.guild_id = json.guild_id;
+    constructor(id: Snowflake, channel_id: Snowflake) {
+        this.id = id;
+        this.channel_id = channel_id;
+    }
+
+    static fromJson(json: any): DiscordMessageDelete {
+        const newInst = new DiscordMessageDelete(json.id, json.channel_id);
+        newInst.guild_id = json.guild_id;
+        return newInst;
     }
 }
