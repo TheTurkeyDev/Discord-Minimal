@@ -1,5 +1,8 @@
 import DiscordMinimal from './discord-minimal';
 import DiscordAPIError from './data-objects/discord-api-error';
+import DiscordApplicationCommand from './data-objects/discord-application-command';
+import DiscordApplicationCommandOption from './data-objects/discord-application-command-option';
+import DiscordApplicationCommandOptionChoiceStructure from './data-objects/discord-application-command-option-choice-structure';
 import DiscordEmbed from './data-objects/discord-embed';
 import DiscordGuild from './data-objects/discord-guild';
 import DiscordGuildMember from './data-objects/discord-guild-memeber';
@@ -18,10 +21,17 @@ import { Snowflake } from './custom-types/snowflake';
 import { DiscordButtonStyle } from './custom-types/discord-button-styles';
 import { INTENTS } from './custom-types/discord-intents';
 import { PERMISSIONS } from './custom-types/discord-permissions';
+import { DiscordApplicationCommandOptionType } from './custom-types/discord-application-command-option-type';
+import { DiscordChannelType } from './custom-types/discord-channel-types';
 
 export {
     DiscordMinimal,
     DiscordAPIError,
+    DiscordChannelType,
+    DiscordApplicationCommand,
+    DiscordApplicationCommandOption,
+    DiscordApplicationCommandOptionChoiceStructure,
+    DiscordApplicationCommandOptionType,
     DiscordEmbed,
     DiscordGuild,
     DiscordGuildMember,
