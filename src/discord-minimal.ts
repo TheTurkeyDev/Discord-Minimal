@@ -7,7 +7,7 @@ import GatewayPayload from './payloads/gateway-payload';
 import HeartBeatPayload from './payloads/heartbeat-payload';
 import IdentifyPayload from './payloads/identify-payload';
 import DiscordMessage from './data-objects/discord-message';
-import { DiscordInteraction, DiscordMessageReactionAdd } from '.';
+import { DiscordApplicationCommand, DiscordInteraction, DiscordMessageReactionAdd } from '.';
 import DiscordReady from './data-objects/discord-ready';
 import DiscordMessageDelete from './data-objects/discord-message-delete';
 import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
