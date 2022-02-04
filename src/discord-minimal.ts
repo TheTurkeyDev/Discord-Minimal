@@ -12,7 +12,7 @@ import DiscordReady from './data-objects/discord-ready';
 import DiscordMessageDelete from './data-objects/discord-message-delete';
 import DiscordMessageDeleteBulk from './data-objects/discord-message-delete-bulk';
 import DiscordGuild from './data-objects/discord-guild';
-import { getGatewayBot } from './api/discord-api';
+import { createGlobalApplicationCommand, getGatewayBot } from './api/discord-api';
 import DiscordGatewayBotInfo from './data-objects/discord-gateway-bot-info';
 import { WebSocketData } from './api/websocket-data';
 import ResumePayload from './payloads/resume-payload';
@@ -270,6 +270,10 @@ export class DiscordMinimal extends events.EventEmitter {
             clearInterval(this.heartbeat[shardNum]);
 
         this.heartbeat[shardNum] = setInterval(() => this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq)), heartbeatDelay);
+    }
+
+    public createGlobalCommand(command: DiscordApplicationCommand) {
+        createGlobalApplicationCommand(command);
     }
 }
 
