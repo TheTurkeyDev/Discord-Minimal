@@ -67,6 +67,7 @@ export default class DiscordInteraction {
     }
 
     public sendMessageInChannel(message: DiscordMessageCreate): Promise<DiscordMessage> {
+        // -1? Should never call this if the channel_id is not set
         return DiscordAPI.createMessage(this.channel_id ?? -1, message);
     }
 }
