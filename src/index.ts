@@ -23,6 +23,7 @@ import { INTENTS } from './custom-types/discord-intents';
 import { PERMISSIONS } from './custom-types/discord-permissions';
 import { DiscordApplicationCommandOptionType } from './custom-types/discord-application-command-option-type';
 import { DiscordChannelType } from './custom-types/discord-channel-types';
+import { DiscordInteractionType } from './custom-types/discord-interaction-type';
 
 export {
     DiscordMinimal,
@@ -36,6 +37,7 @@ export {
     DiscordGuild,
     DiscordGuildMember,
     DiscordInteraction,
+    DiscordInteractionType,
     DiscordMessage,
     DiscordMessageActionRow,
     DiscordMessageButton,
