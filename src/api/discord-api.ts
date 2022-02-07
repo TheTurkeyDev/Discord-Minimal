@@ -104,7 +104,7 @@ export function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
     }).then(resp => {
         if (resp.ok)
             return resp.json().then(json => new DiscordGatewayBotInfo(json));
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -124,7 +124,7 @@ export function interactionCallback(
     }).then(resp => {
         if (resp.ok)
             return new Promise<void>(resolve => resolve());
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -140,7 +140,7 @@ export function createMessage(channelId: Snowflake, message: DiscordMessageCreat
     }).then(resp => {
         if (resp.ok)
             return resp.json().then(DiscordMessage.fromJson);
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -160,7 +160,7 @@ export function editMessage(
     }).then(resp => {
         if (resp.ok)
             return resp.json().then(DiscordMessage.fromJson);
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -175,7 +175,7 @@ export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: 
     }).then(resp => {
         if (resp.ok)
             return new Promise<void>(resolve => resolve());
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -195,7 +195,7 @@ export function deleteUserReaction(
     }).then(resp => {
         if (resp.ok)
             return new Promise<void>(resolve => resolve());
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -210,7 +210,7 @@ export function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake):
     }).then(resp => {
         if (resp.ok)
             return new Promise(resolve => resolve());
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }
 
@@ -226,6 +226,6 @@ export function createGlobalApplicationCommand(command: DiscordApplicationComman
     }).then(resp => {
         if (resp.ok)
             return new Promise(resolve => resolve());
-        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
+        return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, json.errors, url); });
     });
 }

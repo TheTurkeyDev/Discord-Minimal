@@ -69,7 +69,8 @@ export class DiscordMinimal extends events.EventEmitter {
 
         const interval = setInterval(() => {
             const startIndex = this.websocket.length;
-            for (let i = 0; i < Math.min(gatewayInfo.session_start_limit.max_concurrency, this.shards - startIndex); i++)
+            const max = Math.min(gatewayInfo.session_start_limit.max_concurrency, this.shards - startIndex);
+            for (let i = 0; i < max; i++)
                 this.initGatewaySocket(this.gatewayUrl, startIndex + i);
 
             if (this.websocket.length === this.shards)
@@ -108,7 +109,10 @@ export class DiscordMinimal extends events.EventEmitter {
                 if (wsd.resume)
                     this.sendPayload(wsd.ws, new ResumePayload(DiscordMinimal.token ?? '', wsd.session_id, wsd.seq));
                 else
-                    this.sendPayload(wsd.ws, new IdentifyPayload(DiscordMinimal.token ?? '', this.intents, [shardNum, this.shards]));
+                    this.sendPayload(
+                        wsd.ws,
+                        new IdentifyPayload(DiscordMinimal.token ?? '', this.intents, [shardNum, this.shards])
+                    );
                 break;
             case 11:
                 //Heartbeat ACK
@@ -269,7 +273,9 @@ export class DiscordMinimal extends events.EventEmitter {
         if (this.heartbeat[shardNum])
             clearInterval(this.heartbeat[shardNum]);
 
-        this.heartbeat[shardNum] = setInterval(() => this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq)), heartbeatDelay);
+        this.heartbeat[shardNum] = setInterval(
+            () => this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq)), heartbeatDelay
+        );
     }
 
     public createGlobalCommand(command: DiscordApplicationCommand) {
