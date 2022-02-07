@@ -25,12 +25,25 @@ function sendFetch(url: string, urlGroup: string, init?: RequestInit | undefined
     return new Promise<Response>((resolve, reject) => queueReq(url, urlGroup, resolve, reject, init));
 }
 
-function queueReq(url: string, urlGroup: string, resolve: (value: Response | PromiseLike<Response>) => void, reject: (reason?: any) => void, init?: RequestInit | undefined) {
+function queueReq(
+    url: string,
+    urlGroup: string,
+    resolve: (value: Response | PromiseLike<Response>) => void,
+    reject: (reason?: any) => void, init?: RequestInit | undefined
+) {
     requestQueueLen++;
-    requestQueue = requestQueue.then(async () => await processQueue(url, urlGroup, resolve, reject, init)).finally(() => requestQueueLen--);
+    requestQueue = requestQueue.then(
+        async () => await processQueue(url, urlGroup, resolve, reject, init)
+    ).finally(() => requestQueueLen--);
 }
 
-async function processQueue(url: string, urlGroup: string, resolve: (value: Response | PromiseLike<Response>) => void, reject: (reason?: any) => void, init?: RequestInit | undefined) {
+async function processQueue(
+    url: string,
+    urlGroup: string,
+    resolve: (value: Response | PromiseLike<Response>) => void,
+    reject: (reason?: any) => void,
+    init?: RequestInit | undefined
+) {
     if (bucketMap[urlGroup]) {
         const bucketInfo = bucketMap[urlGroup];
         if (bucketInfo.remain == 0) {
@@ -95,7 +108,11 @@ export function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
     });
 }
 
-export function interactionCallback(interactionId: number, interactionToken: string, data: DiscordInteractionResponse): Promise<void> {
+export function interactionCallback(
+    interactionId: number,
+    interactionToken: string,
+    data: DiscordInteractionResponse
+): Promise<void> {
     const url = `${URL_BASE}/interactions/${interactionId}/${interactionToken}/callback`;
     return fetch(url, {
         method: 'POST',
@@ -122,12 +139,16 @@ export function createMessage(channelId: Snowflake, message: DiscordMessageCreat
         body: JSON.stringify(message),
     }).then(resp => {
         if (resp.ok)
-            return resp.json().then(json => DiscordMessage.fromJson(json));
+            return resp.json().then(DiscordMessage.fromJson);
         return resp.json().then(json => { throw new DiscordAPIError(json.code, json.message, url); });
     });
 }
 
-export function editMessage(channelId: Snowflake, messagelId: Snowflake, message: DiscordMessageEdit): Promise<DiscordMessage> {
+export function editMessage(
+    channelId: Snowflake,
+    messagelId: Snowflake,
+    message: DiscordMessageEdit
+): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages/${messagelId}`;
     return sendFetch(url, `/channels/${channelId}/messages/edit`, {
         method: 'PATCH',
@@ -158,7 +179,12 @@ export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: 
     });
 }
 
-export function deleteUserReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string, userId: Snowflake): Promise<void> {
+export function deleteUserReaction(
+    channelId: Snowflake,
+    messagelId: Snowflake,
+    emoji: string,
+    userId: Snowflake
+): Promise<void> {
     const url = `/channels/${channelId}/messages/${messagelId}/reactions/${encodeURIComponent(emoji)}/${userId}`;
     return sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'DELETE',

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Snowflake } from '..';
-import { DiscordApplicationCommandType } from '../custom-types/discord-application-command-type';
-import { DiscordButtonStyle } from '../custom-types/discord-button-styles';
-import { DiscordComponentType } from '../custom-types/discord-component-types';
-import DiscordApplicationCommandOption from './discord-application-command-option';
+import {
+    DiscordApplicationCommandOption,
+    DiscordApplicationCommandType,
+    Snowflake
+} from '..';
 
 export default class DiscordApplicationCommand {
     public id?: Snowflake;	                                // Unique id of the command

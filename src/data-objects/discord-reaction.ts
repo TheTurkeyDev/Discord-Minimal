@@ -1,4 +1,4 @@
-import DiscordEmoji from './discord-emoji';
+import { DiscordEmoji } from '..';
 
 export default class DiscordReaction {
     public count!: number;              // Times this emoji has been used to react

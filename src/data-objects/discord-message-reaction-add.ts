@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Snowflake } from '../custom-types/snowflake';
-import DiscordEmoji from './discord-emoji';
-import DiscordGuildMember from './discord-guild-memeber';
+
+import { DiscordEmoji, DiscordGuildMember, Snowflake } from '..';
 import * as DiscordAPI from '../api/discord-api';
 
 export default class DiscordMessageReactionAdd {
     public user_id!: Snowflake;         // The id of the user
     public channel_id!: Snowflake;      // The id of the channel
     public message_id!: Snowflake;      // The id of the message
-    public guild_id?: Snowflake         // The id of the guild
+    public guild_id?: Snowflake;         // The id of the guild
     public member?: DiscordGuildMember; // The member who reacted if this happened in a guild
     public emoji!: DiscordEmoji;     	// A partial emoji object, the emoji used to react
 
@@ -21,9 +20,14 @@ export default class DiscordMessageReactionAdd {
     }
 
     static fromJson(json: any): DiscordMessageReactionAdd {
-        const newInst = new DiscordMessageReactionAdd(json.user_id, json.channel_id, json.message_id, DiscordEmoji.fromJson(json.emoji));
+        const newInst = new DiscordMessageReactionAdd(
+            json.user_id,
+            json.channel_id,
+            json.message_id,
+            DiscordEmoji.fromJson(json.emoji)
+        );
         newInst.guild_id = json.guild_id;
-        newInst.member = DiscordGuildMember.fromJson(json.member);
+        newInst.member = json.member && DiscordGuildMember.fromJson(json.member);
         return newInst;
     }
 

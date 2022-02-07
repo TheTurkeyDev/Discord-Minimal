@@ -1,6 +1,6 @@
-import { Snowflake } from '../custom-types/snowflake';
+import { DiscordEmbed } from '..';
 import DiscordComponent from './discord-component';
-import DiscordEmbed from './discord-embed';
+
 
 export default class DiscordMessageEdit {
     public content?: string;                    // The message contents(up to 2000 characters)
@@ -10,5 +10,5 @@ export default class DiscordMessageEdit {
     public payload_json?: string;	            // JSON encoded body of non - file params
     //public allowed_mentions	allowed mention object	allowed mentions for the message
     //public attachments	array of attachment objects	attached files to keep
-    public components?: DiscordComponent[]      // The components to include with the messag
+    public components?: DiscordComponent[];      // The components to include with the messag
 }

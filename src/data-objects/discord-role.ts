@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Snowflake } from '..';
-import DiscordUser from './discord-user';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default class DiscordRole {

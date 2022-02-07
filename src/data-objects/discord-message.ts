@@ -1,19 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Snowflake } from '../custom-types/snowflake';
-import DiscordReaction from './discord-reaction';
-import DiscordUser from './discord-user';
+import { DiscordGuildMember, DiscordMessageCreate, DiscordUser, Snowflake } from '..';
 import * as DiscordAPI from '../api/discord-api';
-import DiscordMessageCreate from './discord-message-create';
 import DiscordMessageEdit from './discord-message-edit';
-import DiscordGuildMember from './discord-guild-memeber';
+import DiscordReaction from './discord-reaction';
 
 export default class DiscordMessage {
     public id!: Snowflake;	                    // Id of the message
     public channel_id!: Snowflake;              // Id of the channel the message was sent in
     public guild_id?: Snowflake;                // Id of the guild the message was sent in
-    public author!: DiscordUser                 // The author of this message(not guaranteed to be a valid user, see below)
-    public member?: DiscordGuildMember          // Partial guild member object, member properties for this message's author
+    public author!: DiscordUser;                // The author of this message(not guaranteed to be a valid user, see below)
+    public member?: DiscordGuildMember;         // Partial guild member object, member properties for this message's author
     public content!: string;                    // Contents of the message
     public timestamp!: string;                  // Timestamp when this message was sent
     public edited_timestamp?: string;           // Timestamp when this message was edited(or null if never)
@@ -50,7 +47,13 @@ export default class DiscordMessage {
     }
 
     static fromJson(json: any): DiscordMessage {
-        const newInst = new DiscordMessage(json.id, json.channel_id, DiscordUser.fromJson(json.author), json.content, json.timestamp);
+        const newInst = new DiscordMessage(
+            json.id,
+            json.channel_id,
+            DiscordUser.fromJson(json.author),
+            json.content,
+            json.timestamp
+        );
         newInst.guild_id = json.guild_id;
         newInst.member = DiscordGuildMember.fromJson(json.member ?? {}, newInst.author);
         newInst.edited_timestamp = json.edited_timestamp;
@@ -61,7 +64,18 @@ export default class DiscordMessage {
     }
 
     public reply(message: string): Promise<DiscordMessage> {
-        return DiscordAPI.createMessage(this.channel_id, { content: message, message_reference: { message_id: this.id, channel_id: this.channel_id, guild_id: this.guild_id } });
+        return DiscordAPI.createMessage(
+            this.channel_id,
+            {
+                content: message,
+                message_reference:
+                {
+                    message_id: this.id,
+                    channel_id: this.channel_id,
+                    guild_id: this.guild_id
+                }
+            }
+        );
     }
 
     public sendMessageInChannel(message: string): Promise<DiscordMessage> {

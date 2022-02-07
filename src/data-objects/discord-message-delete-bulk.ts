@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Snowflake } from '../custom-types/snowflake';
-import DiscordComponent from './discord-component';
-import DiscordEmbed from './discord-embed';
+
+import { Snowflake } from '..';
 
 export default class DiscordMessageDeleteBulk {
     public ids!: Snowflake[];           // The ids of the messages

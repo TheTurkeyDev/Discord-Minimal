@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DiscordGuild } from '..';
+import { DiscordGuild, DiscordUser } from '..';
 import DiscordApplication from './discord-application';
-import DiscordUser from './discord-user';
 
 export default class DiscordReady {
     public v!: number;                          // Gateway version

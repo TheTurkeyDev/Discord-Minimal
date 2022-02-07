@@ -1,6 +1,6 @@
-
-import DiscordEmbed from './discord-embed';
+import { DiscordEmbed } from '..';
 import DiscordComponent from './discord-component';
+
 
 export default class DiscordInteractionResponseData {
     public tts?: boolean;                           // Is the response TTS

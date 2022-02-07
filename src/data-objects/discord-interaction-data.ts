@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Snowflake } from '..';
+import { DiscordSelectOption, Snowflake } from '..';
 import { DiscordComponentType } from '../custom-types/discord-component-types';
 import DiscordApplicationCommandInteractionDataOption from './discord-application-command-interaction-data-option';
 import DiscordInteractionResolvedData from './discord-interaction-resolved-data';
-import DiscordSelectOption from './discord-select-option';
 
 export default class DiscordInteractionData {
-    public id: Snowflake                                                    // The ID of the invoked command
+    public id: Snowflake;                                                    // The ID of the invoked command
     public name: string;	                                                // The name of the invoked command
     public type: number;                                                    // The type of the invoked command
     public resolved?: DiscordInteractionResolvedData;                       // Converted users + roles + channels

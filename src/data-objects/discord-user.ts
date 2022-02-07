@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Snowflake } from '../custom-types/snowflake';
+import { Snowflake } from '..';
+
 
 export default class DiscordUser {
-    public id!: Snowflake;               // The user's id	identify
-    public username!: string;            // The user's username, not unique across the platform	identify
-    public discriminator!: string; 	    // The user's 4-digit discord-tag	identify
+    public id!: Snowflake;                  // The user's id	identify
+    public username!: string;               // The user's username, not unique across the platform	identify
+    public discriminator!: string; 	        // The user's 4-digit discord-tag	identify
     // public avatar ? string	the user's avatar hash	identify
     // public bot ? boolean	whether the user belongs to an OAuth2 application	identify
     // public system ? boolean	whether the user is an Official Discord System user(part of the urgent message system)	identify

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DiscordApplicationCommandOptionType } from '../custom-types/discord-application-command-option-type';
+
+import { DiscordApplicationCommandOptionType } from '..';
 
 export default class DiscordApplicationCommandInteractionDataOption {
-    public name: string                                                 // The name of the parameter
+    public name: string;                                                 // The name of the parameter
     public type: DiscordApplicationCommandOptionType;                   // Value of application command option type
     public value?: string | number;                                     // The value of the option resulting from user input
     public options?: DiscordApplicationCommandInteractionDataOption[];	// Present if this option is a group or subcommand

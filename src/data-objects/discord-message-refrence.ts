@@ -1,4 +1,4 @@
-import { Snowflake } from '../custom-types/snowflake';
+import { Snowflake } from '..';
 
 export default class DiscordMessageRefrence {
     public message_id?: Snowflake;                  // Id of the originating message

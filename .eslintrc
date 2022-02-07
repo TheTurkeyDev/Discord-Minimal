@@ -3,10 +3,7 @@
         "browser": true,
         "es2021": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
+    "extends": [],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2019,
@@ -42,6 +39,16 @@
         ],
         "@typescript-eslint/no-unused-vars": [
             "off"
+        ],
+        "max-len": [
+            2,
+            120,
+            {
+                "ignoreTrailingComments": true
+            },
+            {
+                "ignoreComments": true
+            }
         ]
     }
 }

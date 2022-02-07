@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DiscordApplicationCommandType } from '../custom-types/discord-application-command-type';
-import { DiscordApplicationCommandOptionType } from '../custom-types/discord-application-command-option-type';
-import { DiscordChannelType } from '../custom-types/discord-channel-types';
-import DiscordApplicationCommandOptionChoiceStructure from './discord-application-command-option-choice-structure';
+
+import {
+    DiscordApplicationCommandOptionChoiceStructure,
+    DiscordApplicationCommandOptionType,
+    DiscordChannelType
+} from '..';
 
 export default class DiscordApplicationCommandOption {
     public type: DiscordApplicationCommandOptionType;                                 // One of application command option type	the type of option
@@ -26,8 +28,8 @@ export default class DiscordApplicationCommandOption {
     static fromJson(json: any): DiscordApplicationCommandOption {
         const newInst = new DiscordApplicationCommandOption(json.name, json.description, json.type);
         newInst.required = json.required;
-        newInst.choices = json.choices?.map((c: any) => DiscordApplicationCommandOptionChoiceStructure.fromJson(c)) ?? [];
-        newInst.options = json.options?.map((o: any) => DiscordApplicationCommandOption.fromJson(o)) ?? [];
+        newInst.choices = json.choices?.map(DiscordApplicationCommandOptionChoiceStructure.fromJson) ?? [];
+        newInst.options = json.options?.map(DiscordApplicationCommandOption.fromJson) ?? [];
         newInst.channel_types = json.channel_types ?? [];
         newInst.min_value = json.min_value;
         newInst.max_value = json.max_value;

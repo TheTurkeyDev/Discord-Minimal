@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import {
+    DiscordGuildMember,
+    DiscordInteractionType,
+    DiscordMessage,
+    DiscordMessageCreate,
+    DiscordUser,
+    Snowflake
+} from '..';
 import { DiscordComponentType } from '../custom-types/discord-component-types';
-import { Snowflake } from '../custom-types/snowflake';
 import DiscordInteractionData from './discord-interaction-data';
-import DiscordUser from './discord-user';
+import DiscordInteractionResponseData from './discord-interaction-response-data';
 import * as DiscordAPI from '../api/discord-api';
 import { DiscordInteractionCallbackType } from '../custom-types/discord-interaction-callback-type';
-import DiscordInteractionResponseData from './discord-interaction-response-data';
-import DiscordGuildMember from './discord-guild-memeber';
-import { DiscordMessage, DiscordMessageCreate } from '..';
-import { DiscordInteractionType } from '../custom-types/discord-interaction-type';
 
 export default class DiscordInteraction {
 
@@ -69,5 +72,11 @@ export default class DiscordInteraction {
     public sendMessageInChannel(message: DiscordMessageCreate): Promise<DiscordMessage> {
         // -1? Should never call this if the channel_id is not set
         return DiscordAPI.createMessage(this.channel_id ?? -1, message);
+    }
+
+    public deferUpdate(): Promise<void> {
+        return DiscordAPI.interactionCallback(this.id, this.token, {
+            type: DiscordInteractionCallbackType.DEFERRED_UPDATE_MESSAGE
+        });
     }
 }

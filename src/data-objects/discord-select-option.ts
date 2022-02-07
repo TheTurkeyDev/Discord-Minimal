@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import DiscordEmoji from './discord-emoji';
+
+import { DiscordEmoji } from '..';
 
 export default class DiscordSelectOption {
     public label: string;                   // The user-facing name of the option, max 100 characters
@@ -17,8 +18,23 @@ export default class DiscordSelectOption {
     static fromJson(json: any): DiscordSelectOption {
         const newInst = new DiscordSelectOption(json.label, json.value);
         newInst.description = json.description;
-        newInst.emoji = DiscordEmoji.fromJson(json.emoji);
+        newInst.emoji = json.emoji && DiscordEmoji.fromJson(json.emoji);
         newInst.default = json.default;
         return newInst;
+    }
+
+    public setDescription(description: string): DiscordSelectOption {
+        this.description = description;
+        return this;
+    }
+
+    public setEmoji(emoji: DiscordEmoji): DiscordSelectOption {
+        this.emoji = emoji;
+        return this;
+    }
+
+    public setDefault(): DiscordSelectOption {
+        this.default = true;
+        return this;
     }
 }
