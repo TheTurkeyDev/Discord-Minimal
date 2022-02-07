@@ -33,8 +33,8 @@ export default class DiscordSelectOption {
         return this;
     }
 
-    public setDefault(): DiscordSelectOption {
-        this.default = true;
+    public setDefault(def = true): DiscordSelectOption {
+        this.default = def;
         return this;
     }
 }
