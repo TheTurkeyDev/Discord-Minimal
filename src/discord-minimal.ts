@@ -265,7 +265,7 @@ export class DiscordMinimal extends events.EventEmitter {
                 //TODO!
                 break;
             default:
-                console.log('UNKOWN EVENT!', eventId);
+                console.log('UNKNOWN EVENT!', eventId);
         }
     }
 
