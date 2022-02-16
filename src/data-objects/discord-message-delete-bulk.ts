@@ -14,7 +14,7 @@ export default class DiscordMessageDeleteBulk {
     }
 
     static fromJson(json: any): DiscordMessageDeleteBulk {
-        const newInst = new DiscordMessageDeleteBulk(json.id, json.channel_id);
+        const newInst = new DiscordMessageDeleteBulk(json.ids, json.channel_id);
         newInst.guild_id = json.guild_id;
         return newInst;
     }
