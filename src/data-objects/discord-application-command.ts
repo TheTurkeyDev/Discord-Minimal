@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import {
-    DiscordApplicationCommandOption,
-    DiscordApplicationCommandType,
-    Snowflake
-} from '..';
 
-export default class DiscordApplicationCommand {
+import { DiscordApplicationCommandOption } from ".";
+import { DiscordApplicationCommandType, Snowflake } from "..";
+
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+export class DiscordApplicationCommand
+{
     public id?: Snowflake;	                                // Unique id of the command
     public type: DiscordApplicationCommandType; 	        // One of application command type the type of command, defaults 1 if not set
     public application_id: Snowflake;                       // Unique id of the parent application
@@ -17,14 +16,16 @@ export default class DiscordApplicationCommand {
     public default_permission?: boolean;                    // Whether the command is enabled by default when the app is added to a guild
     public version?: Snowflake;                             // Autoincrementing version identifier updated during substantial record changes
 
-    constructor(application_id: Snowflake, name: string, description: string) {
+    constructor(application_id: Snowflake, name: string, description: string)
+    {
         this.application_id = application_id;
         this.name = name;
         this.description = description;
         this.type = DiscordApplicationCommandType.CHAT_INPUT;
     }
 
-    static fromJson(json: any): DiscordApplicationCommand {
+    static fromJson(json: any): DiscordApplicationCommand
+    {
         const newInst = new DiscordApplicationCommand(json.application_id, json.name, json.description);
         newInst.id = json.id;
         newInst.type = json.type;
@@ -35,12 +36,14 @@ export default class DiscordApplicationCommand {
         return newInst;
     }
 
-    public setType(type: DiscordApplicationCommandType): DiscordApplicationCommand {
+    public setType(type: DiscordApplicationCommandType): DiscordApplicationCommand
+    {
         this.type = type;
         return this;
     }
 
-    public addOption(...options: DiscordApplicationCommandOption[]): DiscordApplicationCommand {
+    public addOption(...options: DiscordApplicationCommandOption[]): DiscordApplicationCommand
+    {
         this.options.push(...options);
         return this;
     }

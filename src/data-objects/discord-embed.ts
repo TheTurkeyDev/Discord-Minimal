@@ -3,8 +3,8 @@ import DiscordEmbedField from './discord-embed-field';
 import DiscordEmbedFooter from './discord-embed-footer';
 import DiscordEmbedImage from './discord-embed-image';
 
-export default class DiscordEmbed {
-
+export class DiscordEmbed
+{
     public title?: string;	                    // Title of embed
     // public type?	string	type of embed (always "rich" for webhook embeds)
     public description?: string;	            // Description of embed
@@ -20,42 +20,50 @@ export default class DiscordEmbed {
     public fields?: DiscordEmbedField[] = [];   // Array of embed field objects	fields information
 
 
-    public setColor(color: number | string): DiscordEmbed {
+    public setColor(color: number | string): DiscordEmbed
+    {
         this.color = typeof color === 'string' ? Number(color) : color;
         return this;
     }
 
-    public setDescription(description: string): DiscordEmbed {
+    public setDescription(description: string): DiscordEmbed
+    {
         this.description = description;
         return this;
     }
 
-    public setTitle(title: string): DiscordEmbed {
+    public setTitle(title: string): DiscordEmbed
+    {
         this.title = title;
         return this;
     }
 
-    public setAuthor(name: string, iconUrl?: string, url?: string, proxyIconUrl?: string): DiscordEmbed {
+    public setAuthor(name: string, iconUrl?: string, url?: string, proxyIconUrl?: string): DiscordEmbed
+    {
         this.author = new DiscordEmbedAuthor(name, url, iconUrl, proxyIconUrl);
         return this;
     }
 
-    public setImage(url: string, proxyUrl?: string, height?: number, width?: number): DiscordEmbed {
+    public setImage(url: string, proxyUrl?: string, height?: number, width?: number): DiscordEmbed
+    {
         this.image = new DiscordEmbedImage(url, proxyUrl, height, width);
         return this;
     }
 
-    public addField(name: string, value: string, inline?: boolean): DiscordEmbed {
+    public addField(name: string, value: string, inline?: boolean): DiscordEmbed
+    {
         this.fields?.push(new DiscordEmbedField(name, value, inline));
         return this;
     }
 
-    public setFooter(text: string, iconUrl?: string, proxyIconUrl?: string): DiscordEmbed {
+    public setFooter(text: string, iconUrl?: string, proxyIconUrl?: string): DiscordEmbed
+    {
         this.footer = new DiscordEmbedFooter(text, iconUrl, proxyIconUrl);
         return this;
     }
 
-    public setTimestamp(): DiscordEmbed {
+    public setTimestamp(): DiscordEmbed
+    {
         this.timestamp = new Date().toISOString();
         return this;
     }

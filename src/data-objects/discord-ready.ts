@@ -3,7 +3,8 @@
 import { DiscordGuild, DiscordUser } from '..';
 import DiscordApplication from './discord-application';
 
-export default class DiscordReady {
+export class DiscordReady
+{
     public v!: number;                          // Gateway version
     public user!: DiscordUser;                  // Information about the user including email
     public guilds!: DiscordGuild[];             // The guilds the user is in
@@ -11,7 +12,8 @@ export default class DiscordReady {
     public shard?: number[];                    // Array of two integers(shard_id, num_shards) the shard information associated with this session, if sent when identifying
     public application!: DiscordApplication;     // Partial application object, contains id and flags
 
-    constructor(json: any) {
+    constructor(json: any)
+    {
         this.v = json.v;
         this.user = DiscordUser.fromJson(json.user);
         this.guilds = json.guilds.map(DiscordGuild.fromJson);

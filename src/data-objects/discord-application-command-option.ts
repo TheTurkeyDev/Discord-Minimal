@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import {
+import
+{
     DiscordApplicationCommandOptionChoiceStructure,
     DiscordApplicationCommandOptionType,
     DiscordChannelType
 } from '..';
 
-export default class DiscordApplicationCommandOption {
+export class DiscordApplicationCommandOption
+{
     public type: DiscordApplicationCommandOptionType;                                 // One of application command option type	the type of option
     public name: string;	                                                    // 1-32 character name
     public description: string;	                                                // 1 - 100 character description
@@ -19,13 +21,15 @@ export default class DiscordApplicationCommandOption {
     public max_value?: number;                                                  // For INTEGER options, double for NUMBER options	if the option is an INTEGER or NUMBER type, the maximum value permitted
     public autocomplete?: boolean;	                                            // If autocomplete interactions are enabled for this STRING, INTEGER, or NUMBER type option
 
-    constructor(name: string, description: string, type: DiscordApplicationCommandOptionType) {
+    constructor(name: string, description: string, type: DiscordApplicationCommandOptionType)
+    {
         this.name = name;
         this.description = description;
         this.type = type;
     }
 
-    static fromJson(json: any): DiscordApplicationCommandOption {
+    static fromJson(json: any): DiscordApplicationCommandOption
+    {
         const newInst = new DiscordApplicationCommandOption(json.name, json.description, json.type);
         newInst.required = json.required;
         newInst.choices = json.choices?.map(DiscordApplicationCommandOptionChoiceStructure.fromJson) ?? [];
@@ -37,17 +41,20 @@ export default class DiscordApplicationCommandOption {
         return newInst;
     }
 
-    public setRequired(): DiscordApplicationCommandOption {
+    public setRequired(): DiscordApplicationCommandOption
+    {
         this.required = true;
         return this;
     }
 
-    public addChoiceKeyVal(key: string, value: string | number): DiscordApplicationCommandOption {
+    public addChoiceKeyVal(key: string, value: string | number): DiscordApplicationCommandOption
+    {
         this.choices.push(new DiscordApplicationCommandOptionChoiceStructure(key, value));
         return this;
     }
 
-    public addChoice(choice: DiscordApplicationCommandOptionChoiceStructure): DiscordApplicationCommandOption {
+    public addChoice(choice: DiscordApplicationCommandOptionChoiceStructure): DiscordApplicationCommandOption
+    {
         this.choices.push(choice);
         return this;
     }

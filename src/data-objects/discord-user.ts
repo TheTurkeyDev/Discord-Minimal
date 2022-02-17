@@ -4,7 +4,8 @@
 import { Snowflake } from '..';
 
 
-export default class DiscordUser {
+export class DiscordUser
+{
     public id!: Snowflake;                  // The user's id	identify
     public username!: string;               // The user's username, not unique across the platform	identify
     public discriminator!: string; 	        // The user's 4-digit discord-tag	identify
@@ -21,18 +22,21 @@ export default class DiscordUser {
     // public premium_type ? integer	the type of Nitro subscription on a user's account	identify
     // public public_flags ? integer	the public flags on a user's account	identify
 
-    constructor(id: Snowflake, username: string, discriminator: string) {
+    constructor(id: Snowflake, username: string, discriminator: string)
+    {
         this.id = id;
         this.username = username;
         this.discriminator = discriminator;
     }
 
-    static fromJson(json: any): DiscordUser {
+    static fromJson(json: any): DiscordUser
+    {
         const newInst = new DiscordUser(json.id, json.username, json.discriminator);
         return newInst;
     }
 
-    public setActivity(activity: string) {
+    public setActivity(activity: string)
+    {
         //TODO
     }
 }

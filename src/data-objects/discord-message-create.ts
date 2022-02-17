@@ -2,7 +2,8 @@ import { DiscordEmbed, Snowflake } from '..';
 import DiscordComponent from './discord-component';
 import DiscordMessageRefrence from './discord-message-refrence';
 
-export default class DiscordMessageCreate {
+export class DiscordMessageCreate
+{
     public content?: string;                                // The message contents(up to 2000 characters)
     public tts?: boolean;                                   // true if this is a TTS message
     //public file: file contents	the contents of the file being sent
