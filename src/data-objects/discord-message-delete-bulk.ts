@@ -15,9 +15,8 @@ export class DiscordMessageDeleteBulk
         this.channel_id = channel_id;
     }
 
-    static fromJson(json: any): DiscordMessageDeleteBulk
-    {
-        const newInst = new DiscordMessageDeleteBulk(json.id, json.channel_id);
+    static fromJson(json: any): DiscordMessageDeleteBulk {
+        const newInst = new DiscordMessageDeleteBulk(json.ids, json.channel_id);
         newInst.guild_id = json.guild_id;
         return newInst;
     }
