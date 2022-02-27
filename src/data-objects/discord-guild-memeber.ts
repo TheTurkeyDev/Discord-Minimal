@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DiscordUser, Snowflake } from '..';
+import { Snowflake } from '../custom-types/snowflake';
+import { DiscordUser } from './discord-user';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export class DiscordGuildMember
-{
+export class DiscordGuildMember {
     public user?: DiscordUser;              // The user this guild member represents
     public nick?: string;	                // This users guild nickname
     // public avatar?	?string	the member's guild avatar hash
@@ -16,8 +16,7 @@ export class DiscordGuildMember
     // public pending?	boolean	whether the user has not yet passed the guild's Membership Screening requirements
     public permissions?: string;	        //total permissions of the member in the channel, including overwrites, returned when in the interaction object
 
-    static fromJson(json: any, parentUser: DiscordUser | undefined = undefined): DiscordGuildMember
-    {
+    static fromJson(json: any, parentUser: DiscordUser | undefined = undefined): DiscordGuildMember {
         const newInst = new DiscordGuildMember();
         newInst.user = json.user ? DiscordUser.fromJson(json.user) : parentUser;
         newInst.nick = json.nick;

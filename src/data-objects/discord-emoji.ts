@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Snowflake } from '..';
+import { Snowflake } from '../custom-types/snowflake';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export class DiscordEmoji
-{
+export class DiscordEmoji {
     public id?: Snowflake;	            // Emoji id
     public name?: string;               // (can be null only in reaction emoji objects)	emoji name
     // roles?	array of role object ids	roles allowed to use this emoji
@@ -15,8 +14,7 @@ export class DiscordEmoji
     // available?	boolean	whether this emoji can be used, may be false due to loss of Server Boosts
 
 
-    static fromJson(json: any): DiscordEmoji
-    {
+    static fromJson(json: any): DiscordEmoji {
         const newInst = new DiscordEmoji();
         newInst.id = json.id;
         newInst.name = json.name;

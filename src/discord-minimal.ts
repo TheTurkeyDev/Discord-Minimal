@@ -6,15 +6,13 @@ import events from 'events';
 import { createGlobalApplicationCommand, getGatewayBot } from './api/discord-api';
 import { WebSocketData } from './api/websocket-data';
 import { DiscordGatewayBotInfo } from './data-objects';
-import
-{
+import {
     GatewayPayload,
     HeartBeatPayload,
     IdentifyPayload,
     ResumePayload
 } from './payloads';
-import
-{
+import {
     DiscordApplicationCommand,
     DiscordGuild,
     DiscordInteraction,
@@ -38,8 +36,7 @@ type CloseEvent = {
     target: WebSocket;
 }
 
-export declare interface DiscordMinimal
-{
+export declare interface DiscordMinimal {
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
     on(event: 'messageCreate', listener: (message: DiscordMessage) => void): this;
     on(event: 'messageDelete', listener: (message: DiscordMessageDelete) => void): this;
@@ -52,8 +49,7 @@ export declare interface DiscordMinimal
     on(event: string, listener: () => void): this;
 }
 
-export class DiscordMinimal extends events.EventEmitter
-{
+export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
     private heartbeat: NodeJS.Timer[] = [];
     // This should proably be done better...
@@ -64,14 +60,12 @@ export class DiscordMinimal extends events.EventEmitter
     private shards = 1;
     private gatewayUrl = '';
 
-    constructor(intents: number[])
-    {
+    constructor(intents: number[]) {
         super();
         this.intents = intents.reduce((sum, a) => sum + a, 0);
     }
 
-    public async login(token: string)
-    {
+    public async login(token: string) {
         DiscordMinimal.token = token;
 
         const gatewayInfo = await getGatewayBot().catch(e => { console.log(e); return new DiscordGatewayBotInfo({}); });
@@ -79,8 +73,7 @@ export class DiscordMinimal extends events.EventEmitter
         this.gatewayUrl = gatewayInfo.url;
         this.shards = gatewayInfo.shards;
 
-        const interval = setInterval(() =>
-        {
+        const interval = setInterval(() => {
             const startIndex = this.websocket.length;
             const max = Math.min(gatewayInfo.session_start_limit.max_concurrency, this.shards - startIndex);
             for (let i = 0; i < max; i++)
@@ -91,8 +84,7 @@ export class DiscordMinimal extends events.EventEmitter
         }, 7000);
     }
 
-    private initGatewaySocket(gatewayUrl: string, shardId: number)
-    {
+    private initGatewaySocket(gatewayUrl: string, shardId: number) {
         const ws = new WebSocket(`${gatewayUrl}/?v=8&encoding=json`);
 
         const wsd = new WebSocketData(ws, shardId);
@@ -104,14 +96,12 @@ export class DiscordMinimal extends events.EventEmitter
 
     }
 
-    private onMessage(wsd: WebSocketData, event: MessageEvent, shardNum: number)
-    {
+    private onMessage(wsd: WebSocketData, event: MessageEvent, shardNum: number) {
         const message: GatewayPayload = Object.assign(new GatewayPayload(), JSON.parse(event.data));
         if (message.s)
             wsd.seq = message.s;
 
-        switch (message.op)
-        {
+        switch (message.op) {
             case 0:
                 this.onEvent(message, wsd);
                 break;
@@ -138,8 +128,7 @@ export class DiscordMinimal extends events.EventEmitter
         }
     }
 
-    private onClose(event: CloseEvent, shardId: number)
-    {
+    private onClose(event: CloseEvent, shardId: number) {
         const code = event.code;
 
         clearInterval(this.heartbeat[shardId]);
@@ -147,8 +136,7 @@ export class DiscordMinimal extends events.EventEmitter
         if (event.reason === 'Clientside closed!')
             return;
 
-        switch (code)
-        {
+        switch (code) {
             case -1:
             case 1000:
             case 1001:
@@ -165,11 +153,9 @@ export class DiscordMinimal extends events.EventEmitter
         }
     }
 
-    private initReconnect(shardId: number)
-    {
+    private initReconnect(shardId: number) {
         const socketData = this.websocket.find(wsd => wsd.shard === shardId);
-        if (socketData)
-        {
+        if (socketData) {
             socketData.resume = true;
             socketData.ws.removeAllListeners();
             socketData.ws.close(1002);
@@ -182,25 +168,21 @@ export class DiscordMinimal extends events.EventEmitter
         }
     }
 
-    private initReconnectFull()
-    {
+    private initReconnectFull() {
         for (let i = 0; i < this.websocket.length; i++)
             this.websocket[i].ws.removeAllListeners();
         this.websocket = [];
         this.login(DiscordMinimal.token ?? '');
     }
 
-    public sendPayload(ws: WebSocket, message: GatewayPayload): void
-    {
+    public sendPayload(ws: WebSocket, message: GatewayPayload): void {
         if (ws.readyState === OPEN)
             ws.send(JSON.stringify(message));
     }
 
-    private onEvent(json: GatewayPayload, wsd: WebSocketData): void
-    {
+    private onEvent(json: GatewayPayload, wsd: WebSocketData): void {
         const eventId = json.t;
-        switch (eventId)
-        {
+        switch (eventId) {
             case 'READY':
                 // eslint-disable-next-line no-case-declarations
                 const ready = new DiscordReady(json.d);
@@ -296,8 +278,7 @@ export class DiscordMinimal extends events.EventEmitter
         }
     }
 
-    private startHeartbeat(wsd: WebSocketData, shardNum: number, heartbeatDelay: number)
-    {
+    private startHeartbeat(wsd: WebSocketData, shardNum: number, heartbeatDelay: number) {
         if (this.heartbeat[shardNum])
             clearInterval(this.heartbeat[shardNum]);
 
@@ -306,8 +287,7 @@ export class DiscordMinimal extends events.EventEmitter
         );
     }
 
-    public createGlobalCommand(command: DiscordApplicationCommand)
-    {
+    public createGlobalCommand(command: DiscordApplicationCommand) {
         createGlobalApplicationCommand(command);
     }
 }

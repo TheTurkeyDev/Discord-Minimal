@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DiscordGuildMember, DiscordMessageCreate, DiscordUser, Snowflake } from '..';
 import * as DiscordAPI from '../api/discord-api';
+import { Snowflake } from '../custom-types/snowflake';
+import { DiscordGuildMember } from './discord-guild-memeber';
+import { DiscordMessageCreate } from './discord-message-create';
 import DiscordMessageEdit from './discord-message-edit';
 import DiscordReaction from './discord-reaction';
+import { DiscordUser } from './discord-user';
 
-export class DiscordMessage
-{
+export class DiscordMessage {
     public id!: Snowflake;	                    // Id of the message
     public channel_id!: Snowflake;              // Id of the channel the message was sent in
     public guild_id?: Snowflake;                // Id of the guild the message was sent in
@@ -39,8 +41,7 @@ export class DiscordMessage
     //     public sticker_items ? array of message sticker item objects	sent if the message contains stickers
     //     public stickers ? array of sticker objects	Deprecated the stickers sent with the message
 
-    constructor(id: Snowflake, channel_id: Snowflake, author: DiscordUser, content: string, timestamp: string)
-    {
+    constructor(id: Snowflake, channel_id: Snowflake, author: DiscordUser, content: string, timestamp: string) {
         this.id = id;
         this.channel_id = channel_id;
         this.author = author;
@@ -48,8 +49,7 @@ export class DiscordMessage
         this.timestamp = timestamp;
     }
 
-    static fromJson(json: any): DiscordMessage
-    {
+    static fromJson(json: any): DiscordMessage {
         const newInst = new DiscordMessage(
             json.id,
             json.channel_id,
@@ -66,8 +66,7 @@ export class DiscordMessage
         return newInst;
     }
 
-    public reply(message: string): Promise<DiscordMessage>
-    {
+    public reply(message: string): Promise<DiscordMessage> {
         return DiscordAPI.createMessage(
             this.channel_id,
             {
@@ -82,28 +81,23 @@ export class DiscordMessage
         );
     }
 
-    public sendMessageInChannel(message: string): Promise<DiscordMessage>
-    {
+    public sendMessageInChannel(message: string): Promise<DiscordMessage> {
         return DiscordAPI.createMessage(this.channel_id, { content: message });
     }
 
-    public sendInChannel(message: DiscordMessageCreate): Promise<DiscordMessage>
-    {
+    public sendInChannel(message: DiscordMessageCreate): Promise<DiscordMessage> {
         return DiscordAPI.createMessage(this.channel_id, message);
     }
 
-    public edit(message: DiscordMessageEdit): Promise<DiscordMessage>
-    {
+    public edit(message: DiscordMessageEdit): Promise<DiscordMessage> {
         return DiscordAPI.editMessage(this.channel_id, this.id, message);
     }
 
-    public react(emoji: string): Promise<void>
-    {
+    public react(emoji: string): Promise<void> {
         return DiscordAPI.addReaction(this.channel_id, this.id, emoji);
     }
 
-    public removeAllReactions(): Promise<void>
-    {
+    public removeAllReactions(): Promise<void> {
         return DiscordAPI.deleteAllReactions(this.channel_id, this.id);
     }
 }

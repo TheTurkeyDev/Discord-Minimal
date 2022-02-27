@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { Snowflake } from '..';
+import { Snowflake } from '../custom-types/snowflake';
 
 export default class DiscordApplication {
     public id: Snowflake;	                // The id of the app

@@ -1,5 +1,5 @@
-import { DiscordEmbed } from '..';
 import DiscordComponent from './discord-component';
+import { DiscordEmbed } from './discord-embed';
 
 
 export default class DiscordInteractionResponseData {

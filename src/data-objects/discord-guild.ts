@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DiscordRole, Snowflake } from '..';
+import { Snowflake } from '../custom-types/snowflake';
+import { DiscordRole } from './discord-role';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export class DiscordGuild
-{
+export class DiscordGuild {
     public id: Snowflake;	                // Guild id
     public name: string;                    // Guild name (2-100 characters, excluding trailing and leading whitespace)
     public icon?: string;                   // 
@@ -56,15 +56,13 @@ export class DiscordGuild
     // guild_scheduled_events? *	array of guild scheduled event objects	the scheduled events in the guild
     // premium_progress_bar_enabled	boolean	whether the guild has the boost progress bar enabled
 
-    constructor(id: Snowflake, name: string, owner_id: Snowflake)
-    {
+    constructor(id: Snowflake, name: string, owner_id: Snowflake) {
         this.id = id;
         this.name = name;
         this.owner_id = owner_id;
     }
 
-    static fromJson(json: any): DiscordGuild
-    {
+    static fromJson(json: any): DiscordGuild {
         const newInst = new DiscordGuild(json.id, json.name, json.owner_id);
         newInst.icon = json.icon;
         newInst.icon_hash = json.icon_hash;

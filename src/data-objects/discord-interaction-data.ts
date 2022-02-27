@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DiscordSelectOption, Snowflake } from '..';
 import { DiscordComponentType } from '../custom-types/discord-component-types';
+import { Snowflake } from '../custom-types/snowflake';
 import DiscordApplicationCommandInteractionDataOption from './discord-application-command-interaction-data-option';
 import DiscordInteractionResolvedData from './discord-interaction-resolved-data';
 

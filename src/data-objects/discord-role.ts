@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Snowflake } from '..';
+import { Snowflake } from '../custom-types/snowflake';
+
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export class DiscordRole
-{
+export class DiscordRole {
 
     public id: Snowflake;	            // Role id
     public name: string;                // Role name
@@ -17,15 +17,13 @@ export class DiscordRole
     // managed	boolean	whether this role is managed by an integration
     // mentionable	boolean	whether this role is mentionable
     // tags?	role tags object	the tags this role has
-    constructor(id: Snowflake, name: string, permissions: number)
-    {
+    constructor(id: Snowflake, name: string, permissions: number) {
         this.id = id;
         this.name = name;
         this.permissions = permissions;
     }
 
-    static fromJson(json: any): DiscordRole
-    {
+    static fromJson(json: any): DiscordRole {
         const newInst = new DiscordRole(json.id, json.name, json.permissions);
         return newInst;
     }

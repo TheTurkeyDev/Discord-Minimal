@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { DiscordGuildMember, DiscordMessage, DiscordRole, DiscordUser } from '..';
+import { DiscordGuildMember } from './discord-guild-memeber';
+import { DiscordMessage } from './discord-message';
+import { DiscordRole } from './discord-role';
+import { DiscordUser } from './discord-user';
 
 interface UserMap {
     [key: string]: DiscordUser;
