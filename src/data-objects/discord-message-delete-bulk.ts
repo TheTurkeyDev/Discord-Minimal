@@ -3,12 +3,14 @@
 
 import { Snowflake } from '..';
 
-export default class DiscordMessageDeleteBulk {
+export class DiscordMessageDeleteBulk
+{
     public ids!: Snowflake[];           // The ids of the messages
     public channel_id!: Snowflake;      // The id of the channel
     public guild_id?: Snowflake;	    // The id of the guild
 
-    constructor(ids: Snowflake[], channel_id: Snowflake) {
+    constructor(ids: Snowflake[], channel_id: Snowflake)
+    {
         this.ids = ids;
         this.channel_id = channel_id;
     }

@@ -1,8 +1,10 @@
-import GatewayPayload from './gateway-payload';
+import { GatewayPayload } from './gateway-payload';
 
-export default class IdentifyPayload extends GatewayPayload {
+export class IdentifyPayload extends GatewayPayload
+{
 
-    constructor(token: string, intents: number, shard: number[]) {
+    constructor(token: string, intents: number, shard: number[])
+    {
         super();
         this.op = 2;
         this.d = {

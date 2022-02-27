@@ -1,8 +1,10 @@
-import GatewayPayload from './gateway-payload';
+import { GatewayPayload } from './gateway-payload';
 
-export default class ResumePayload extends GatewayPayload {
+export class ResumePayload extends GatewayPayload
+{
 
-    constructor(token: string, session_id: string, seq: number) {
+    constructor(token: string, session_id: string, seq: number)
+    {
         super();
         this.op = 6;
         this.d = {
