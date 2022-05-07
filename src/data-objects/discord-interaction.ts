@@ -69,6 +69,12 @@ export class DiscordInteraction {
         });
     }
 
+    public respondText(message: string): Promise<void> {
+        const data = new DiscordInteractionResponseData();
+        data.content = message;
+        return this.respond(data);
+    }
+
     public sendMessageInChannel(message: DiscordMessageCreate): Promise<DiscordMessage> {
         // -1? Should never call this if the channel_id is not set
         return DiscordAPI.createMessage(this.channel_id ?? -1, message);
