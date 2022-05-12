@@ -133,9 +133,6 @@ export class DiscordMinimal extends events.EventEmitter {
 
         clearInterval(this.heartbeat[shardId]);
 
-        if (event.reason === 'Clientside closed!')
-            return;
-
         switch (code) {
             case -1:
             case 1000:
@@ -271,6 +268,12 @@ export class DiscordMinimal extends events.EventEmitter {
                 //TODO!
                 break;
             case 'THREAD_LIST_SYNC':
+                //TODO!
+                break;
+            case 'USER_UPDATE':
+                //TODO!
+                break;
+            case 'GIFT_CODE_UPDATE':
                 //TODO!
                 break;
             default:
