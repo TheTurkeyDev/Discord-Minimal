@@ -5,7 +5,8 @@
   "main": "output/src/index.js",
   "types": "output/src/index.d.ts",
   "scripts": {
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "test": "npx tsc & node output/test/test-bot.js"
   },
   "author": "TurkeyDev",
   "license": "MIT",

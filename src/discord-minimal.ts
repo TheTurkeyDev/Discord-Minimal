@@ -37,6 +37,7 @@ type CloseEvent = {
 }
 
 export declare interface DiscordMinimal {
+    on(event: 'debug', listener: (message: string) => void): this;
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
     on(event: 'messageCreate', listener: (message: DiscordMessage) => void): this;
     on(event: 'messageDelete', listener: (message: DiscordMessageDelete) => void): this;
@@ -92,6 +93,7 @@ export class DiscordMinimal extends events.EventEmitter {
 
         ws.addEventListener('message', (event) => this.onMessage(wsd, event, shardId));
         ws.addEventListener('close', (event) => this.onClose(event, shardId));
+        ws.addEventListener('open', (event) => this.onOpen(event, shardId));
         ws.addEventListener('error', (error) => console.error(error));
 
     }
@@ -100,6 +102,8 @@ export class DiscordMinimal extends events.EventEmitter {
         const message: GatewayPayload = Object.assign(new GatewayPayload(), JSON.parse(event.data));
         if (message.s)
             wsd.seq = message.s;
+
+        this.debug(`Message on shard \`${shardNum}\` | OP: ${message.op}`);
 
         switch (message.op) {
             case 0:
@@ -128,10 +132,20 @@ export class DiscordMinimal extends events.EventEmitter {
         }
     }
 
+    private debug(message: string) {
+        this.emit('debug', message);
+    }
+
+    private onOpen(event: WebSocket.Event, shardId: number) {
+        this.debug(`Shard \`${shardId}\` open! Event type: ${event.type} `);
+    }
+
     private onClose(event: CloseEvent, shardId: number) {
         const code = event.code;
 
         clearInterval(this.heartbeat[shardId]);
+
+        this.debug(`Shard \`${shardId}\` closed! Code: ${code} | Reason: ${event.reason} `);
 
         switch (code) {
             case -1:
@@ -179,6 +193,9 @@ export class DiscordMinimal extends events.EventEmitter {
 
     private onEvent(json: GatewayPayload, wsd: WebSocketData): void {
         const eventId = json.t;
+
+        this.debug(`Event recieved | Shard: ${wsd.shard} | ID: ${eventId}`);
+
         switch (eventId) {
             case 'READY':
                 // eslint-disable-next-line no-case-declarations
@@ -286,7 +303,10 @@ export class DiscordMinimal extends events.EventEmitter {
             clearInterval(this.heartbeat[shardNum]);
 
         this.heartbeat[shardNum] = setInterval(
-            () => this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq)), heartbeatDelay
+            () => {
+                this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq));
+                this.debug(`Heartbeat | Shard: ${shardNum} | Delay: ${heartbeatDelay}`);
+            }, heartbeatDelay
         );
     }
 
