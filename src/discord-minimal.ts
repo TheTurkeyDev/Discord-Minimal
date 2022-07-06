@@ -260,6 +260,9 @@ export class DiscordMinimal extends events.EventEmitter {
             case 'GUILD_JOIN_REQUEST_DELETE':
                 //TODO!
                 break;
+            case 'GUILD_APPLICATION_COMMAND_INDEX_UPDATE':
+                //TODO!
+                break;
             case 'CHANNEL_CREATE':
                 //TODO!
                 break;
