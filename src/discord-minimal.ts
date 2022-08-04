@@ -147,11 +147,12 @@ export class DiscordMinimal extends events.EventEmitter {
 
         this.debug(`Shard \`${shardId}\` closed! Code: ${code} | Reason: ${event.reason} `);
 
+        if (code < 4000) {
+            this.initReconnect(shardId);
+            return;
+        }
+
         switch (code) {
-            case -1:
-            case 1000:
-            case 1001:
-            case 1006:
             case 4000:
             case 4008:
             case 4009:
