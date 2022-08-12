@@ -5,7 +5,7 @@ import WebSocket, { OPEN } from 'ws';
 import events from 'events';
 import { createGlobalApplicationCommand, getGatewayBot } from './api/discord-api';
 import { WebSocketData } from './api/websocket-data';
-import { DiscordGatewayBotInfo } from './data-objects';
+import { DiscordGatewayBotInfo, DiscordGuildMember, DiscordUser } from './data-objects';
 import {
     GatewayPayload,
     HeartBeatPayload,
@@ -22,6 +22,18 @@ import {
     DiscordMessageReactionAdd,
     DiscordReady
 } from '.';
+import { DiscordMessageReactionRemove } from './data-objects/discord-message-reaction-remove';
+import { DiscordMessageReactionRemoveAll } from './data-objects/discord-message-reaction-remove-all';
+import { DiscordMessageReactionRemoveEmoji } from './data-objects/discord-message-reaction-remove-emoji';
+import { DiscordGuildMemberRemove } from './data-objects/discord-guild-memeber-remove';
+import { DiscordGuildMemberUpdate } from './data-objects/discord-guild-memeber-update';
+import { DiscordGuildRoleUpsert } from './data-objects/discord-guild-role-upsert';
+import { DiscordGuildRoleDelete } from './data-objects/discord-guild-role-delete';
+import { DiscordChannel } from './data-objects/discord-channel';
+import { DiscordThreadListSync } from './data-objects/discord-thread-list-sync';
+import { DiscordStageInstance } from './data-objects/discord-stage-instance';
+import { DiscordChannelPinsUpdate } from './data-objects/discord-channel-pins-update';
+import { DiscordApplicationCommandPermissions } from './data-objects/discord-application-command-permissions';
 
 type MessageEvent = {
     data: any;
@@ -39,16 +51,81 @@ type CloseEvent = {
 export declare interface DiscordMinimal {
     on(event: 'debug', listener: (message: string) => void): this;
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
+    on(event: 'resumed', listener: () => void): this;
     on(event: 'messageCreate', listener: (message: DiscordMessage) => void): this;
+    on(event: 'messageUpdate', listener: (message: DiscordMessage) => void): this;
     on(event: 'messageDelete', listener: (message: DiscordMessageDelete) => void): this;
     on(event: 'messageDeleteBulk', listener: (messages: DiscordMessageDeleteBulk) => void): this;
     on(event: 'messageReactionAdd', listener: (messageReaction: DiscordMessageReactionAdd) => void): this;
+    on(event: 'messageReactionRemove', listener: (messageReaction: DiscordMessageReactionRemove) => void): this;
+    on(event: 'messageReactionRemoveAll', listener: (messageReaction: DiscordMessageReactionRemoveAll) => void): this;
+    on(event: 'messageReactionRemoveEmoji', listener: (msgReaction: DiscordMessageReactionRemoveEmoji) => void): this;
     on(event: 'interactionCreate', listener: (interaction: DiscordInteraction) => void): this;
     on(event: 'guildCreate', listener: (interaction: DiscordGuild) => void): this;
     on(event: 'guildDelete', listener: (interaction: DiscordGuild) => void): this;
     on(event: 'guildUpdate', listener: (interaction: DiscordGuild) => void): this;
+    on(event: 'guildMemberAdd', listener: (memeber: DiscordGuildMember) => void): this;
+    on(event: 'guildMemberRemove', listener: (memeber: DiscordGuildMemberRemove) => void): this;
+    on(event: 'guildMemberUpdate', listener: (memeber: DiscordGuildMemberUpdate) => void): this;
+    on(event: 'guildRoleCreate', listener: (upsert: DiscordGuildRoleUpsert) => void): this;
+    on(event: 'guildRoleUpdate', listener: (upsert: DiscordGuildRoleUpsert) => void): this;
+    on(event: 'guildRoleDelete', listener: (upsert: DiscordGuildRoleDelete) => void): this;
+    on(event: 'channelCreate', listener: (channel: DiscordChannel) => void): this;
+    on(event: 'channelUpdate', listener: (channel: DiscordChannel) => void): this;
+    on(event: 'channelDelete', listener: (channel: DiscordChannel) => void): this;
+    on(event: 'channelPinsUpdate', listener: (channelPinsUpdate: DiscordChannelPinsUpdate) => void): this;
+    // eslint-disable-next-line max-len
+    on(event: 'applicationCommandPermissionsUpdate', listener: (permissionsUpdate: DiscordApplicationCommandPermissions) => void): this;
+    on(event: 'stageInstanceCreate', listener: (stageInstance: DiscordStageInstance) => void): this;
+    on(event: 'stageInstanceDelete', listener: (stageInstance: DiscordStageInstance) => void): this;
+    on(event: 'stageInstanceUpdate', listener: (stageInstance: DiscordStageInstance) => void): this;
+    on(event: 'threadListSync', listener: (threadListSync: DiscordThreadListSync) => void): this;
+    on(event: 'userUpdate', listener: (user: DiscordUser) => void): this;
+
     on(event: string, listener: () => void): this;
 }
+
+type Events = {
+    [type: string]: {
+        eventId: string
+        dataMap: (data: any) => any
+    }
+}
+const EVENTS_MAP: Events = {};
+function addEvent(type: string, eventId: string, dataMap: (data: any) => any) {
+    EVENTS_MAP[type] = { eventId, dataMap };
+}
+
+addEvent('MESSAGE_CREATE', 'messageCreate', DiscordMessage.fromJson);
+addEvent('MESSAGE_UPDATE', 'messageUpdate', DiscordMessage.fromJson);
+addEvent('MESSAGE_DELETE', 'messageDelete', DiscordMessageDelete.fromJson);
+addEvent('MESSAGE_DELETE_BULK', 'messageDeleteBulk', DiscordMessageDeleteBulk.fromJson);
+addEvent('MESSAGE_REACTION_ADD', 'messageReactionAdd', DiscordMessageReactionAdd.fromJson);
+addEvent('MESSAGE_REACTION_REMOVE', 'messageReactionRemove', DiscordMessageReactionRemove.fromJson);
+addEvent('MESSAGE_REACTION_REMOVE_ALL', 'messageReactionRemoveAll', DiscordMessageReactionRemoveAll.fromJson);
+addEvent('MESSAGE_REACTION_REMOVE_EMOJI', 'messageReactionRemoveEmoji', DiscordMessageReactionRemoveEmoji.fromJson);
+addEvent('INTERACTION_CREATE', 'interactionCreate', DiscordInteraction.fromJson);
+addEvent('GUILD_CREATE', 'guildCreate', DiscordGuild.fromJson);
+addEvent('GUILD_DELETE', 'guildDelete', DiscordGuild.fromJson);
+addEvent('GUILD_UPDATE', 'guildUpdate', DiscordGuild.fromJson);
+addEvent('GUILD_MEMBER_ADD', 'guildMemberAdd', DiscordGuildMember.fromJson);
+addEvent('GUILD_MEMBER_REMOVE', 'guildMemberRemove', DiscordGuildMemberRemove.fromJson);
+addEvent('GUILD_MEMBER_UPDATE', 'guildMemberUpdate', DiscordGuildMemberUpdate.fromJson);
+addEvent('GUILD_ROLE_CREATE', 'guildRoleCreate', DiscordGuildRoleUpsert.fromJson);
+addEvent('GUILD_ROLE_UPDATE', 'guildRoleUpdate', DiscordGuildRoleUpsert.fromJson);
+addEvent('GUILD_ROLE_DELETE', 'guildRoleDelete', DiscordGuildRoleDelete.fromJson);
+addEvent('CHANNEL_CREATE', 'channelCreate', DiscordChannel.fromJson);
+addEvent('CHANNEL_UPDATE', 'channelUpdate', DiscordChannel.fromJson);
+addEvent('CHANNEL_DELETE', 'channelDelete', DiscordChannel.fromJson);
+addEvent('CHANNEL_PINS_UPDATE', 'channelPinsUpdate', DiscordChannelPinsUpdate.fromJson);
+// eslint-disable-next-line max-len
+addEvent('APPLICATION_COMMAND_PERMISSIONS_UPDATE', 'applicationCommandPermissionsUpdate', DiscordApplicationCommandPermissions.fromJson);
+addEvent('STAGE_INSTANCE_CREATE', 'stageInstanceCreate', DiscordStageInstance.fromJson);
+addEvent('STAGE_INSTANCE_DELETE', 'stageInstanceDelete', DiscordStageInstance.fromJson);
+addEvent('STAGE_INSTANCE_UPDATE', 'stageInstanceUpdate', DiscordStageInstance.fromJson);
+addEvent('THREAD_LIST_SYNC', 'threadListSync', DiscordThreadListSync.fromJson);
+addEvent('USER_UPDATE', 'userUpdate', DiscordUser.fromJson);
+
 
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
@@ -197,108 +274,28 @@ export class DiscordMinimal extends events.EventEmitter {
 
         this.debug(`Event recieved | Shard: ${wsd.shard} | ID: ${eventId}`);
 
-        switch (eventId) {
-            case 'READY':
-                // eslint-disable-next-line no-case-declarations
-                const ready = new DiscordReady(json.d);
-                wsd.session_id = ready.session_id;
-                this.emit('ready', ready);
-                break;
-            case 'RESUMED':
-                //TODO!
-                break;
-            case 'MESSAGE_CREATE':
-                this.emit('messageCreate', DiscordMessage.fromJson(json.d));
-                break;
-            case 'MESSAGE_UPDATE':
-                //TODO!
-                break;
-            case 'MESSAGE_DELETE':
-                this.emit('messageDelete', DiscordMessageDelete.fromJson(json.d));
-                break;
-            case 'MESSAGE_DELETE_BULK':
-                this.emit('messageDeleteBulk', DiscordMessageDeleteBulk.fromJson(json.d));
-                break;
-            case 'MESSAGE_REACTION_ADD':
-                this.emit('messageReactionAdd', DiscordMessageReactionAdd.fromJson(json.d));
-                break;
-            case 'MESSAGE_REACTION_REMOVE':
-                //TODO!
-                break;
-            case 'MESSAGE_REACTION_REMOVE_EMOJI':
-                //TODO!
-                break;
-            case 'MESSAGE_REACTION_REMOVE_ALL':
-                //TODO!
-                break;
-            case 'INTERACTION_CREATE':
-                this.emit('interactionCreate', DiscordInteraction.fromJson(json.d));
-                break;
-            case 'GUILD_CREATE':
-                this.emit('guildCreate', DiscordGuild.fromJson(json.d));
-                break;
-            case 'GUILD_DELETE':
-                this.emit('guildDelete', DiscordGuild.fromJson(json.d));
-                break;
-            case 'GUILD_UPDATE':
-                this.emit('guildUpdate', DiscordGuild.fromJson(json.d));
-                break;
-            case 'GUILD_MEMBER_UPDATE':
-                //TODO!
-                break;
-            case 'GUILD_ROLE_CREATE':
-                //TODO!
-                break;
-            case 'GUILD_ROLE_UPDATE':
-                //TODO!
-                break;
-            case 'GUILD_ROLE_DELETE':
-                //TODO!
-                break;
-            case 'GUILD_JOIN_REQUEST_UPDATE':
-                //TODO!
-                break;
-            case 'GUILD_JOIN_REQUEST_DELETE':
-                //TODO!
-                break;
-            case 'GUILD_APPLICATION_COMMAND_INDEX_UPDATE':
-                //TODO!
-                break;
-            case 'CHANNEL_CREATE':
-                //TODO!
-                break;
-            case 'CHANNEL_UPDATE':
-                //TODO!
-                break;
-            case 'CHANNEL_DELETE':
-                //TODO!
-                break;
-            case 'CHANNEL_PINS_UPDATE':
-                //TODO!
-                break;
-            case 'APPLICATION_COMMAND_PERMISSIONS_UPDATE':
-                //TODO!
-                break;
-            case 'STAGE_INSTANCE_CREATE':
-                //TODO!
-                break;
-            case 'STAGE_INSTANCE_DELETE':
-                //TODO!
-                break;
-            case 'STAGE_INSTANCE_UPDATE':
-                //TODO!
-                break;
-            case 'THREAD_LIST_SYNC':
-                //TODO!
-                break;
-            case 'USER_UPDATE':
-                //TODO!
-                break;
-            case 'GIFT_CODE_UPDATE':
-                //TODO!
-                break;
-            default:
-                console.log('UNKNOWN EVENT!', eventId);
+        if(!eventId){
+            return;
+        }
+
+        const event = EVENTS_MAP[eventId];
+        if (event) {
+            this.emit(event.eventId, event.dataMap(json.d));
+        }
+        else if (eventId === 'READY') {
+            const ready = new DiscordReady(json.d);
+            wsd.session_id = ready.session_id;
+            this.emit('ready', ready);
+        }
+        else if (eventId === 'RESUMED') {
+            this.emit('resumed');
+        }
+        // eslint-disable-next-line max-len
+        else if (['GUILD_JOIN_REQUEST_UPDATE', 'GUILD_JOIN_REQUEST_DELETE', 'GUILD_APPLICATION_COMMAND_INDEX_UPDATE', 'GIFT_CODE_UPDATE'].includes(eventId)) {
+            //TODO: I've seen these event id's but no idea what their payload is... Can't find docs on them
+        }
+        else {
+            console.log('UNKNOWN EVENT!', eventId);
         }
     }
 
