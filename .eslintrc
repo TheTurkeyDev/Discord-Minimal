@@ -42,7 +42,7 @@
         ],
         "max-len": [
             2,
-            120,
+            130,
             {
                 "ignoreTrailingComments": true
             },

@@ -8,12 +8,12 @@ export class DiscordMessageReactionRemoveEmoji {
     /**
      * The id of the channel
      */
-    public channel_id!: Snowflake;
+    public channel_id: Snowflake;
 
     /**
      * The id of the message
      */
-    public message_id!: Snowflake;
+    public message_id: Snowflake;
 
     /**
      * The id of the guild

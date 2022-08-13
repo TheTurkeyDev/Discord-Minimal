@@ -4,11 +4,31 @@
 import { DiscordEmoji } from './discord-emoji';
 
 export class DiscordSelectOption {
-    public label: string;                   // The user-facing name of the option, max 100 characters
-    public value: string;                   // The dev-define value of the option, max 100 characters
-    public description?: string;            // An additional description of the option, max 100 characters
-    public emoji?: DiscordEmoji;            // Partial emoji object	id, name, and animated
-    public default?: boolean;	            // Will render this option as selected by default
+
+    /**
+     * The user-facing name of the option, max 100 characters
+     */
+    public label: string;
+
+    /**
+     * The dev-define value of the option, max 100 characters
+     */
+    public value: string;
+
+    /**
+     * An additional description of the option, max 100 characters
+     */
+    public description?: string;
+
+    /**
+     * Partial emoji object	id, name, and animated
+     */
+    public emoji?: DiscordEmoji;
+    
+    /**
+     * Will render this option as selected by default
+     */
+    public default?: boolean;
 
     constructor(label: string, value: string) {
         this.label = label;

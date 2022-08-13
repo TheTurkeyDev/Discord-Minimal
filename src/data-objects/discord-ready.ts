@@ -5,12 +5,36 @@ import { DiscordGuild } from './discord-guild';
 import { DiscordUser } from './discord-user';
 
 export class DiscordReady {
-    public v!: number;                          // Gateway version
-    public user!: DiscordUser;                  // Information about the user including email
-    public guilds!: DiscordGuild[];             // The guilds the user is in
-    public session_id!: string;                 // Used for resuming connections
-    public shard?: number[];                    // Array of two integers(shard_id, num_shards) the shard information associated with this session, if sent when identifying
-    public application!: DiscordApplication;    // Partial application object, contains id and flags
+
+    /**
+     * Gateway version
+     */
+    public v: number;
+
+    /**
+     * Information about the user including email
+     */
+    public user: DiscordUser;
+
+    /**
+     * The guilds the user is in
+     */
+    public guilds: DiscordGuild[];
+
+    /**
+     * Used for resuming connections
+     */
+    public session_id: string;
+
+    /**
+     * Array of two integers(shard_id, num_shards) the shard information associated with this session, if sent when identifying
+     */
+    public shard?: number[];
+
+    /**
+     * Partial application object, contains id and flags
+     */
+    public application: DiscordApplication;
 
     constructor(json: any) {
         this.v = json.v;

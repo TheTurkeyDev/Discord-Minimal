@@ -1,7 +1,22 @@
 export enum DiscordButtonStyle {
-    PRIMARY = 1,        // blurple
-    SECONDARY = 2,      // grey
-    SUCCESS = 3,	    // green
-    DANGER = 4,	        // red
-    LINK = 5,	        // grey
+    /**
+     * blurple
+     */
+    PRIMARY = 1,
+    /**
+     * grey
+     */
+    SECONDARY = 2,
+    /**
+     * green
+     */
+    SUCCESS = 3,
+    /**
+     * red
+     */
+    DANGER = 4,
+    /**
+     * grey
+     */
+    LINK = 5,
 }

@@ -4,11 +4,30 @@
 import { DiscordApplicationCommandOptionType } from '../custom-types/discord-application-command-option-type';
 
 export default class DiscordApplicationCommandInteractionDataOption {
-    public name: string;                                                // The name of the parameter
-    public type: DiscordApplicationCommandOptionType;                   // Value of application command option type
-    public value?: string | number;                                     // The value of the option resulting from user input
-    public options?: DiscordApplicationCommandInteractionDataOption[];	// Present if this option is a group or subcommand
-    public focused?: boolean;	                                        // true if this option is the currently focused option for autocomplete
+    /**
+     * The name of the parameter
+     */
+    public name: string;
+
+    /**
+     * Value of application command option type
+     */
+    public type: DiscordApplicationCommandOptionType;
+
+    /**
+     * The value of the option resulting from user input
+     */
+    public value?: string | number;
+
+    /**
+     * Present if this option is a group or subcommand
+     */
+    public options?: DiscordApplicationCommandInteractionDataOption[];
+
+    /**
+     * true if this option is the currently focused option for autocomplete
+     */
+    public focused?: boolean;
 
     constructor(name: string, type: DiscordApplicationCommandOptionType) {
         this.name = name;

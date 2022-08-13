@@ -1,8 +1,24 @@
 export default class DiscordEmbedImage {
-    public url: string;	                // Source url of image (only supports http(s) and attachments)
-    public proxy_url?: string;	        // A proxied url of the image
-    public height?: number;	            // Height of image
-    public width?: number;              // Width of image
+
+    /**
+     * Source url of image (only supports http(s) and attachments)
+     */
+    public url: string;
+
+    /**
+     * A proxied url of the image
+     */
+    public proxy_url?: string;
+
+    /**
+     * Height of image
+     */
+    public height?: number;
+
+    /**
+     * Width of image
+     */
+    public width?: number;
 
     public constructor(url: string, proxyUrl?: string, height?: number, width?: number) {
         this.url = url;

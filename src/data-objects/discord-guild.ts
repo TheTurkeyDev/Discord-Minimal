@@ -5,13 +5,33 @@ import { DiscordRole } from './discord-role';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class DiscordGuild {
-    public id: Snowflake;	                // Guild id
-    public name: string;                    // Guild name (2-100 characters, excluding trailing and leading whitespace)
-    public icon?: string;                   // 
-    public icon_hash?: string;	            // Returned when in the template object
+
+    /**
+     * Guild id
+     */
+    public id: Snowflake;
+
+    /**
+     * Guild name (2-100 characters, excluding trailing and leading whitespace)
+     */
+    public name: string;
+
+    /**
+     * icon hash
+     */
+    public icon?: string;
+
+    /**
+     * Returned when in the template object
+     */
+    public icon_hash?: string;
     // splash	?string	splash hash
     // discovery_splash	?string	discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
-    public owner_id: Snowflake;              //	id of owner
+
+    /**
+     * Id of owner
+     */
+    public owner_id: Snowflake;
     // region? ***	?string	voice region id for the guild (deprecated)
     // afk_channel_id	?snowflake	id of afk channel
     // afk_timeout	integer	afk timeout in seconds
@@ -20,7 +40,11 @@ export class DiscordGuild {
     // verification_level	integer	verification level required for the guild
     // default_message_notifications	integer	default message notifications level
     // explicit_content_filter	integer	explicit content filter level
-    public roles: DiscordRole[] = [];            // Roles in the guild
+
+    /**
+     * Roles in the guild
+     */
+    public roles: DiscordRole[] = [];
     // emojis	array of emoji objects	custom guild emojis
     // features	array of guild feature strings	enabled guild features
     // mfa_level	integer	required MFA level for the guild
@@ -30,7 +54,11 @@ export class DiscordGuild {
     // rules_channel_id	?snowflake	the id of the channel where Community guilds can display rules and/or guidelines
     // joined_at? *	ISO8601 timestamp	when this guild was joined at
     // large? *	boolean	true if this is considered a large guild
-    public unavailable?: boolean;           // True if this guild is unavailable due to an outage
+
+    /**
+     * True if this guild is unavailable due to an outage
+     */
+    public unavailable?: boolean;
     // member_count? *	integer	total number of members in this guild
     // voice_states? *	array of partial voice state objects	states of members currently in voice channels; lacks the guild_id key
     // members? *	array of guild member objects	users in the guild

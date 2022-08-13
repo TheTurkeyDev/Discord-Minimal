@@ -4,9 +4,21 @@
 import { Snowflake } from '../custom-types/snowflake';
 
 export class DiscordMessageDeleteBulk {
-    public ids!: Snowflake[];           // The ids of the messages
-    public channel_id!: Snowflake;      // The id of the channel
-    public guild_id?: Snowflake;	    // The id of the guild
+
+    /**
+     * The ids of the messages
+     */
+    public ids: Snowflake[];
+
+    /**
+     * The id of the channel
+     */
+    public channel_id: Snowflake;
+
+    /**
+     * The id of the guild
+     */
+    public guild_id?: Snowflake;
 
     constructor(ids: Snowflake[], channel_id: Snowflake) {
         this.ids = ids;

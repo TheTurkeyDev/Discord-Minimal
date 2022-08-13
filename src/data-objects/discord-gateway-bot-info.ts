@@ -1,9 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class DiscordGatewayBotInfo {
-    public url: string;	                                            // The WSS URL that can be used for connecting to the gateway
-    public shards: number;                                          // The recommended number of shards to use when connecting
-    public session_start_limit: DiscordGatewaySessionStartLimit;    // Information on the current session start limit
+
+    /**
+     * The WSS URL that can be used for connecting to the gateway
+     */
+    public url: string;
+
+    /**
+     * The recommended number of shards to use when connecting
+     */
+    public shards: number;
+
+    /**
+     * Information on the current session start limit
+     */
+    public session_start_limit: DiscordGatewaySessionStartLimit;
 
     constructor(json: any) {
         this.url = json.url;
@@ -13,10 +25,26 @@ export class DiscordGatewayBotInfo {
 }
 
 export class DiscordGatewaySessionStartLimit {
-    public total: number;               // The total number of session starts the current user is allowed
-    public remaining: number;           // The remaining number of session starts the current user is allowed
-    public reset_after: number;         // The number of milliseconds after which the limit resets
-    public max_concurrency: number;     // The number of identify requests allowed per 5 seconds
+
+    /**
+     * The total number of session starts the current user is allowed
+     */
+    public total: number;
+
+    /**
+     * The remaining number of session starts the current user is allowed
+     */
+    public remaining: number;
+
+    /**
+     * The number of milliseconds after which the limit resets
+     */
+    public reset_after: number;
+
+    /**
+     * The number of identify requests allowed per 5 seconds
+     */
+    public max_concurrency: number;
 
     constructor(json: any) {
         this.total = json.total;

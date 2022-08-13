@@ -7,12 +7,36 @@ import { DiscordEmoji } from './discord-emoji';
 import { DiscordGuildMember } from './discord-guild-memeber';
 
 export class DiscordMessageReactionAdd {
-    public user_id!: Snowflake;         // The id of the user
-    public channel_id!: Snowflake;      // The id of the channel
-    public message_id!: Snowflake;      // The id of the message
-    public guild_id?: Snowflake;         // The id of the guild
-    public member?: DiscordGuildMember; // The member who reacted if this happened in a guild
-    public emoji!: DiscordEmoji;     	// A partial emoji object, the emoji used to react
+
+    /**
+     * The id of the user
+     */
+    public user_id: Snowflake;
+
+    /**
+     * The id of the channel
+     */
+    public channel_id: Snowflake;
+
+    /**
+     * The id of the message
+     */
+    public message_id: Snowflake;
+
+    /**
+     * The id of the guild
+     */
+    public guild_id?: Snowflake;
+
+    /**
+     * The member who reacted if this happened in a guild
+     */
+    public member?: DiscordGuildMember;
+
+    /**
+     * A partial emoji object, the emoji used to react
+     */
+    public emoji: DiscordEmoji;
 
     constructor(user_id: Snowflake, channel_id: Snowflake, message_id: Snowflake, emoji: DiscordEmoji) {
         this.user_id = user_id;

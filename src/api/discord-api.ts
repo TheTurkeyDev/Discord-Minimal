@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import fetch, { RequestInit, Response } from 'node-fetch';
 import { Snowflake } from '../custom-types/snowflake';
 import DiscordInteractionResponse from '../data-objects/discord-interaction-response';
@@ -93,155 +92,139 @@ async function processQueue(
     resolve(resp);
 }
 
-export function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
+export async function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
     const url = '/gateway/bot';
-    return sendFetch(url, url, {
+    const resp = await sendFetch(url, url, {
         method: 'GET',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         }
-    }).then(resp => {
-        if (resp.ok)
-            return resp.json().then(json => new DiscordGatewayBotInfo(json));
-        return resp.json().then(json => { 
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'GET', url); 
-        });
     });
+    if (resp.ok)
+        return resp.json().then(json => new DiscordGatewayBotInfo(json));
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'GET', url);
 }
 
-export function interactionCallback(
+export async function interactionCallback(
     interactionId: number,
     interactionToken: string,
     data: DiscordInteractionResponse
 ): Promise<void> {
     const url = `${URL_BASE}/interactions/${interactionId}/${interactionToken}/callback`;
-    return fetch(url, {
+    const resp = await fetch(url, {
         method: 'POST',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-    }).then(resp => {
-        if (resp.ok)
-            return new Promise<void>(resolve => resolve());
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
-        });
     });
+    if (resp.ok)
+        return new Promise<void>(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
 }
 
-export function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
+export async function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages`;
-    return sendFetch(url, `/channels/${channelId}/messages/create`, {
+    const resp = await sendFetch(url, `/channels/${channelId}/messages/create`, {
         method: 'POST',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(message),
-    }).then(resp => {
-        if (resp.ok)
-            return resp.json().then(DiscordMessage.fromJson);
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
-        });
     });
+    if (resp.ok)
+        return resp.json().then(DiscordMessage.fromJson);
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
 }
 
-export function editMessage(
+export async function editMessage(
     channelId: Snowflake,
     messagelId: Snowflake,
     message: DiscordMessageEdit
 ): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages/${messagelId}`;
-    return sendFetch(url, `/channels/${channelId}/messages/edit`, {
+    const resp = await sendFetch(url, `/channels/${channelId}/messages/edit`, {
         method: 'PATCH',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(message),
-    }).then(resp => {
-        if (resp.ok)
-            return resp.json().then(DiscordMessage.fromJson);
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'PATCH', url);
-        });
     });
+    if (resp.ok)
+        return resp.json().then(DiscordMessage.fromJson);
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'PATCH', url);
 }
 
-export function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string): Promise<void> {
+export async function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string): Promise<void> {
     const url = `/channels/${channelId}/messages/${messagelId}/reactions/${encodeURIComponent(emoji)}/@me`;
-    return sendFetch(url, `/channels/${channelId}/messages/reactions`, {
+    const resp = await sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'PUT',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         }
-    }).then(resp => {
-        if (resp.ok)
-            return new Promise<void>(resolve => resolve());
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'PUT', url);
-        });
     });
+    if (resp.ok)
+        return new Promise<void>(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'PUT', url);
 }
 
-export function deleteUserReaction(
+export async function deleteUserReaction(
     channelId: Snowflake,
     messagelId: Snowflake,
     emoji: string,
     userId: Snowflake
 ): Promise<void> {
     const url = `/channels/${channelId}/messages/${messagelId}/reactions/${encodeURIComponent(emoji)}/${userId}`;
-    return sendFetch(url, `/channels/${channelId}/messages/reactions`, {
+    const resp = await sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'DELETE',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         }
-    }).then(resp => {
-        if (resp.ok)
-            return new Promise<void>(resolve => resolve());
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
-        });
     });
+    if (resp.ok)
+        return new Promise<void>(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
 }
 
-export function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake): Promise<void> {
+export async function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake): Promise<void> {
     const url = `/channels/${channelId}/messages/${messagelId}/reactions`;
-    return sendFetch(url, `/channels/${channelId}/messages/reactions`, {
+    const resp = await sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'DELETE',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         }
-    }).then(resp => {
-        if (resp.ok)
-            return new Promise(resolve => resolve());
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
-        });
     });
+    if (resp.ok)
+        return new Promise(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
 }
 
-export function createGlobalApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
+export async function createGlobalApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
     const url = `/applications/${command.application_id}/commands`;
-    return sendFetch(url, `/applications/${command.application_id}/commands`, {
+    const resp = await sendFetch(url, `/applications/${command.application_id}/commands`, {
         method: 'POST',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(command),
-    }).then(resp => {
-        if (resp.ok)
-            return new Promise(resolve => resolve());
-        return resp.json().then(json => {
-            throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
-        });
     });
+    if (resp.ok)
+        return new Promise(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
 }

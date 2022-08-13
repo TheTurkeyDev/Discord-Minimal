@@ -5,12 +5,36 @@ import { DiscordEmoji } from './discord-emoji';
 
 
 export class DiscordMessageButton extends DiscordComponent {
-    public custom_id?: string;                              // A developer-defined identifier for the component, max 100 characters
-    public disabled?: boolean = false;                      // Whether the component is disabled, default false
-    public style?: DiscordButtonStyle;                      // One of button styles
-    public label?: string;                                  // Text that appears on the button, max 80 characters
-    public emoji?: DiscordEmoji;                            // partial emoji name, id, and animated
-    public url?: string;                                    // A url for link - style buttons
+
+    /**
+     * A developer-defined identifier for the component, max 100 characters
+     */
+    public custom_id?: string;
+
+    /**
+     * Whether the component is disabled, default false
+     */
+    public disabled?: boolean = false;
+
+    /**
+     * One of button styles
+     */
+    public style?: DiscordButtonStyle;
+
+    /**
+     * Text that appears on the button, max 80 characters
+     */
+    public label?: string;
+
+    /**
+     * Partial emoji name, id, and animated
+     */
+    public emoji?: DiscordEmoji;
+
+    /**
+     * A url for link - style buttons
+     */
+    public url?: string;
 
     constructor() {
         super();

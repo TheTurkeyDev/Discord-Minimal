@@ -2,6 +2,14 @@ import { DiscordInteractionCallbackType } from '../custom-types/discord-interact
 import DiscordInteractionResponseData from './discord-interaction-response-data';
 
 export default class DiscordInteractionResponse {
-    public type!: DiscordInteractionCallbackType;        // The type of response
-    public data?: DiscordInteractionResponseData;	    // An optional response message
+    
+    /**
+     * The type of response
+     */
+    public type!: DiscordInteractionCallbackType;
+
+    /**
+     * An optional response message
+     */
+    public data?: DiscordInteractionResponseData;
 }

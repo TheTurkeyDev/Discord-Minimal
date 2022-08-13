@@ -5,11 +5,31 @@ import { Snowflake } from '../custom-types/snowflake';
 import { DiscordEmoji } from './discord-emoji';
 
 export class DiscordMessageReactionRemove {
-    public user_id!: Snowflake;         // The id of the user
-    public channel_id!: Snowflake;      // The id of the channel
-    public message_id!: Snowflake;      // The id of the message
-    public guild_id?: Snowflake;         // The id of the guild
-    public emoji!: DiscordEmoji;     	// A partial emoji object, the emoji used to react
+
+    /**
+     * The id of the user
+     */
+    public user_id: Snowflake;
+
+    /**
+     * The id of the channel
+     */
+    public channel_id: Snowflake;
+
+    /**
+     * The id of the message
+     */
+    public message_id: Snowflake;
+
+    /**
+     * The id of the guild
+     */
+    public guild_id?: Snowflake;
+
+    /**
+     * A partial emoji object, the emoji used to react
+     */
+    public emoji: DiscordEmoji;
 
     constructor(user_id: Snowflake, channel_id: Snowflake, message_id: Snowflake, emoji: DiscordEmoji) {
         this.user_id = user_id;

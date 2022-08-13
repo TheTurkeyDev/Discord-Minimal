@@ -4,12 +4,36 @@
 import { Snowflake } from '../custom-types/snowflake';
 
 export default class DiscordApplication {
-    public id: Snowflake;	                // The id of the app
-    // name	string	the name of the app
-    // icon	?string	the icon hash of the app
-    // description	string	the description of the app
-    // rpc_origins?	array of strings	an array of rpc origin urls, if rpc is enabled
-    // bot_public	boolean	when false only app owner can join the app's bot to guilds
+    /**
+     * The id of the app
+     */
+    public id: Snowflake;
+
+    /**
+     * The name of the app
+     */
+    public name: string;
+
+    /**
+     * The icon hash of the app
+     */
+    public icon?: string;
+
+    /**
+     * the description of the app
+     */
+    public description: string;
+
+    /**
+     * An array of rpc origin urls, if rpc is enabled
+     */
+    public rpc_origins?: string[];
+
+    /**
+     * when false only app owner can join the app's bot to guilds
+     */
+    public bot_public: boolean;
+
     // bot_require_code_grant	boolean	when true the app's bot will only join upon completion of the full oauth2 code grant flow
     // terms_of_service_url?	string	the url of the app's terms of service
     // privacy_policy_url?	string	the url of the app's privacy policy
@@ -23,12 +47,16 @@ export default class DiscordApplication {
     // cover_image?	string	the application's default rich presence invite cover image hash
     // flags?	integer	the application's public flags
 
-    constructor(id: Snowflake) {
+    constructor(id: Snowflake, name: string, description: string, bot_public: boolean) {
         this.id = id;
+        this.name = name;
+        this.description = description;
+        this.bot_public = bot_public;
     }
 
     static fromJson(json: any): DiscordApplication {
-        const newInst = new DiscordApplication(json.id);
+        const newInst = new DiscordApplication(json.id, json.name, json.description, json.bot_public);
+        newInst.icon = json.icon;
         return newInst;
     }
 }

@@ -96,36 +96,35 @@ function addEvent(type: string, eventId: string, dataMap: (data: any) => any) {
     EVENTS_MAP[type] = { eventId, dataMap };
 }
 
-addEvent('MESSAGE_CREATE', 'messageCreate', DiscordMessage.fromJson);
-addEvent('MESSAGE_UPDATE', 'messageUpdate', DiscordMessage.fromJson);
-addEvent('MESSAGE_DELETE', 'messageDelete', DiscordMessageDelete.fromJson);
-addEvent('MESSAGE_DELETE_BULK', 'messageDeleteBulk', DiscordMessageDeleteBulk.fromJson);
-addEvent('MESSAGE_REACTION_ADD', 'messageReactionAdd', DiscordMessageReactionAdd.fromJson);
-addEvent('MESSAGE_REACTION_REMOVE', 'messageReactionRemove', DiscordMessageReactionRemove.fromJson);
-addEvent('MESSAGE_REACTION_REMOVE_ALL', 'messageReactionRemoveAll', DiscordMessageReactionRemoveAll.fromJson);
-addEvent('MESSAGE_REACTION_REMOVE_EMOJI', 'messageReactionRemoveEmoji', DiscordMessageReactionRemoveEmoji.fromJson);
-addEvent('INTERACTION_CREATE', 'interactionCreate', DiscordInteraction.fromJson);
-addEvent('GUILD_CREATE', 'guildCreate', DiscordGuild.fromJson);
-addEvent('GUILD_DELETE', 'guildDelete', DiscordGuild.fromJson);
-addEvent('GUILD_UPDATE', 'guildUpdate', DiscordGuild.fromJson);
-addEvent('GUILD_MEMBER_ADD', 'guildMemberAdd', DiscordGuildMember.fromJson);
-addEvent('GUILD_MEMBER_REMOVE', 'guildMemberRemove', DiscordGuildMemberRemove.fromJson);
-addEvent('GUILD_MEMBER_UPDATE', 'guildMemberUpdate', DiscordGuildMemberUpdate.fromJson);
-addEvent('GUILD_ROLE_CREATE', 'guildRoleCreate', DiscordGuildRoleUpsert.fromJson);
-addEvent('GUILD_ROLE_UPDATE', 'guildRoleUpdate', DiscordGuildRoleUpsert.fromJson);
-addEvent('GUILD_ROLE_DELETE', 'guildRoleDelete', DiscordGuildRoleDelete.fromJson);
-addEvent('CHANNEL_CREATE', 'channelCreate', DiscordChannel.fromJson);
-addEvent('CHANNEL_UPDATE', 'channelUpdate', DiscordChannel.fromJson);
-addEvent('CHANNEL_DELETE', 'channelDelete', DiscordChannel.fromJson);
-addEvent('CHANNEL_PINS_UPDATE', 'channelPinsUpdate', DiscordChannelPinsUpdate.fromJson);
+addEvent('MESSAGE_CREATE', 'messageCreate', d => DiscordMessage.fromJson(d));
+addEvent('MESSAGE_UPDATE', 'messageUpdate', d => DiscordMessage.fromJson(d));
+addEvent('MESSAGE_DELETE', 'messageDelete', d => DiscordMessageDelete.fromJson(d));
+addEvent('MESSAGE_DELETE_BULK', 'messageDeleteBulk', d => DiscordMessageDeleteBulk.fromJson(d));
+addEvent('MESSAGE_REACTION_ADD', 'messageReactionAdd', d => DiscordMessageReactionAdd.fromJson(d));
+addEvent('MESSAGE_REACTION_REMOVE', 'messageReactionRemove', d => DiscordMessageReactionRemove.fromJson(d));
+addEvent('MESSAGE_REACTION_REMOVE_ALL', 'messageReactionRemoveAll', d => DiscordMessageReactionRemoveAll.fromJson(d));
+addEvent('MESSAGE_REACTION_REMOVE_EMOJI', 'messageReactionRemoveEmoji', d => DiscordMessageReactionRemoveEmoji.fromJson(d));
+addEvent('INTERACTION_CREATE', 'interactionCreate', d => DiscordInteraction.fromJson(d));
+addEvent('GUILD_CREATE', 'guildCreate', d => DiscordGuild.fromJson(d));
+addEvent('GUILD_DELETE', 'guildDelete', d => DiscordGuild.fromJson(d));
+addEvent('GUILD_UPDATE', 'guildUpdate', d => DiscordGuild.fromJson(d));
+addEvent('GUILD_MEMBER_ADD', 'guildMemberAdd', d => DiscordGuildMember.fromJson(d));
+addEvent('GUILD_MEMBER_REMOVE', 'guildMemberRemove', d => DiscordGuildMemberRemove.fromJson(d));
+addEvent('GUILD_MEMBER_UPDATE', 'guildMemberUpdate', d => DiscordGuildMemberUpdate.fromJson(d));
+addEvent('GUILD_ROLE_CREATE', 'guildRoleCreate', d => DiscordGuildRoleUpsert.fromJson(d));
+addEvent('GUILD_ROLE_UPDATE', 'guildRoleUpdate', d => DiscordGuildRoleUpsert.fromJson(d));
+addEvent('GUILD_ROLE_DELETE', 'guildRoleDelete', d => DiscordGuildRoleDelete.fromJson(d));
+addEvent('CHANNEL_CREATE', 'channelCreate', d => DiscordChannel.fromJson(d));
+addEvent('CHANNEL_UPDATE', 'channelUpdate', d => DiscordChannel.fromJson(d));
+addEvent('CHANNEL_DELETE', 'channelDelete', d => DiscordChannel.fromJson(d));
+addEvent('CHANNEL_PINS_UPDATE', 'channelPinsUpdate', d => DiscordChannelPinsUpdate.fromJson(d));
 // eslint-disable-next-line max-len
-addEvent('APPLICATION_COMMAND_PERMISSIONS_UPDATE', 'applicationCommandPermissionsUpdate', DiscordApplicationCommandPermissions.fromJson);
-addEvent('STAGE_INSTANCE_CREATE', 'stageInstanceCreate', DiscordStageInstance.fromJson);
-addEvent('STAGE_INSTANCE_DELETE', 'stageInstanceDelete', DiscordStageInstance.fromJson);
-addEvent('STAGE_INSTANCE_UPDATE', 'stageInstanceUpdate', DiscordStageInstance.fromJson);
-addEvent('THREAD_LIST_SYNC', 'threadListSync', DiscordThreadListSync.fromJson);
-addEvent('USER_UPDATE', 'userUpdate', DiscordUser.fromJson);
-
+addEvent('APPLICATION_COMMAND_PERMISSIONS_UPDATE', 'applicationCommandPermissionsUpdate', d => DiscordApplicationCommandPermissions.fromJson(d));
+addEvent('STAGE_INSTANCE_CREATE', 'stageInstanceCreate', d => DiscordStageInstance.fromJson(d));
+addEvent('STAGE_INSTANCE_DELETE', 'stageInstanceDelete', d => DiscordStageInstance.fromJson(d));
+addEvent('STAGE_INSTANCE_UPDATE', 'stageInstanceUpdate', d => DiscordStageInstance.fromJson(d));
+addEvent('THREAD_LIST_SYNC', 'threadListSync', d => DiscordThreadListSync.fromJson(d));
+addEvent('USER_UPDATE', 'userUpdate', d => DiscordUser.fromJson(d));
 
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
@@ -180,7 +179,7 @@ export class DiscordMinimal extends events.EventEmitter {
         if (message.s)
             wsd.seq = message.s;
 
-        this.debug(`Message on shard \`${shardNum}\` | OP: ${message.op}`);
+        this.debug(`${this.baseStr('Message')} | Shard: ${shardNum} | OP: ${message.op}`);
 
         switch (message.op) {
             case 0:
@@ -214,7 +213,7 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     private onOpen(event: WebSocket.Event, shardId: number) {
-        this.debug(`Shard \`${shardId}\` open! Event type: ${event.type} `);
+        this.debug(`${this.baseStr('Open')} | Shard: ${shardId} | Event type: ${event.type} `);
     }
 
     private onClose(event: CloseEvent, shardId: number) {
@@ -222,7 +221,7 @@ export class DiscordMinimal extends events.EventEmitter {
 
         clearInterval(this.heartbeat[shardId]);
 
-        this.debug(`Shard \`${shardId}\` closed! Code: ${code} | Reason: ${event.reason} `);
+        this.debug(`${this.baseStr('Close')} | Shard: ${shardId} | Code: ${code} | Reason: ${event.reason} `);
 
         if (code < 4000) {
             this.initReconnect(shardId);
@@ -272,9 +271,9 @@ export class DiscordMinimal extends events.EventEmitter {
     private onEvent(json: GatewayPayload, wsd: WebSocketData): void {
         const eventId = json.t;
 
-        this.debug(`Event recieved | Shard: ${wsd.shard} | ID: ${eventId}`);
+        this.debug(`${this.baseStr('Event recieved')} | Shard: ${wsd.shard} | ID: ${eventId}`);
 
-        if(!eventId){
+        if (!eventId) {
             return;
         }
 
@@ -306,13 +305,17 @@ export class DiscordMinimal extends events.EventEmitter {
         this.heartbeat[shardNum] = setInterval(
             () => {
                 this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq));
-                this.debug(`Heartbeat | Shard: ${shardNum} | Delay: ${heartbeatDelay}`);
+                this.debug(`${this.baseStr('Heartbeat')} | Shard: ${shardNum} | Delay: ${heartbeatDelay}`);
             }, heartbeatDelay
         );
     }
 
     public createGlobalCommand(command: DiscordApplicationCommand) {
         createGlobalApplicationCommand(command);
+    }
+
+    private baseStr(str: string): string {
+        return str + ' '.repeat(20 - str.length);
     }
 }
 

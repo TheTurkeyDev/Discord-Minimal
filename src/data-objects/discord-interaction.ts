@@ -16,17 +16,60 @@ import * as DiscordAPI from '../api/discord-api';
 
 export class DiscordInteraction {
 
-    public id!: Snowflake;                          // Id of the interaction
-    public application_id!: Snowflake;	            // Id of the application this interaction is for
-    public type!: DiscordInteractionType;	        // Interaction type the type of interaction
-    public data?: DiscordInteractionData;           // The command data payload
-    public guild_id?: Snowflake;	                // The guild it was sent from
-    public channel_id?: Snowflake;	                // The channel it was sent from
-    public member?: DiscordGuildMember;             // Guild member data for the invoking user, including permissions
-    public user?: DiscordUser;                      // User object for the invoking user, if invoked in a DM
-    public token!: string;                          // A continuation token for responding to the interaction
-    public version?: number;	                    // Read-only property, always 1
-    public message?: DiscordMessage;                // For components, the message they were attached to
+    /**
+     * Id of the interaction
+     */
+    public id!: Snowflake;
+
+    /**
+     * Id of the application this interaction is for
+     */
+    public application_id!: Snowflake;
+
+    /**
+     * Interaction type the type of interaction
+     */
+    public type!: DiscordInteractionType;
+
+    /**
+     * The command data payload
+     */
+    public data?: DiscordInteractionData;
+
+    /**
+     * The guild it was sent from
+     */
+    public guild_id?: Snowflake;
+
+    /**
+     * The channel it was sent from
+     */
+    public channel_id?: Snowflake;
+
+    /**
+     * Guild member data for the invoking user, including permissions
+     */
+    public member?: DiscordGuildMember;
+
+    /**
+     * User object for the invoking user, if invoked in a DM
+     */
+    public user?: DiscordUser;
+
+    /**
+     * A continuation token for responding to the interaction
+     */
+    public token!: string;
+
+    /**
+     * Read-only property, always 1
+     */
+    public version?: number;
+
+    /**
+     * For components, the message they were attached to
+     */
+    public message?: DiscordMessage;
 
     constructor(id: Snowflake, application_id: Snowflake, type: DiscordInteractionType, token: string) {
         this.id = id;

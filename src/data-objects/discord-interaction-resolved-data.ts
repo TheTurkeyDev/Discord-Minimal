@@ -27,11 +27,27 @@ interface MessageMap {
 }
 
 export default class DiscordInteractionResolvedData {
-    public users?: UserMap;                         // Map of Snowflakes to user objects
-    public members?: MemberMap;                     // Map of Snowflakes to partial member objects
-    public roles?: RoleMap;                         // Map of Snowflakes to role objects
+
+    /**
+     * Map of Snowflakes to user objects
+     */
+    public users?: UserMap;
+
+    /**
+     * Map of Snowflakes to partial member objects
+     */
+    public members?: MemberMap;
+
+    /**
+     * Map of Snowflakes to role objects
+     */
+    public roles?: RoleMap;
     //public channels?  ;                   // Map of Snowflakes to partial channel objects
-    public messages?: MessageMap;                   // Map of Snowflakes to partial messages objects
+
+    /**
+     * Map of Snowflakes to partial messages objects
+     */
+    public messages?: MessageMap;
 
     static fromJson(json: any): DiscordInteractionResolvedData {
         const newInst = new DiscordInteractionResolvedData();

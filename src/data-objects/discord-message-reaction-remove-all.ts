@@ -4,9 +4,21 @@
 import { Snowflake } from '../custom-types/snowflake';
 
 export class DiscordMessageReactionRemoveAll {
-    public channel_id!: Snowflake;      // The id of the channel
-    public message_id!: Snowflake;      // The id of the message
-    public guild_id?: Snowflake;         // The id of the guild
+    
+    /**
+     * The id of the channel
+     */
+    public channel_id: Snowflake;
+
+    /**
+     * The id of the message
+     */
+    public message_id: Snowflake;
+
+    /**
+     * The id of the guild
+     */
+    public guild_id?: Snowflake;
 
     constructor(channel_id: Snowflake, message_id: Snowflake) {
         this.channel_id = channel_id;

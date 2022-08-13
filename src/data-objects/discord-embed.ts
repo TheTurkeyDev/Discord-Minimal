@@ -4,19 +4,60 @@ import DiscordEmbedFooter from './discord-embed-footer';
 import DiscordEmbedImage from './discord-embed-image';
 
 export class DiscordEmbed {
-    public title?: string;	                    // Title of embed
-    // public type?	string	type of embed (always "rich" for webhook embeds)
-    public description?: string;	            // Description of embed
-    // public url?	string	url of embed
-    public timestamp?: string;                  // ISO8601 timestamp	timestamp of embed content
-    public color?: number;	                    // Color code of the embed
-    public footer?: DiscordEmbedFooter;	        // Footer information
-    public image?: DiscordEmbedImage;	        // Image information
+
+    /**
+     * Title of embed
+     */
+    public title?: string;
+
+    /**
+     * Type of embed (always "rich" for webhook embeds)
+     */
+    public type?:string;
+
+    /**
+     * Description of embed
+     */
+    public description?: string;
+
+    /**
+     * Url of embed
+     */
+    public url?: string;
+
+    /**
+     * timestamp of embed content (ISO8601 timestamp)
+     */
+    public timestamp?: string;
+
+    /**
+     * Color code of the embed
+     */
+    public color?: number;
+
+    /**
+     * Footer information
+     */
+    public footer?: DiscordEmbedFooter;
+
+    /**
+     * Image information
+     */
+    public image?: DiscordEmbedImage;
+    
     // public thumbnail?	embed thumbnail object	thumbnail information
     // public video?	embed video object	video information
     // public provider?	embed provider object	provider information
-    public author?: DiscordEmbedAuthor;         // Embed author object	author information
-    public fields?: DiscordEmbedField[] = [];   // Array of embed field objects	fields information
+
+    /**
+     *  Embed author object	author information
+     */
+    public author?: DiscordEmbedAuthor;
+
+    /**
+     * Array of embed field objects fields information
+     */
+    public fields?: DiscordEmbedField[] = [];
 
 
     public setColor(color: number | string): DiscordEmbed {

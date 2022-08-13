@@ -4,9 +4,21 @@
 import { Snowflake } from '../custom-types/snowflake';
 
 export class DiscordMessageDelete {
-    public id!: Snowflake;              // The id of the message
-    public channel_id!: Snowflake;      // The id of the channel
-    public guild_id?: Snowflake;	    // The id of the guild
+
+    /**
+     * The id of the message
+     */
+    public id: Snowflake;
+
+    /**
+     * The id of the channel
+     */
+    public channel_id: Snowflake;
+
+    /**
+     * The id of the guild
+     */
+    public guild_id?: Snowflake;
 
     constructor(id: Snowflake, channel_id: Snowflake) {
         this.id = id;
