@@ -48,6 +48,8 @@ type CloseEvent = {
     target: WebSocket;
 }
 
+export const APIVersion = 10;
+
 export declare interface DiscordMinimal {
     on(event: 'debug', listener: (message: string) => void): this;
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
@@ -161,7 +163,7 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     private initGatewaySocket(gatewayUrl: string, shardId: number) {
-        const ws = new WebSocket(`${gatewayUrl}/?v=8&encoding=json`);
+        const ws = new WebSocket(`${gatewayUrl}/?v=${APIVersion}&encoding=json`);
 
         const wsd = new WebSocketData(ws, shardId);
         this.websocket[shardId] = wsd;
@@ -247,7 +249,7 @@ export class DiscordMinimal extends events.EventEmitter {
             socketData.ws.removeAllListeners();
             socketData.ws.close(1002);
 
-            const ws = new WebSocket(`${socketData.resume_url}/?v=8&encoding=json`);
+            const ws = new WebSocket(`${socketData.resume_url}/?v=${APIVersion}&encoding=json`);
             socketData.ws = ws;
             ws.addEventListener('message', (event) => this.onMessage(socketData, event, shardId));
             ws.addEventListener('close', (event) => this.onClose(event, shardId));
