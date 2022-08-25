@@ -18,9 +18,19 @@ export class DiscordApplicationCommandOption {
     public name: string;
 
     /**
+     * Localization dictionary for the name field. Values follow the same restrictions as name
+     */
+    public name_localizations?: { [key: string]: string };
+
+    /**
      * 1 - 100 character description
      */
     public description: string;
+
+    /**
+     * Localization dictionary for the description field. Values follow the same restrictions as description
+     */
+    public description_localizations?: { [key: string]: string };
 
     /**
      * If the parameter is required or optional--default false

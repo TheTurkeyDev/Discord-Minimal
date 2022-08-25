@@ -31,9 +31,21 @@ export class DiscordChannel {
      * The name of the channel (1-100 characters)
      */
     public name?: string;
-    // topic?	?string	the channel topic (0-1024 characters)
-    // nsfw?	boolean	whether the channel is nsfw
-    // last_message_id?	?snowflake	the id of the last message sent in this channel (or thread for GUILD_FORUM channels) (may not point to an existing or valid message or thread)
+
+    /**
+     * The channel topic (0-1024 characters)
+     */
+    public topic?: string;
+
+    /**
+     * Whether the channel is nsfw
+     */
+    public nsfw?: boolean;
+
+    /**
+     * The id of the last message sent in this channel (or thread for GUILD_FORUM channels) (may not point to an existing or valid message or thread)
+     */
+    public last_message_id?: Snowflake;
     // bitrate?	integer	the bitrate (in bits) of the voice channel
     // user_limit?	integer	the user limit of the voice channel
     // rate_limit_per_user?*	integer	amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
@@ -54,7 +66,7 @@ export class DiscordChannel {
     // flags?	integer	channel flags combined as a bitfield
     // total_message_sent?	integer	number of messages ever sent in a thread, it's similar to message_count on message creation, but will not decrement the number when a message is deleted
 
-    constructor(id: Snowflake, type: DiscordChannelType){
+    constructor(id: Snowflake, type: DiscordChannelType) {
         this.id = id;
         this.type = type;
     }
@@ -64,6 +76,9 @@ export class DiscordChannel {
         newInst.guild_id = json.guild_id;
         newInst.position = json.position;
         newInst.name = json.name;
+        newInst.topic = json.topic;
+        newInst.nsfw = json.nsfw;
+        newInst.last_message_id = json.last_message_id;
         return newInst;
     }
 }

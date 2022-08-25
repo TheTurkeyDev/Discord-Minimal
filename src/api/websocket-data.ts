@@ -5,6 +5,7 @@ export class WebSocketData {
     public ws: WebSocket;
     public shard: number;
     public resume = false;
+    public resume_url = '';
     public session_id = '';
     public seq = -1;
 

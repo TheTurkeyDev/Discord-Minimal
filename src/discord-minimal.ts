@@ -135,7 +135,6 @@ export class DiscordMinimal extends events.EventEmitter {
 
     private intents: number;
     private shards = 1;
-    private gatewayUrl = '';
 
     constructor(intents: number[]) {
         super();
@@ -147,14 +146,14 @@ export class DiscordMinimal extends events.EventEmitter {
 
         const gatewayInfo = await getGatewayBot().catch(e => { console.log(e); return new DiscordGatewayBotInfo({}); });
 
-        this.gatewayUrl = gatewayInfo.url;
+        gatewayInfo.url;
         this.shards = gatewayInfo.shards;
 
         const interval = setInterval(() => {
             const startIndex = this.websocket.length;
             const max = Math.min(gatewayInfo.session_start_limit.max_concurrency, this.shards - startIndex);
             for (let i = 0; i < max; i++)
-                this.initGatewaySocket(this.gatewayUrl, startIndex + i);
+                this.initGatewaySocket(gatewayInfo.url, startIndex + i);
 
             if (this.websocket.length === this.shards)
                 clearInterval(interval);
@@ -248,7 +247,7 @@ export class DiscordMinimal extends events.EventEmitter {
             socketData.ws.removeAllListeners();
             socketData.ws.close(1002);
 
-            const ws = new WebSocket(`${this.gatewayUrl}/?v=8&encoding=json`);
+            const ws = new WebSocket(`${socketData.resume_url}/?v=8&encoding=json`);
             socketData.ws = ws;
             ws.addEventListener('message', (event) => this.onMessage(socketData, event, shardId));
             ws.addEventListener('close', (event) => this.onClose(event, shardId));
@@ -284,6 +283,7 @@ export class DiscordMinimal extends events.EventEmitter {
         else if (eventId === 'READY') {
             const ready = new DiscordReady(json.d);
             wsd.session_id = ready.session_id;
+            wsd.resume_url = ready.resume_gateway_url;
             this.emit('ready', ready);
         }
         else if (eventId === 'RESUMED') {

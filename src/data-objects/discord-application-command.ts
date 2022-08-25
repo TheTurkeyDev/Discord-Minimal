@@ -33,9 +33,19 @@ export class DiscordApplicationCommand {
     public name: string;
 
     /**
+     * Localization dictionary for the name field. Values follow the same restrictions as name
+     */
+    public name_localizations?: { [key: string]: string };
+
+    /**
      * 1 - 100 character description for CHAT_INPUT commands, empty string for USER and MESSAGE commands
      */
     public description: string;
+
+    /**
+     * Localization dictionary for the description field. Values follow the same restrictions as description
+     */
+    public description_localizations?: { [key: string]: string };
 
     /**
      * The parameters for the command, max 25	CHAT_INPUT

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Snowflake } from '../custom-types/snowflake';
+import { DiscordChannel } from './discord-channel';
+import { DiscordGuildMember } from './discord-guild-memeber';
 import { DiscordRole } from './discord-role';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -61,8 +63,16 @@ export class DiscordGuild {
     public unavailable?: boolean;
     // member_count? *	integer	total number of members in this guild
     // voice_states? *	array of partial voice state objects	states of members currently in voice channels; lacks the guild_id key
-    // members? *	array of guild member objects	users in the guild
-    // channels? *	array of channel objects	channels in the guild
+    
+    /**
+     * Users in the guild
+     */
+    public members?: DiscordGuildMember[];
+    
+    /**
+     * Channels in the guild
+     */
+    public channels?: DiscordChannel[]; 
     // threads? *	array of channel objects	all active threads in the guild that current user has permission to view
     // presences? *	array of partial presence update objects	presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
     // max_presences?	?integer	the maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
@@ -96,6 +106,8 @@ export class DiscordGuild {
         newInst.icon_hash = json.icon_hash;
         newInst.roles = json.roles?.map(DiscordRole.fromJson);
         newInst.unavailable = json.unavailable;
+        newInst.members = json.members?.map(DiscordGuildMember.fromJson);
+        newInst.channels = json.channels?.map(DiscordChannel.fromJson);
         return newInst;
     }
 }
