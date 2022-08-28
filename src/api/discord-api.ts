@@ -4,11 +4,12 @@ import DiscordInteractionResponse from '../data-objects/discord-interaction-resp
 import { DiscordMessageCreate } from '../data-objects/discord-message-create';
 import DiscordMessageEdit from '../data-objects/discord-message-edit';
 import { DiscordMessage } from '../data-objects/discord-message';
-import { APIVersion, DiscordAPIError, DiscordMinimal } from '..';
+import { DiscordAPIError, DiscordMinimal } from '..';
 import { DiscordGatewayBotInfo } from '../data-objects/discord-gateway-bot-info';
 import RateLimitBucket from './rate-limit-bucket';
 import { DiscordApplicationCommand } from '../data-objects/discord-application-command';
 
+export const APIVersion = 10;
 const URL_BASE = `https://discord.com/api/v${APIVersion}`;
 
 let requestQueue = Promise.resolve();

@@ -3,7 +3,7 @@
 
 import WebSocket, { OPEN } from 'ws';
 import events from 'events';
-import { createGlobalApplicationCommand, getGatewayBot } from './api/discord-api';
+import { APIVersion, createGlobalApplicationCommand, getGatewayBot } from './api/discord-api';
 import { WebSocketData } from './api/websocket-data';
 import { DiscordGatewayBotInfo, DiscordGuildMember, DiscordUser } from './data-objects';
 import {
@@ -47,8 +47,6 @@ type CloseEvent = {
     reason: string;
     target: WebSocket;
 }
-
-export const APIVersion = 10;
 
 export declare interface DiscordMinimal {
     on(event: 'debug', listener: (message: string) => void): this;

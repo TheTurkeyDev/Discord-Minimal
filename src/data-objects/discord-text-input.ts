@@ -1,3 +1,4 @@
+import { DiscordTextInputStyle } from '../custom-types';
 import { DiscordComponentType } from '../custom-types/discord-component-types';
 import DiscordComponent from './discord-component';
 
@@ -11,7 +12,7 @@ export class DiscordTextInput extends DiscordComponent {
     /**
      * The Text Input Style
      */
-    public style: number;
+    public style: DiscordTextInputStyle;
 
     /**
      * The label for this component, max 45 characters
@@ -43,7 +44,7 @@ export class DiscordTextInput extends DiscordComponent {
      */
     public placeholder?: string;
 
-    constructor(custom_id: string, style: number, label: string) {
+    constructor(custom_id: string, style: DiscordTextInputStyle, label: string) {
         super();
         super.type = DiscordComponentType.TEXT_INPUT;
         this.custom_id = custom_id;
