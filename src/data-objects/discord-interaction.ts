@@ -112,6 +112,13 @@ export class DiscordInteraction {
         });
     }
 
+    public respondWithModal(data: DiscordInteractionResponseData): Promise<void> {
+        return DiscordAPI.interactionCallback(this.id, this.token, {
+            type: DiscordInteractionCallbackType.MODAL,
+            data
+        });
+    }
+
     public respondText(message: string): Promise<void> {
         const data = new DiscordInteractionResponseData();
         data.content = message;

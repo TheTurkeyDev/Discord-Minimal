@@ -20,3 +20,4 @@ export * from './discord-ready';
 export * from './discord-role';
 export * from './discord-user';
 export * from './discord-gateway-bot-info';
+export * from './discord-text-input';

@@ -11,4 +11,8 @@ export enum DiscordComponentType {
      * A select menu for picking from choices
      */
     SELECT_MENU = 3,
+    /**
+     * A text input object
+     */
+    TEXT_INPUT = 4,
 }

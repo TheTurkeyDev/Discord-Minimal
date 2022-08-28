@@ -8,3 +8,4 @@ export * from './discord-channel-types';
 export * from './discord-interaction-type';
 export * from './discord-component-types';
 export * from './discord-interaction-callback-type';
+export * from './discord-text-input-styles';
