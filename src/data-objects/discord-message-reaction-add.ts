@@ -4,7 +4,7 @@
 import * as DiscordAPI from '../api/discord-api';
 import { Snowflake } from '../custom-types/snowflake';
 import { DiscordEmoji } from './discord-emoji';
-import { DiscordGuildMember } from './discord-guild-memeber';
+import { DiscordGuildMember } from './discord-guild-member';
 
 export class DiscordMessageReactionAdd {
 

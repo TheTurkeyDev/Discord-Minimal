@@ -2,7 +2,7 @@
 
 import { Snowflake } from '../custom-types/snowflake';
 import { DiscordChannel } from './discord-channel';
-import { DiscordGuildMember } from './discord-guild-memeber';
+import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordRole } from './discord-role';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */

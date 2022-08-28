@@ -1,5 +1,6 @@
 import { DiscordInteractionCallbackType } from '../custom-types/discord-interaction-callback-type';
-import DiscordInteractionResponseData from './discord-interaction-response-data';
+import DiscordInteractionResponseMessageData from './discord-interaction-response-message-data';
+import DiscordInteractionResponseModalData from './discord-interaction-response-modal-data';
 
 export default class DiscordInteractionResponse {
     
@@ -11,5 +12,5 @@ export default class DiscordInteractionResponse {
     /**
      * An optional response message
      */
-    public data?: DiscordInteractionResponseData;
+    public data?: DiscordInteractionResponseMessageData | DiscordInteractionResponseModalData;
 }

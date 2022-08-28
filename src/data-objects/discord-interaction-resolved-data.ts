@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { DiscordGuildMember } from './discord-guild-memeber';
+import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordMessage } from './discord-message';
 import { DiscordRole } from './discord-role';
 import { DiscordUser } from './discord-user';

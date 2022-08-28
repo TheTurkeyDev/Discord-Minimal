@@ -9,7 +9,7 @@ export class DiscordSelectMenu extends DiscordComponent {
     /**
      * A developer-defined identifier for the component, max 100 characters
      */
-    public custom_id?: string;
+    public custom_id: string;
 
     /**
      * Whether the component is disabled, default false
@@ -36,9 +36,10 @@ export class DiscordSelectMenu extends DiscordComponent {
      */
     public max_values?: number = 1;
 
-    constructor() {
+    constructor(custom_id: string) {
         super();
         super.type = DiscordComponentType.SELECT_MENU;
+        this.custom_id = custom_id;
     }
 
     public addOptions(...options: DiscordSelectOption[]): DiscordSelectMenu {

@@ -11,8 +11,9 @@ import {
     Snowflake
 } from '..';
 import DiscordInteractionData from './discord-interaction-data';
-import DiscordInteractionResponseData from './discord-interaction-response-data';
+import DiscordInteractionResponseData from './discord-interaction-response-message-data';
 import * as DiscordAPI from '../api/discord-api';
+import DiscordInteractionResponseModalData from './discord-interaction-response-modal-data';
 
 export class DiscordInteraction {
 
@@ -112,7 +113,7 @@ export class DiscordInteraction {
         });
     }
 
-    public respondWithModal(data: DiscordInteractionResponseData): Promise<void> {
+    public respondWithModal(data: DiscordInteractionResponseModalData): Promise<void> {
         return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.MODAL,
             data
