@@ -109,7 +109,7 @@ export async function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
 }
 
 export async function interactionCallback(
-    interactionId: number,
+    interactionId: Snowflake,
     interactionToken: string,
     data: DiscordInteractionResponse
 ): Promise<void> {

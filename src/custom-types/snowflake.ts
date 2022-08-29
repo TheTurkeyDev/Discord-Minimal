@@ -1,1 +1,1 @@
-export declare type Snowflake = number
+export declare type Snowflake = string

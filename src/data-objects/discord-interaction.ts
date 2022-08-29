@@ -20,17 +20,17 @@ export class DiscordInteraction {
     /**
      * Id of the interaction
      */
-    public id!: Snowflake;
+    public id: Snowflake;
 
     /**
      * Id of the application this interaction is for
      */
-    public application_id!: Snowflake;
+    public application_id: Snowflake;
 
     /**
      * Interaction type the type of interaction
      */
-    public type!: DiscordInteractionType;
+    public type: DiscordInteractionType;
 
     /**
      * The command data payload
@@ -60,7 +60,7 @@ export class DiscordInteraction {
     /**
      * A continuation token for responding to the interaction
      */
-    public token!: string;
+    public token: string;
 
     /**
      * Read-only property, always 1
@@ -132,7 +132,7 @@ export class DiscordInteraction {
 
     public sendMessageInChannel(message: DiscordMessageCreate): Promise<DiscordMessage> {
         // -1? Should never call this if the channel_id is not set
-        return DiscordAPI.createMessage(this.channel_id ?? -1, message);
+        return DiscordAPI.createMessage(this.channel_id ?? '', message);
     }
 
     public deferUpdate(): Promise<void> {

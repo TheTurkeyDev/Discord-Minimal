@@ -11,6 +11,7 @@ export * from './discord-gateway-bot-info';
 export * from './discord-guild';
 export * from './discord-guild-member';
 export * from './discord-interaction';
+export * from './discord-interaction-response-message-data';
 export * from './discord-interaction-response-modal-data';
 export * from './discord-message';
 export * from './discord-message-action-row';
