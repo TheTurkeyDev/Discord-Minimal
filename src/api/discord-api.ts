@@ -146,10 +146,10 @@ export async function createMessage(channelId: Snowflake, message: DiscordMessag
 
 export async function editMessage(
     channelId: Snowflake,
-    messagelId: Snowflake,
+    messageId: Snowflake,
     message: DiscordMessageEdit
 ): Promise<DiscordMessage> {
-    const url = `/channels/${channelId}/messages/${messagelId}`;
+    const url = `/channels/${channelId}/messages/${messageId}`;
     const resp = await sendFetch(url, `/channels/${channelId}/messages/edit`, {
         method: 'PATCH',
         headers: {
@@ -164,8 +164,8 @@ export async function editMessage(
     throw new DiscordAPIError(json.code, json.message, json.errors, 'PATCH', url);
 }
 
-export async function addReaction(channelId: Snowflake, messagelId: Snowflake, emoji: string): Promise<void> {
-    const url = `/channels/${channelId}/messages/${messagelId}/reactions/${encodeURIComponent(emoji)}/@me`;
+export async function addReaction(channelId: Snowflake, messageId: Snowflake, emoji: string): Promise<void> {
+    const url = `/channels/${channelId}/messages/${messageId}/reactions/${encodeURIComponent(emoji)}/@me`;
     const resp = await sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'PUT',
         headers: {
@@ -181,11 +181,11 @@ export async function addReaction(channelId: Snowflake, messagelId: Snowflake, e
 
 export async function deleteUserReaction(
     channelId: Snowflake,
-    messagelId: Snowflake,
+    messageId: Snowflake,
     emoji: string,
     userId: Snowflake
 ): Promise<void> {
-    const url = `/channels/${channelId}/messages/${messagelId}/reactions/${encodeURIComponent(emoji)}/${userId}`;
+    const url = `/channels/${channelId}/messages/${messageId}/reactions/${encodeURIComponent(emoji)}/${userId}`;
     const resp = await sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'DELETE',
         headers: {
@@ -199,8 +199,8 @@ export async function deleteUserReaction(
     throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
 }
 
-export async function deleteAllReactions(channelId: Snowflake, messagelId: Snowflake): Promise<void> {
-    const url = `/channels/${channelId}/messages/${messagelId}/reactions`;
+export async function deleteAllReactions(channelId: Snowflake, messageId: Snowflake): Promise<void> {
+    const url = `/channels/${channelId}/messages/${messageId}/reactions`;
     const resp = await sendFetch(url, `/channels/${channelId}/messages/reactions`, {
         method: 'DELETE',
         headers: {
@@ -216,7 +216,7 @@ export async function deleteAllReactions(channelId: Snowflake, messagelId: Snowf
 
 export async function createGlobalApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
     const url = `/applications/${command.application_id}/commands`;
-    const resp = await sendFetch(url, `/applications/${command.application_id}/commands`, {
+    const resp = await sendFetch(url, url, {
         method: 'POST',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
@@ -228,4 +228,50 @@ export async function createGlobalApplicationCommand(command: DiscordApplication
         return new Promise(resolve => resolve());
     const json = await resp.json();
     throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
+}
+
+export async function deleteGlobalApplicationCommand(applicationId: Snowflake, commandId: Snowflake): Promise<void> {
+    const url = `/applications/${applicationId}/commands`;
+    const resp = await sendFetch(url, `${url}/${commandId}`, {
+        method: 'DELETE',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        }
+    });
+    if (resp.ok)
+        return new Promise(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
+}
+
+export async function createGuildApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
+    const url = `/applications/${command.application_id}/guilds/${command.guild_id}/commands`;
+    const resp = await sendFetch(url, url, {
+        method: 'POST',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(command),
+    });
+    if (resp.ok)
+        return new Promise(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
+}
+
+export async function deleteGuildApplicationCommand(appId: Snowflake, guildId: Snowflake, cmdId: Snowflake): Promise<void> {
+    const url = `/applications/${appId}/guilds/${guildId}/commands`;
+    const resp = await sendFetch(url, `${url}/${cmdId}`, {
+        method: 'DELETE',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        }
+    });
+    if (resp.ok)
+        return new Promise(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
 }

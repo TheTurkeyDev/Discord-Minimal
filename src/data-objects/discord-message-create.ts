@@ -1,7 +1,7 @@
 import { Snowflake } from '../custom-types/snowflake';
 import DiscordComponent from './discord-component';
 import { DiscordEmbed } from './discord-embed';
-import DiscordMessageRefrence from './discord-message-refrence';
+import DiscordMessageReference from './discord-message-reference';
 
 export class DiscordMessageCreate {
 
@@ -30,7 +30,7 @@ export class DiscordMessageCreate {
     /**
      * Include to make your message a reply
      */
-    public message_reference?: DiscordMessageRefrence;
+    public message_reference?: DiscordMessageReference;
 
     /**
      * The components to include with the message

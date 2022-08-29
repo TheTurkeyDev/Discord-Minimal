@@ -1,6 +1,6 @@
 import { Snowflake } from '../custom-types/snowflake';
 
-export default class DiscordMessageRefrence {
+export default class DiscordMessageReference {
 
     /**
      * Id of the originating message

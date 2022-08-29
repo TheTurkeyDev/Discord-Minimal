@@ -48,7 +48,7 @@ export default class DiscordInteractionData {
     public values: string[] = [];
 
     /**
-     * Id the of user or message targetted by a user or message command
+     * Id the of user or message targeted by a user or message command
      */
     public target_id?: Snowflake;
 

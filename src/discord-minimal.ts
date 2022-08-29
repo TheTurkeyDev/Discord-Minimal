@@ -3,9 +3,32 @@
 
 import WebSocket, { OPEN } from 'ws';
 import events from 'events';
-import { APIVersion, createGlobalApplicationCommand, getGatewayBot } from './api/discord-api';
+import {
+    APIVersion,
+    createGlobalApplicationCommand,
+    createGuildApplicationCommand,
+    deleteGlobalApplicationCommand,
+    deleteGuildApplicationCommand,
+    getGatewayBot
+} from './api/discord-api';
 import { WebSocketData } from './api/websocket-data';
-import { DiscordGatewayBotInfo, DiscordGuildMember, DiscordUser } from './data-objects';
+import {
+    DiscordApplicationCommandPermissions,
+    DiscordChannel,
+    DiscordChannelPinsUpdate,
+    DiscordGatewayBotInfo,
+    DiscordGuildMember,
+    DiscordGuildMemberRemove,
+    DiscordGuildMemberUpdate,
+    DiscordGuildRoleDelete,
+    DiscordGuildRoleUpsert,
+    DiscordMessageReactionRemove,
+    DiscordMessageReactionRemoveAll,
+    DiscordMessageReactionRemoveEmoji,
+    DiscordStageInstance,
+    DiscordThreadListSync,
+    DiscordUser
+} from './data-objects';
 import {
     GatewayPayload,
     HeartBeatPayload,
@@ -20,20 +43,9 @@ import {
     DiscordMessageDelete,
     DiscordMessageDeleteBulk,
     DiscordMessageReactionAdd,
-    DiscordReady
+    DiscordReady,
+    Snowflake
 } from '.';
-import { DiscordMessageReactionRemove } from './data-objects/discord-message-reaction-remove';
-import { DiscordMessageReactionRemoveAll } from './data-objects/discord-message-reaction-remove-all';
-import { DiscordMessageReactionRemoveEmoji } from './data-objects/discord-message-reaction-remove-emoji';
-import { DiscordGuildMemberRemove } from './data-objects/discord-guild-memeber-remove';
-import { DiscordGuildMemberUpdate } from './data-objects/discord-guild-memeber-update';
-import { DiscordGuildRoleUpsert } from './data-objects/discord-guild-role-upsert';
-import { DiscordGuildRoleDelete } from './data-objects/discord-guild-role-delete';
-import { DiscordChannel } from './data-objects/discord-channel';
-import { DiscordThreadListSync } from './data-objects/discord-thread-list-sync';
-import { DiscordStageInstance } from './data-objects/discord-stage-instance';
-import { DiscordChannelPinsUpdate } from './data-objects/discord-channel-pins-update';
-import { DiscordApplicationCommandPermissions } from './data-objects/discord-application-command-permissions';
 
 type MessageEvent = {
     data: any;
@@ -64,9 +76,9 @@ export declare interface DiscordMinimal {
     on(event: 'guildCreate', listener: (interaction: DiscordGuild) => void): this;
     on(event: 'guildDelete', listener: (interaction: DiscordGuild) => void): this;
     on(event: 'guildUpdate', listener: (interaction: DiscordGuild) => void): this;
-    on(event: 'guildMemberAdd', listener: (memeber: DiscordGuildMember) => void): this;
-    on(event: 'guildMemberRemove', listener: (memeber: DiscordGuildMemberRemove) => void): this;
-    on(event: 'guildMemberUpdate', listener: (memeber: DiscordGuildMemberUpdate) => void): this;
+    on(event: 'guildMemberAdd', listener: (member: DiscordGuildMember) => void): this;
+    on(event: 'guildMemberRemove', listener: (member: DiscordGuildMemberRemove) => void): this;
+    on(event: 'guildMemberUpdate', listener: (member: DiscordGuildMemberUpdate) => void): this;
     on(event: 'guildRoleCreate', listener: (upsert: DiscordGuildRoleUpsert) => void): this;
     on(event: 'guildRoleUpdate', listener: (upsert: DiscordGuildRoleUpsert) => void): this;
     on(event: 'guildRoleDelete', listener: (upsert: DiscordGuildRoleDelete) => void): this;
@@ -129,7 +141,7 @@ addEvent('USER_UPDATE', 'userUpdate', d => DiscordUser.fromJson(d));
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
     private heartbeat: NodeJS.Timer[] = [];
-    // This should proably be done better...
+    // This should probably be done better...
     // Probably switch to some sort of Request Builder
     public static token?: string;
 
@@ -270,7 +282,7 @@ export class DiscordMinimal extends events.EventEmitter {
     private onEvent(json: GatewayPayload, wsd: WebSocketData): void {
         const eventId = json.t;
 
-        this.debug(`${this.baseStr('Event recieved')} | Shard: ${wsd.shard} | ID: ${eventId}`);
+        this.debug(`${this.baseStr('Event received')} | Shard: ${wsd.shard} | ID: ${eventId}`);
 
         if (!eventId) {
             return;
@@ -312,6 +324,18 @@ export class DiscordMinimal extends events.EventEmitter {
 
     public createGlobalCommand(command: DiscordApplicationCommand) {
         createGlobalApplicationCommand(command);
+    }
+
+    public createGuildCommand(command: DiscordApplicationCommand) {
+        createGuildApplicationCommand(command);
+    }
+
+    public deleteGlobalCommand(applicationId: Snowflake, commandId: Snowflake) {
+        deleteGlobalApplicationCommand(applicationId, commandId);
+    }
+
+    public deleteGuildCommand(appId: Snowflake, guildId: Snowflake, cmdId: Snowflake) {
+        deleteGuildApplicationCommand(appId, guildId, cmdId);
     }
 
     private baseStr(str: string): string {

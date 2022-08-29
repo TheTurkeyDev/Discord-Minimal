@@ -99,6 +99,10 @@ export class DiscordInteraction {
         return this.type == DiscordInteractionType.APPLICATION_COMMAND;
     }
 
+    public isModalSubmit(): boolean {
+        return this.type == DiscordInteractionType.MODAL_SUBMIT;
+    }
+
     public update(data: DiscordInteractionResponseData): Promise<void> {
         return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.UPDATE_MESSAGE,
