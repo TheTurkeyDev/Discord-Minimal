@@ -19,7 +19,7 @@ export class DiscordMessageButton extends DiscordComponent {
     /**
      * One of button styles
      */
-    public style?: DiscordButtonStyle;
+    public style: DiscordButtonStyle;
 
     /**
      * Text that appears on the button, max 80 characters
@@ -36,9 +36,10 @@ export class DiscordMessageButton extends DiscordComponent {
      */
     public url?: string;
 
-    constructor() {
+    constructor(style: DiscordButtonStyle) {
         super();
         super.type = DiscordComponentType.BUTTON;
+        this.style = style;
     }
 
     public setCustomId(id: string): DiscordMessageButton {
@@ -48,11 +49,6 @@ export class DiscordMessageButton extends DiscordComponent {
 
     public setLabel(label: string): DiscordMessageButton {
         this.label = label;
-        return this;
-    }
-
-    public setStyle(style: DiscordButtonStyle): DiscordMessageButton {
-        this.style = style;
         return this;
     }
 }

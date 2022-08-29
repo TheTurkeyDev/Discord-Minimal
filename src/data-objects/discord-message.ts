@@ -112,8 +112,8 @@ export class DiscordMessage {
         newInst.edited_timestamp = json.edited_timestamp;
         newInst.tts = json.tts;
         newInst.mention_everyone = json.mention_everyone;
-        newInst.mentions = json.mentions.map(DiscordUser.fromJson);
-        newInst.reactions = json.reactions.map(DiscordReaction.fromJson);
+        newInst.mentions = json.mentions?.map(DiscordUser.fromJson);
+        newInst.reactions = json.reactions?.map(DiscordReaction.fromJson);
         return newInst;
     }
 
