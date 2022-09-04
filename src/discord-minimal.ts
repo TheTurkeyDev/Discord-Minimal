@@ -3,14 +3,7 @@
 
 import WebSocket, { OPEN } from 'ws';
 import events from 'events';
-import {
-    APIVersion,
-    createGlobalApplicationCommand,
-    createGuildApplicationCommand,
-    deleteGlobalApplicationCommand,
-    deleteGuildApplicationCommand,
-    getGatewayBot
-} from './api/discord-api';
+import { APIVersion, getGatewayBot } from './api/discord-api';
 import { WebSocketData } from './api/websocket-data';
 import {
     DiscordApplicationCommandPermissions,
@@ -36,15 +29,13 @@ import {
     ResumePayload
 } from './payloads';
 import {
-    DiscordApplicationCommand,
     DiscordGuild,
     DiscordInteraction,
     DiscordMessage,
     DiscordMessageDelete,
     DiscordMessageDeleteBulk,
     DiscordMessageReactionAdd,
-    DiscordReady,
-    Snowflake
+    DiscordReady
 } from '.';
 
 type MessageEvent = {
@@ -320,22 +311,6 @@ export class DiscordMinimal extends events.EventEmitter {
                 this.debug(`${this.baseStr('Heartbeat')} | Shard: ${shardNum} | Delay: ${heartbeatDelay}`);
             }, heartbeatDelay
         );
-    }
-
-    public createGlobalCommand(command: DiscordApplicationCommand) {
-        createGlobalApplicationCommand(command);
-    }
-
-    public createGuildCommand(command: DiscordApplicationCommand) {
-        createGuildApplicationCommand(command);
-    }
-
-    public deleteGlobalCommand(applicationId: Snowflake, commandId: Snowflake) {
-        deleteGlobalApplicationCommand(applicationId, commandId);
-    }
-
-    public deleteGuildCommand(appId: Snowflake, guildId: Snowflake, cmdId: Snowflake) {
-        deleteGuildApplicationCommand(appId, guildId, cmdId);
     }
 
     private baseStr(str: string): string {
