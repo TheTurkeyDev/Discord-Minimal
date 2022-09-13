@@ -3,6 +3,7 @@
 import { DiscordComponentType } from '../custom-types/discord-component-types';
 import { Snowflake } from '../custom-types/snowflake';
 import DiscordApplicationCommandInteractionDataOption from './discord-application-command-interaction-data-option';
+import DiscordComponent from './discord-component';
 import DiscordInteractionResolvedData from './discord-interaction-resolved-data';
 
 export default class DiscordInteractionData {
@@ -52,6 +53,11 @@ export default class DiscordInteractionData {
      */
     public target_id?: Snowflake;
 
+    /**
+     * The values the user selected
+     */
+    public components: DiscordComponent[] = [];
+
     constructor(id: Snowflake, name: string, type: number) {
         this.id = id;
         this.name = name;
@@ -66,6 +72,7 @@ export default class DiscordInteractionData {
         newInst.component_type = json.component_type;
         newInst.values = json.values;
         newInst.target_id = json.target_id;
+        newInst.components = json.components?.map(DiscordComponent.fromJson);
         return newInst;
     }
 }

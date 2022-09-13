@@ -9,8 +9,7 @@ export class DiscordMessageActionRow extends DiscordComponent {
     public components: DiscordComponent[] = [];
 
     constructor() {
-        super();
-        super.type = DiscordComponentType.ACTION_ROW;
+        super(DiscordComponentType.ACTION_ROW);
     }
 
     public addComponents(...components: DiscordComponent[]): DiscordMessageActionRow {

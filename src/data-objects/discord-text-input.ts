@@ -45,8 +45,7 @@ export class DiscordTextInput extends DiscordComponent {
     public placeholder?: string;
 
     constructor(custom_id: string, style: DiscordTextInputStyle, label: string) {
-        super();
-        super.type = DiscordComponentType.TEXT_INPUT;
+        super(DiscordComponentType.TEXT_INPUT);
         this.custom_id = custom_id;
         this.style = style;
         this.label = label;

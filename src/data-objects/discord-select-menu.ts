@@ -37,8 +37,7 @@ export class DiscordSelectMenu extends DiscordComponent {
     public max_values?: number = 1;
 
     constructor(custom_id: string) {
-        super();
-        super.type = DiscordComponentType.SELECT_MENU;
+        super(DiscordComponentType.SELECT_MENU);
         this.custom_id = custom_id;
     }
 

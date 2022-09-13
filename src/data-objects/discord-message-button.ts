@@ -37,8 +37,7 @@ export class DiscordMessageButton extends DiscordComponent {
     public url?: string;
 
     constructor(style: DiscordButtonStyle) {
-        super();
-        super.type = DiscordComponentType.BUTTON;
+        super(DiscordComponentType.BUTTON);
         this.style = style;
     }
 

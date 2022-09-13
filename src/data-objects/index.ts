@@ -5,6 +5,7 @@ export * from './discord-application-command-option-choice-structure';
 export * from './discord-application-command-permissions';
 export * from './discord-channel';
 export * from './discord-channel-pins-update';
+export * from './discord-component';
 export * from './discord-embed';
 export * from './discord-emoji';
 export * from './discord-gateway-bot-info';
