@@ -95,6 +95,10 @@ export class DiscordInteraction {
         return this.data?.component_type == DiscordComponentType.BUTTON;
     }
 
+    public isSelectMenu(): boolean {
+        return this.data?.component_type == DiscordComponentType.SELECT_MENU;
+    }
+
     public isAppCommand(): boolean {
         return this.type == DiscordInteractionType.APPLICATION_COMMAND;
     }
