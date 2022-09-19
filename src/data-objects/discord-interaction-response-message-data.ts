@@ -30,12 +30,4 @@ export default class DiscordInteractionResponseMessageData {
      * Message components
      */
     public components?: DiscordComponent[];
-
-    public setEphemeral() {
-        this.flags = (this.flags ?? 0) + DiscordMessageFlags.EPHEMERAL;
-    }
-
-    public setSuppressEmbeds() {
-        this.flags = (this.flags ?? 0) + DiscordMessageFlags.SUPPRESS_EMBEDS;
-    }
 }
