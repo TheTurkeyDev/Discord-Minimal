@@ -7,6 +7,7 @@ import {
     DiscordInteractionType,
     DiscordMessage,
     DiscordMessageCreate,
+    DiscordMessageFlags,
     DiscordUser,
     Snowflake
 } from '..';
@@ -131,6 +132,13 @@ export class DiscordInteraction {
     public respondText(message: string): Promise<void> {
         const data = new DiscordInteractionResponseData();
         data.content = message;
+        return this.respond(data);
+    }
+
+    public respondTextEphemeral(message: string): Promise<void> {
+        const data = new DiscordInteractionResponseData();
+        data.content = message;
+        data.flags = DiscordMessageFlags.EPHEMERAL;
         return this.respond(data);
     }
 

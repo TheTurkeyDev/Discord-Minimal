@@ -122,7 +122,7 @@ export class DiscordEmbed {
         embed.footer = json.footer && DiscordEmbedFooter.fromJson(json.footer);
         embed.image = json.image && DiscordEmbedImage.fromJson(json.image);
         embed.author = json.author && DiscordEmbedAuthor.fromJson(json.author);
-        embed.fields = json.fields.map(DiscordEmbedField.fromJson);
+        embed.fields = json.fields?.map(DiscordEmbedField.fromJson);
 
         return embed;
     }

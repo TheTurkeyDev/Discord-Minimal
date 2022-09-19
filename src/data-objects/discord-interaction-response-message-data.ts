@@ -1,4 +1,3 @@
-import { DiscordMessageFlags } from '../custom-types';
 import DiscordComponent from './discord-component';
 import { DiscordEmbed } from './discord-embed';
 
