@@ -9,3 +9,7 @@ export * from './discord-interaction-type';
 export * from './discord-component-types';
 export * from './discord-interaction-callback-type';
 export * from './discord-text-input-styles';
+export * from './discord-message-flags';
+export * from './discord-message-types';
+export * from './discord-video-quality-modes';
+export * from './discord-channel-flags';

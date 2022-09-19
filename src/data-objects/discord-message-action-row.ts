@@ -16,4 +16,8 @@ export class DiscordMessageActionRow extends DiscordComponent {
         this.components = components;
         return this;
     }
+
+    static fromJson(json: any): DiscordComponent {
+        return new DiscordMessageActionRow().addComponents(...json.components?.map(DiscordComponent.fromJson));
+    }
 }

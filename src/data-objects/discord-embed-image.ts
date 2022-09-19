@@ -20,10 +20,15 @@ export default class DiscordEmbedImage {
      */
     public width?: number;
 
-    public constructor(url: string, proxyUrl?: string, height?: number, width?: number) {
+    public constructor(url: string) {
         this.url = url;
-        this.proxy_url = proxyUrl;
-        this.height = height;
-        this.width = width;
+    }
+
+    static fromJson(json: any) {
+        const embedImage = new DiscordEmbedImage(json.url);
+        embedImage.proxy_url = json.proxyUrl;
+        embedImage.height = json.height;
+        embedImage.width = json.width;
+        return embedImage;
     }
 }

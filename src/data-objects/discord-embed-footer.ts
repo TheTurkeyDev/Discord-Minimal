@@ -15,9 +15,14 @@ export default class DiscordEmbedFooter {
      */
     public proxy_icon_url?: string;
 
-    public constructor(text: string, iconUrl?: string, proxyIconUrl?: string) {
+    public constructor(text: string) {
         this.text = text;
-        this.icon_url = iconUrl;
-        this.proxy_icon_url = proxyIconUrl;
+    }
+
+    static fromJson(json: any) {
+        const embedFooter = new DiscordEmbedFooter(json.text);
+        embedFooter.icon_url = json.iconUrl;
+        embedFooter.proxy_icon_url = json.proxyIconUrl;
+        return embedFooter;
     }
 }

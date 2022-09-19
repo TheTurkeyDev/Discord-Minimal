@@ -50,4 +50,15 @@ export class DiscordSelectMenu extends DiscordComponent {
         this.custom_id = id;
         return this;
     }
+
+    static fromJson(json: any): DiscordComponent {
+        const btn = new DiscordSelectMenu(json.custom_id);
+        btn.disabled = json.disabled;
+        btn.options = json.options?.map(DiscordSelectOption.fromJson);
+        btn.placeholder = json.placeholder;
+        btn.min_values = json.min_values;
+        btn.max_values = json.max_values;
+
+        return btn;
+    }
 }

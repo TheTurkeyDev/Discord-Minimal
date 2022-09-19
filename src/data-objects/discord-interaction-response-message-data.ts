@@ -1,3 +1,4 @@
+import { DiscordMessageFlags } from '../custom-types';
 import DiscordComponent from './discord-component';
 import { DiscordEmbed } from './discord-embed';
 
@@ -13,7 +14,7 @@ export default class DiscordInteractionResponseMessageData {
      * Message content
      */
     public content?: string;
-    
+
     /**
      * Supports up to 10 embeds
      */
@@ -29,4 +30,12 @@ export default class DiscordInteractionResponseMessageData {
      * Message components
      */
     public components?: DiscordComponent[];
+
+    public setEphemeral() {
+        this.flags = (this.flags ?? 0) + DiscordMessageFlags.EPHEMERAL;
+    }
+
+    public setSuppressEmbeds() {
+        this.flags = (this.flags ?? 0) + DiscordMessageFlags.SUPPRESS_EMBEDS;
+    }
 }

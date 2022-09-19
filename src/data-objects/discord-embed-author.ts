@@ -20,10 +20,16 @@ export default class DiscordEmbedAuthor {
      */
     public proxy_icon_url?: string;
 
-    public constructor(name: string, url?: string, iconUrl?: string, proxyIconUrl?: string) {
+    public constructor(name: string) {
         this.name = name;
-        this.url = url;
-        this.icon_url = iconUrl;
-        this.proxy_icon_url = proxyIconUrl;
+
+    }
+
+    static fromJson(json: any) {
+        const embedAuthor = new DiscordEmbedAuthor(json.name);
+        embedAuthor.url = json.url;
+        embedAuthor.icon_url = json.iconUrl;
+        embedAuthor.proxy_icon_url = json.proxyIconUrl;
+        return embedAuthor;
     }
 }

@@ -15,9 +15,14 @@ export default class DiscordEmbedField {
      */
     public inline?: boolean;
 
-    public constructor(name: string, value: string, inline?: boolean) {
+    public constructor(name: string, value: string) {
         this.name = name;
         this.value = value;
-        this.inline = inline;
+    }
+
+    static fromJson(json: any) {
+        const field = new DiscordEmbedField(json.name, json.value);
+        field.inline = json.inline;
+        return field;
     }
 }

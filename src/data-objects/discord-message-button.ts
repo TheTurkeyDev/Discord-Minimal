@@ -50,4 +50,14 @@ export class DiscordMessageButton extends DiscordComponent {
         this.label = label;
         return this;
     }
+
+    static fromJson(json: any): DiscordComponent {
+        const btn = new DiscordMessageButton(json.style);
+        btn.custom_id = json.custom_id;
+        btn.disabled = json.disabled;
+        btn.label = json.label;
+        btn.emoji = json.emoji && DiscordEmoji.fromJson(json.emoji);
+        btn.url = json.url;
+        return btn;
+    }
 }

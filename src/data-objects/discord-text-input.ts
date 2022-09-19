@@ -51,4 +51,13 @@ export class DiscordTextInput extends DiscordComponent {
         this.label = label;
     }
 
+    static fromJson(json: any): DiscordComponent {
+        const btn = new DiscordTextInput(json.custom_id, json.style, json.label);
+        btn.min_length = json.min_length;
+        btn.max_length = json.max_length;
+        btn.required = json.required;
+        btn.value = json.value;
+        btn.placeholder = json.placeholder;
+        return btn;
+    }
 }
