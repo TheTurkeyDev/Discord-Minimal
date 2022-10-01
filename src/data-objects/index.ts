@@ -24,6 +24,7 @@ export * from './discord-message-reaction-add';
 export * from './discord-message-reaction-remove';
 export * from './discord-message-reaction-remove-all';
 export * from './discord-message-reaction-remove-emoji';
+export * from './discord-message-update';
 export * from './discord-guild-member-remove';
 export * from './discord-guild-member-update';
 export * from './discord-guild-role-upsert';

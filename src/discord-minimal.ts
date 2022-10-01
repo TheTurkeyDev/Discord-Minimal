@@ -37,6 +37,7 @@ import {
     DiscordMessageReactionAdd,
     DiscordReady
 } from '.';
+import { DiscordMessageUpdate } from './data-objects/discord-message-update';
 
 type MessageEvent = {
     data: any;
@@ -55,8 +56,9 @@ export declare interface DiscordMinimal {
     on(event: 'debug', listener: (message: string) => void): this;
     on(event: 'ready', listener: (ready: DiscordReady) => void): this;
     on(event: 'resumed', listener: () => void): this;
+    on(event: 'eventRaw', listener: (eventId: string, message: string) => void): this;
     on(event: 'messageCreate', listener: (message: DiscordMessage) => void): this;
-    on(event: 'messageUpdate', listener: (message: DiscordMessage) => void): this;
+    on(event: 'messageUpdate', listener: (message: DiscordMessageUpdate) => void): this;
     on(event: 'messageDelete', listener: (message: DiscordMessageDelete) => void): this;
     on(event: 'messageDeleteBulk', listener: (messages: DiscordMessageDeleteBulk) => void): this;
     on(event: 'messageReactionAdd', listener: (messageReaction: DiscordMessageReactionAdd) => void): this;
@@ -100,7 +102,7 @@ function addEvent(type: string, eventId: string, dataMap: (data: any) => any) {
 }
 
 addEvent('MESSAGE_CREATE', 'messageCreate', d => DiscordMessage.fromJson(d));
-addEvent('MESSAGE_UPDATE', 'messageUpdate', d => DiscordMessage.fromJson(d));
+addEvent('MESSAGE_UPDATE', 'messageUpdate', d => DiscordMessageUpdate.fromJson(d));
 addEvent('MESSAGE_DELETE', 'messageDelete', d => DiscordMessageDelete.fromJson(d));
 addEvent('MESSAGE_DELETE_BULK', 'messageDeleteBulk', d => DiscordMessageDeleteBulk.fromJson(d));
 addEvent('MESSAGE_REACTION_ADD', 'messageReactionAdd', d => DiscordMessageReactionAdd.fromJson(d));
@@ -278,6 +280,8 @@ export class DiscordMinimal extends events.EventEmitter {
         if (!eventId) {
             return;
         }
+
+        this.emit('eventRaw', eventId, JSON.stringify(json.d));
 
         const event = EVENTS_MAP[eventId];
         if (event) {
