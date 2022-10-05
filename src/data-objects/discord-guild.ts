@@ -67,12 +67,12 @@ export class DiscordGuild {
     /**
      * Users in the guild
      */
-    public members?: DiscordGuildMember[];
+    public members: DiscordGuildMember[] = [];
     
     /**
      * Channels in the guild
      */
-    public channels?: DiscordChannel[]; 
+    public channels: DiscordChannel[] = []; 
     // threads? *	array of channel objects	all active threads in the guild that current user has permission to view
     // presences? *	array of partial presence update objects	presences of the members in the guild, will only include non-offline members if the size is greater than large threshold
     // max_presences?	?integer	the maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
@@ -104,10 +104,10 @@ export class DiscordGuild {
         const newInst = new DiscordGuild(json.id, json.name, json.owner_id);
         newInst.icon = json.icon;
         newInst.icon_hash = json.icon_hash;
-        newInst.roles = json.roles?.map(DiscordRole.fromJson);
+        newInst.roles = json.roles?.map(DiscordRole.fromJson) ?? [];
         newInst.unavailable = json.unavailable;
-        newInst.members = json.members?.map(DiscordGuildMember.fromJson);
-        newInst.channels = json.channels?.map(DiscordChannel.fromJson);
+        newInst.members = json.members?.map(DiscordGuildMember.fromJson) ?? [];
+        newInst.channels = json.channels?.map(DiscordChannel.fromJson) ?? [];
         return newInst;
     }
 }

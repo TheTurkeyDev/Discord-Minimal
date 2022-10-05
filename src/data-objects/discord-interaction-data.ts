@@ -70,9 +70,9 @@ export default class DiscordInteractionData {
         newInst.options = json.options?.map(DiscordApplicationCommandInteractionDataOption.fromJson) ?? [];
         newInst.custom_id = json.custom_id;
         newInst.component_type = json.component_type;
-        newInst.values = json.values;
+        newInst.values = json.values ?? [];
         newInst.target_id = json.target_id;
-        newInst.components = json.components?.map(DiscordComponent.fromJson);
+        newInst.components = json.components?.map(DiscordComponent.fromJson) ?? [];
         return newInst;
     }
 }

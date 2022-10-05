@@ -30,9 +30,9 @@ export class DiscordMessageUpdate extends DiscordMessageBase {
         newInst.edited_timestamp = json.edited_timestamp;
         newInst.tts = json.tts;
         newInst.mention_everyone = json.mention_everyone;
-        newInst.mentions = json.mentions?.map(DiscordUser.fromJson);
-        newInst.reactions = json.reactions?.map(DiscordReaction.fromJson);
-        newInst.embeds = json.embeds?.map(DiscordEmbed.fromJson);
+        newInst.mentions = json.mentions?.map(DiscordUser.fromJson) ?? [];
+        newInst.reactions = json.reactions?.map(DiscordReaction.fromJson) ?? [];
+        newInst.embeds = json.embeds?.map(DiscordEmbed.fromJson) ?? [];
         newInst.nonce = json.nonce;
         newInst.application_id = json.application_id;
         newInst.flags = json.flags;

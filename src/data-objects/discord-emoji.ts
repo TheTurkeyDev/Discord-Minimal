@@ -20,7 +20,7 @@ export class DiscordEmoji {
     /**
      * Roles allowed to use this emoji
      */
-    public roles?: DiscordRole[];
+    public roles: DiscordRole[] = [];
 
     /**
      * user object	user that created this emoji
@@ -51,8 +51,8 @@ export class DiscordEmoji {
         const newInst = new DiscordEmoji();
         newInst.id = json.id;
         newInst.name = json.name;
-        newInst.roles = json.roles.map((r: any) => DiscordRole.fromJson(r));
-        newInst.user = DiscordUser.fromJson(json.user);
+        newInst.roles = json.roles?.map((r: any) => DiscordRole.fromJson(r)) ?? [];
+        newInst.user = json.user && DiscordUser.fromJson(json.user);
         newInst.require_colons = json.require_colons;
         newInst.managed = json.managed;
         newInst.animated = json.animated;
