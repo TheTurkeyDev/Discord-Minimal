@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { DiscordMessageType } from '../custom-types';
 import { Snowflake } from '../custom-types/snowflake';
 import { DiscordEmbed } from './discord-embed';
@@ -7,6 +5,7 @@ import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordMessageBase } from './discord-message-base';
 import DiscordReaction from './discord-reaction';
 import { DiscordUser } from './discord-user';
+import * as DiscordAPI from '../api/discord-api';
 
 export class DiscordMessage extends DiscordMessageBase {
 
@@ -75,5 +74,9 @@ export class DiscordMessage extends DiscordMessageBase {
         newInst.application_id = json.application_id;
         newInst.flags = json.flags;
         return newInst;
+    }
+
+    public createThreadOnMessage(name: string, autoArchiveDuration?: number, rateLimitPerUser?: number) {
+        return DiscordAPI.startThreadFromMessage(this.channel_id, this.id, name, autoArchiveDuration, rateLimitPerUser);
     }
 }
