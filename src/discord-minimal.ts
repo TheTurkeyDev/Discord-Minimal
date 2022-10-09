@@ -38,6 +38,7 @@ import {
     DiscordReady
 } from '.';
 import { DiscordMessageUpdate } from './data-objects/discord-message-update';
+import { DiscordThreadMember } from './data-objects/discord-thread-member';
 
 type MessageEvent = {
     data: any;
@@ -85,6 +86,8 @@ export declare interface DiscordMinimal {
     on(event: 'stageInstanceDelete', listener: (stageInstance: DiscordStageInstance) => void): this;
     on(event: 'stageInstanceUpdate', listener: (stageInstance: DiscordStageInstance) => void): this;
     on(event: 'threadListSync', listener: (threadListSync: DiscordThreadListSync) => void): this;
+    on(event: 'threadCreate', listener: (channel: DiscordChannel) => void): this;
+    on(event: 'threadMemberUpdate', listener: (threadMember: DiscordThreadMember) => void): this;
     on(event: 'userUpdate', listener: (user: DiscordUser) => void): this;
 
     on(event: string, listener: () => void): this;
@@ -129,6 +132,8 @@ addEvent('STAGE_INSTANCE_CREATE', 'stageInstanceCreate', d => DiscordStageInstan
 addEvent('STAGE_INSTANCE_DELETE', 'stageInstanceDelete', d => DiscordStageInstance.fromJson(d));
 addEvent('STAGE_INSTANCE_UPDATE', 'stageInstanceUpdate', d => DiscordStageInstance.fromJson(d));
 addEvent('THREAD_LIST_SYNC', 'threadListSync', d => DiscordThreadListSync.fromJson(d));
+addEvent('THREAD_CREATE', 'threadCreate', d => DiscordChannel.fromJson(d));
+addEvent('THREAD_MEMBER_UPDATE', 'threadMemberUpdate', d => DiscordThreadMember.fromJson(d));
 addEvent('USER_UPDATE', 'userUpdate', d => DiscordUser.fromJson(d));
 
 export class DiscordMinimal extends events.EventEmitter {

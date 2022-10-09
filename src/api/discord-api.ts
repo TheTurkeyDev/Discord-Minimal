@@ -126,7 +126,18 @@ export async function interactionCallback(
     data: DiscordInteractionResponse
 ): Promise<void> {
     const url = `${URL_BASE}/interactions/${interactionId}/${interactionToken}/callback`;
-    return makeFetch(url, '', 'POST', () => { }, JSON.stringify(data));
+    const resp = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    if (resp.ok)
+        return new Promise<void>(resolve => resolve());
+    const json = await resp.json();
+    throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
 }
 
 export async function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
