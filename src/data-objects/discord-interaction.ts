@@ -97,7 +97,7 @@ export class DiscordInteraction {
     }
 
     public isSelectMenu(): boolean {
-        return this.data?.component_type == DiscordComponentType.SELECT_MENU;
+        return this.data?.component_type == DiscordComponentType.STRING_SELECT;
     }
 
     public isAppCommand(): boolean {

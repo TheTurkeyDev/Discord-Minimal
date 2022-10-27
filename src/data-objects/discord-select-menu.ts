@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { DiscordChannelType } from '../custom-types';
 import { DiscordComponentType } from '../custom-types/discord-component-types';
 import DiscordComponent from './discord-component';
 import { DiscordSelectOption } from './discord-select-option';
@@ -22,6 +23,11 @@ export class DiscordSelectMenu extends DiscordComponent {
     public options: DiscordSelectOption[] = [];
 
     /**
+    * List of channel types to include in the channel select component (type 8)
+    */
+    public channel_types: DiscordChannelType[] = [];
+
+    /**
      * Custom placeholder text if nothing is selected, max 100 characters
      */
     public placeholder?: string;
@@ -36,8 +42,8 @@ export class DiscordSelectMenu extends DiscordComponent {
      */
     public max_values?: number = 1;
 
-    constructor(custom_id: string) {
-        super(DiscordComponentType.SELECT_MENU);
+    constructor(custom_id: string, type: DiscordComponentType = DiscordComponentType.STRING_SELECT) {
+        super(type);
         this.custom_id = custom_id;
     }
 

@@ -170,8 +170,8 @@ export async function deleteUserReaction(
 }
 
 export async function deleteAllReactions(channelId: Snowflake, messageId: Snowflake): Promise<void> {
-    const url = `/channels/${channelId}/messages/${messageId}/reactions`;
-    return makeFetch(url, `/channels/${channelId}/messages/reactions`, 'DELETE', () => { });
+    const url = `/channels/${channelId}/messages`;
+    return makeFetch(url, `/${messageId}/reactions`, 'DELETE', () => { });
 }
 
 export async function createGlobalApplicationCommand(command: DiscordApplicationCommand): Promise<void> {

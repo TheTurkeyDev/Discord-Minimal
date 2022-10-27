@@ -16,7 +16,11 @@ export default class DiscordComponent {
                 return DiscordMessageActionRow.fromJson(json);
             case DiscordComponentType.BUTTON:
                 return DiscordMessageButton.fromJson(json);
-            case DiscordComponentType.SELECT_MENU:
+            case DiscordComponentType.STRING_SELECT:
+            case DiscordComponentType.CHANNEL_SELECT:
+            case DiscordComponentType.MENTIONABLE_SELECT:
+            case DiscordComponentType.USER_SELECT:
+            case DiscordComponentType.ROLE_SELECT:
                 return DiscordSelectMenu.fromJson(json);
             case DiscordComponentType.TEXT_INPUT:
                 return DiscordTextInput.fromJson(json);

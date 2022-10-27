@@ -87,6 +87,8 @@ export declare interface DiscordMinimal {
     on(event: 'stageInstanceUpdate', listener: (stageInstance: DiscordStageInstance) => void): this;
     on(event: 'threadListSync', listener: (threadListSync: DiscordThreadListSync) => void): this;
     on(event: 'threadCreate', listener: (channel: DiscordChannel) => void): this;
+    on(event: 'threadDelete', listener: (channel: DiscordChannel) => void): this;
+    on(event: 'threadUpdate', listener: (channel: DiscordChannel) => void): this;
     on(event: 'threadMemberUpdate', listener: (threadMember: DiscordThreadMember) => void): this;
     on(event: 'userUpdate', listener: (user: DiscordUser) => void): this;
 
@@ -133,6 +135,8 @@ addEvent('STAGE_INSTANCE_DELETE', 'stageInstanceDelete', d => DiscordStageInstan
 addEvent('STAGE_INSTANCE_UPDATE', 'stageInstanceUpdate', d => DiscordStageInstance.fromJson(d));
 addEvent('THREAD_LIST_SYNC', 'threadListSync', d => DiscordThreadListSync.fromJson(d));
 addEvent('THREAD_CREATE', 'threadCreate', d => DiscordChannel.fromJson(d));
+addEvent('THREAD_DELETE', 'threadDelete', d => DiscordChannel.fromJson(d));
+addEvent('THREAD_UPDATE', 'threadUpdate', d => DiscordChannel.fromJson(d));
 addEvent('THREAD_MEMBER_UPDATE', 'threadMemberUpdate', d => DiscordThreadMember.fromJson(d));
 addEvent('USER_UPDATE', 'userUpdate', d => DiscordUser.fromJson(d));
 
