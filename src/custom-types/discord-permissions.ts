@@ -41,5 +41,5 @@ export const PERMISSIONS = {
     SEND_MESSAGES_IN_THREADS: 1 << 38,
     START_EMBEDDED_ACTIVITIES: 1 << 39,
     MODERATE_MEMBERS: 1 << 40,
-    ALL: (1 << 40) - 1,
+    ALL: (1 << 41) - 1,
 };
