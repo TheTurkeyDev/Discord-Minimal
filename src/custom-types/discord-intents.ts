@@ -1,3 +1,6 @@
+/**
+ * @see {@link https://discord.com/developers/docs/topics/gateway#list-of-intents}
+ */
 export const INTENTS = {
     GUILDS: 1 << 0,
     GUILD_MEMBERS: 1 << 1,
@@ -19,3 +22,9 @@ export const INTENTS = {
     AUTO_MODERATION_CONFIGURATION: 1 << 20,
     AUTO_MODERATION_EXECUTION: 1 << 21,
 };
+
+/**
+ * Freeze the object of intents, preventing any modifications to it
+ * @internal
+ */
+Object.freeze(INTENTS);

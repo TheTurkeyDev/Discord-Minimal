@@ -1,3 +1,6 @@
+/**
+ * @see {@link https://discord.com/developers/docs/resources/channel#message-object-message-flags}
+ */
 export enum DiscordMessageFlags {
     /**
      * This message has been published to subscribed channels (via Channel Following)
@@ -35,4 +38,4 @@ export enum DiscordMessageFlags {
      * This message failed to mention some roles and add their members to the thread
      */
     FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 1 << 8,
-};
+}

@@ -1,3 +1,6 @@
+/**
+ * @see {@link https://discord.com/developers/docs/interactions/message-components#component-object-component-types}
+ */
 export enum DiscordInteractionCallbackType {
     /**
      * ACK a Ping
@@ -24,7 +27,7 @@ export enum DiscordInteractionCallbackType {
      */
     APPLICATION_COMMAND_AUTOCOMPLETE_RESULT = 8,
     /**
-    * Respond to an interaction with a popup modal
-    */
+     * Respond to an interaction with a popup modal
+     */
     MODAL = 9,
 }

@@ -1,3 +1,6 @@
+/**
+ * @see {@link https://discord.com/developers/docs/interactions/message-components#component-object-component-types}
+ */
 export enum DiscordComponentType {
     /**
      * A container for other components

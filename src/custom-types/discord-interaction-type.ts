@@ -1,3 +1,6 @@
+/**
+ * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type}
+ */
 export enum DiscordInteractionType {
     PONG = 1,
     APPLICATION_COMMAND = 2,

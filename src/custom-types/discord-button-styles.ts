@@ -1,3 +1,6 @@
+/**
+ * @see {@link https://discord.com/developers/docs/interactions/message-components#button-object-button-styles}
+ */
 export enum DiscordButtonStyle {
     /**
      * blurple
@@ -16,7 +19,7 @@ export enum DiscordButtonStyle {
      */
     DANGER = 4,
     /**
-     * grey
+     * grey, navigates to a URL
      */
     LINK = 5,
 }
