@@ -95,6 +95,7 @@ async function processQueue(
 }
 
 async function makeFetch<T>(
+    instance: DiscordMinimal,
     topLvlUrl: string,
     urlExtra: string,
     method: string,
@@ -104,7 +105,7 @@ async function makeFetch<T>(
     const resp = await sendFetch(topLvlUrl, urlExtra, {
         method: method,
         headers: {
-            'authorization': `Bot ${DiscordMinimal.token}`,
+            'authorization': `Bot ${instance.token}`,
             'Content-Type': 'application/json',
         },
         body: body
@@ -115,12 +116,13 @@ async function makeFetch<T>(
     throw new DiscordAPIError(json.code, json.message, json.errors, method, `${topLvlUrl}${urlExtra}`);
 }
 
-export async function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
+export async function getGatewayBot(interaciton: DiscordMinimal): Promise<DiscordGatewayBotInfo> {
     const url = '/gateway/bot';
-    return makeFetch(url, '', 'GET', json => new DiscordGatewayBotInfo(json));
+    return makeFetch(interaciton, url, '', 'GET', json => new DiscordGatewayBotInfo(json));
 }
 
 export async function interactionCallback(
+    instance: DiscordMinimal,
     interactionId: Snowflake,
     interactionToken: string,
     data: DiscordInteractionResponse
@@ -129,7 +131,7 @@ export async function interactionCallback(
     const resp = await fetch(url, {
         method: 'POST',
         headers: {
-            'authorization': `Bot ${DiscordMinimal.token}`,
+            'authorization': `Bot ${instance.token}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
@@ -140,61 +142,85 @@ export async function interactionCallback(
     throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
 }
 
-export async function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
+export async function createMessage(
+    instance: DiscordMinimal, 
+    channelId: Snowflake, 
+    message: DiscordMessageCreate
+): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages`;
-    return makeFetch(url, '', 'POST', DiscordMessage.fromJson, JSON.stringify(message));
+    return makeFetch(instance, url, '', 'POST', DiscordMessage.fromJson, JSON.stringify(message));
 }
 
 export async function editMessage(
+    instance: DiscordMinimal, 
     channelId: Snowflake,
     messageId: Snowflake,
     message: DiscordMessageEdit
 ): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages/${messageId}`;
-    return makeFetch(url, '', 'PATCH', DiscordMessage.fromJson, JSON.stringify(message));
+    return makeFetch(instance, url, '', 'PATCH', DiscordMessage.fromJson, JSON.stringify(message));
 }
 
-export async function addReaction(channelId: Snowflake, messageId: Snowflake, emoji: string): Promise<void> {
+export async function addReaction(
+    instance: DiscordMinimal,
+    channelId: Snowflake, 
+    messageId: Snowflake, 
+    emoji: string
+): Promise<void> {
     const url = `/channels/${channelId}/messages`;
-    return makeFetch(url, `/${messageId}/reactions/${encodeURIComponent(emoji)}/@me`, 'PUT', () => { });
+    return makeFetch(instance, url, `/${messageId}/reactions/${encodeURIComponent(emoji)}/@me`, 'PUT', () => { });
 }
 
 export async function deleteUserReaction(
+    instance: DiscordMinimal,
     channelId: Snowflake,
     messageId: Snowflake,
     emoji: string,
     userId: Snowflake
 ): Promise<void> {
     const url = `/channels/${channelId}/messages`;
-    return makeFetch(url, `/${messageId}/reactions/${encodeURIComponent(emoji)}/${userId}`, 'DELETE', () => { });
+    return makeFetch(instance, url, `/${messageId}/reactions/${encodeURIComponent(emoji)}/${userId}`, 'DELETE', () => { });
 }
 
-export async function deleteAllReactions(channelId: Snowflake, messageId: Snowflake): Promise<void> {
+export async function deleteAllReactions(instance: DiscordMinimal, channelId: Snowflake, messageId: Snowflake): Promise<void> {
     const url = `/channels/${channelId}/messages`;
-    return makeFetch(url, `/${messageId}/reactions`, 'DELETE', () => { });
+    return makeFetch(instance, url, `/${messageId}/reactions`, 'DELETE', () => { });
 }
 
-export async function createGlobalApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
+export async function createGlobalApplicationCommand(
+    instance: DiscordMinimal, 
+    command: DiscordApplicationCommand
+): Promise<void> {
     const url = `/applications/${command.application_id}/commands`;
-    return makeFetch(url, '', 'POST', () => { }, JSON.stringify(command));
+    return makeFetch(instance, url, '', 'POST', () => { }, JSON.stringify(command));
 }
 
-export async function deleteGlobalApplicationCommand(applicationId: Snowflake, commandId: Snowflake): Promise<void> {
+export async function deleteGlobalApplicationCommand(
+    instance: DiscordMinimal,
+    applicationId: Snowflake, 
+    commandId: Snowflake
+): Promise<void> {
     const url = `/applications/${applicationId}/commands`;
-    return makeFetch(url, `/${commandId}`, 'DELETE', () => { });
+    return makeFetch(instance, url, `/${commandId}`, 'DELETE', () => { });
 }
 
-export async function createGuildApplicationCommand(command: DiscordApplicationCommand): Promise<void> {
+export async function createGuildApplicationCommand(instance: DiscordMinimal, command: DiscordApplicationCommand): Promise<void> {
     const url = `/applications/${command.application_id}/guilds/${command.guild_id}/commands`;
-    return makeFetch(url, '', 'POST', () => { }, JSON.stringify(command));
+    return makeFetch(instance, url, '', 'POST', () => { }, JSON.stringify(command));
 }
 
-export async function deleteGuildApplicationCommand(appId: Snowflake, guildId: Snowflake, cmdId: Snowflake): Promise<void> {
+export async function deleteGuildApplicationCommand(
+    instance: DiscordMinimal, 
+    appId: Snowflake, 
+    guildId: Snowflake, 
+    cmdId: Snowflake
+): Promise<void> {
     const url = `/applications/${appId}/guilds/${guildId}/commands`;
-    return makeFetch(url, `/${cmdId}`, 'DELETE', () => { });
+    return makeFetch(instance, url, `/${cmdId}`, 'DELETE', () => { });
 }
 
 export async function startThreadFromMessage(
+    instance: DiscordMinimal, 
     channelId: Snowflake,
     messageId: Snowflake,
     name: string,                   // 1-100 character channel name
@@ -202,7 +228,7 @@ export async function startThreadFromMessage(
     rateLimitPerUser?: number       // Amount of seconds a user has to wait before sending another message (0-21600)
 ): Promise<DiscordChannel> {
     const url = `/channels/${channelId}/messages`;
-    return makeFetch(url, `/${messageId}/threads`, 'POST', DiscordChannel.fromJson, JSON.stringify({
+    return makeFetch(instance, url, `/${messageId}/threads`, 'POST', DiscordChannel.fromJson, JSON.stringify({
         name,
         auto_archive_duration: autoArchiveDuration,
         rate_limit_per_user: rateLimitPerUser
