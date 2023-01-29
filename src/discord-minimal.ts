@@ -345,7 +345,9 @@ addEvent('USER_UPDATE', 'userUpdate', (d) => DiscordUser.fromJson(d));
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
     private heartbeat: NodeJS.Timer[] = [];
-    public token?: string;
+    // This should probably be done better...
+    // Probably switch to some sort of Request Builder
+    public static token?: string;
 
     private intents: number;
     private shards = 1;
@@ -356,9 +358,9 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     public async login(token: string) {
-        this.token = token;
+        DiscordMinimal.token = token;
 
-        const gatewayInfo = await getGatewayBot(this).catch((e) => {
+        const gatewayInfo = await getGatewayBot().catch((e) => {
             console.log(e);
             return new DiscordGatewayBotInfo({});
         });
@@ -407,7 +409,7 @@ export class DiscordMinimal extends events.EventEmitter {
                 if (message.d)
                     this.sendPayload(
                         wsd.ws,
-                        new ResumePayload(this.token ?? '', wsd.session_id, wsd.seq),
+                        new ResumePayload(DiscordMinimal.token ?? '', wsd.session_id, wsd.seq),
                     );
                 break;
             case 10:
@@ -415,12 +417,12 @@ export class DiscordMinimal extends events.EventEmitter {
                 if (wsd.resume)
                     this.sendPayload(
                         wsd.ws,
-                        new ResumePayload(this.token ?? '', wsd.session_id, wsd.seq),
+                        new ResumePayload(DiscordMinimal.token ?? '', wsd.session_id, wsd.seq),
                     );
                 else
                     this.sendPayload(
                         wsd.ws,
-                        new IdentifyPayload(this.token ?? '', this.intents, [
+                        new IdentifyPayload(DiscordMinimal.token ?? '', this.intents, [
                             shardNum,
                             this.shards,
                         ]),
@@ -491,7 +493,7 @@ export class DiscordMinimal extends events.EventEmitter {
     private initReconnectFull() {
         for (let i = 0; i < this.websocket.length; i++) this.websocket[i].ws.removeAllListeners();
         this.websocket = [];
-        this.login(this.token ?? '');
+        this.login(DiscordMinimal.token ?? '');
     }
 
     public sendPayload(ws: WebSocket, message: GatewayPayload): void {
