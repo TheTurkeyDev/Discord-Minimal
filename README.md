@@ -23,5 +23,5 @@ client.on('messageCreate', message => {
 // you should store this token securely in a .env or config file
 // this file should not be commited to version control or shared with anybody
 // the token gives malicious actors access to your bot
-client.login('Bot MTA2MDk4NzEyNjkyMzE0OTM5Mw.GD2fg1.Unq1R8zbVrDM4TGCLwP5Lj1dugzHgODMthd3P4');
+client.login('token goes here');
 ```
