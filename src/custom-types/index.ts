@@ -13,3 +13,4 @@ export * from './discord-message-flags';
 export * from './discord-message-types';
 export * from './discord-video-quality-modes';
 export * from './discord-channel-flags';
+export * from './discord-user-status';

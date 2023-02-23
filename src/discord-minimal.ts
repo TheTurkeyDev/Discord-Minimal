@@ -13,6 +13,7 @@ import {
     DiscordGatewayBotInfo,
     DiscordGuildMember,
     DiscordGuildMemberRemove,
+    DiscordGuildMembersChunk,
     DiscordGuildMemberUpdate,
     DiscordGuildRoleDelete,
     DiscordGuildRoleUpsert,
@@ -163,6 +164,12 @@ export declare interface DiscordMinimal {
      * @see {@link https://discord.com/developers/docs/topics/gateway-events#guild-member-add}
      */
     on(event: 'guildMemberAdd', listener: (member: DiscordGuildMember) => void): this;
+    /**
+     * Sent in response to Guild Request Members. You can use the chunk_index and chunk_count to calculate how many chunks are left for your request.
+     * @event DiscordMinimal#guildMemberChunk
+     * @see {@link https://discord.com/developers/docs/topics/gateway-events#guild-members-chunk}
+     */
+    on(event: 'guildMembersChunk', listener: (member: DiscordGuildMembersChunk) => void): this;
     /**
      * Sent when a user is removed from a guild (leave/kick/ban).
      * @event DiscordMinimal#guildMemberRemove
@@ -321,6 +328,7 @@ addEvent('GUILD_UPDATE', 'guildUpdate', (d) => DiscordGuild.fromJson(d));
 addEvent('GUILD_MEMBER_ADD', 'guildMemberAdd', (d) => DiscordGuildMember.fromJson(d));
 addEvent('GUILD_MEMBER_REMOVE', 'guildMemberRemove', (d) => DiscordGuildMemberRemove.fromJson(d));
 addEvent('GUILD_MEMBER_UPDATE', 'guildMemberUpdate', (d) => DiscordGuildMemberUpdate.fromJson(d));
+addEvent('GUILD_MEMBERS_CHUNK', 'guildMembersChunk', (d) => DiscordGuildMembersChunk.fromJson(d));
 addEvent('GUILD_ROLE_CREATE', 'guildRoleCreate', (d) => DiscordGuildRoleUpsert.fromJson(d));
 addEvent('GUILD_ROLE_UPDATE', 'guildRoleUpdate', (d) => DiscordGuildRoleUpsert.fromJson(d));
 addEvent('GUILD_ROLE_DELETE', 'guildRoleDelete', (d) => DiscordGuildRoleDelete.fromJson(d));
@@ -328,7 +336,6 @@ addEvent('CHANNEL_CREATE', 'channelCreate', (d) => DiscordChannel.fromJson(d));
 addEvent('CHANNEL_UPDATE', 'channelUpdate', (d) => DiscordChannel.fromJson(d));
 addEvent('CHANNEL_DELETE', 'channelDelete', (d) => DiscordChannel.fromJson(d));
 addEvent('CHANNEL_PINS_UPDATE', 'channelPinsUpdate', (d) => DiscordChannelPinsUpdate.fromJson(d));
-// eslint-disable-next-line max-len
 addEvent('APPLICATION_COMMAND_PERMISSIONS_UPDATE', 'applicationCommandPermissionsUpdate', (d) =>
     DiscordApplicationCommandPermissions.fromJson(d),
 );
@@ -441,7 +448,7 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     private onOpen(event: WebSocket.Event, shardId: number) {
-        this.debug(`${this.baseStr('Open')} | Shard: ${shardId} | Event type: ${event.type} `);
+        this.debug(`${this.baseStr('Open')} | Shard: ${shardId} | Event type: ${event.type}`);
     }
 
     private onClose(event: CloseEvent, shardId: number) {
@@ -450,9 +457,7 @@ export class DiscordMinimal extends events.EventEmitter {
         clearInterval(this.heartbeat[shardId]);
 
         this.debug(
-            `${this.baseStr('Close')} | Shard: ${shardId} | Code: ${code} | Reason: ${
-                event.reason
-            } `,
+            `${this.baseStr('Close')} | Shard: ${shardId} | Code: ${code} | Reason: ${event.reason}`,
         );
 
         if (code < 4000) {
@@ -491,9 +496,14 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     private initReconnectFull() {
-        for (let i = 0; i < this.websocket.length; i++) this.websocket[i].ws.removeAllListeners();
+        for (let i = 0; i < this.websocket.length; i++)
+            this.websocket[i].ws.removeAllListeners();
         this.websocket = [];
         this.login(DiscordMinimal.token ?? '');
+    }
+
+    public getShardWebSocket(shardId: number): WebSocketData | undefined {
+        return this.websocket.find(ws => ws.shard === shardId);
     }
 
     public sendPayload(ws: WebSocket, message: GatewayPayload): void {
