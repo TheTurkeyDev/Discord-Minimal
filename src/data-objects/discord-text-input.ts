@@ -1,6 +1,5 @@
-import { DiscordTextInputStyle } from '../custom-types';
-import { DiscordComponentType } from '../custom-types/discord-component-types';
-import DiscordComponent from './discord-component';
+import { DiscordTextInputStyle, DiscordComponentType } from '../custom-types';
+import { DiscordComponent } from './discord-component';
 
 export class DiscordTextInput extends DiscordComponent {
 

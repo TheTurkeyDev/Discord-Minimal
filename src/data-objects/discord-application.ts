@@ -3,7 +3,7 @@
 
 import { Snowflake } from '../custom-types/snowflake';
 
-export default class DiscordApplication {
+export class DiscordApplication {
     /**
      * The id of the app
      */

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import { DiscordEmoji } from './discord-emoji';
 
 export class DiscordSelectOption {
@@ -24,7 +21,7 @@ export class DiscordSelectOption {
      * Partial emoji object	id, name, and animated
      */
     public emoji?: DiscordEmoji;
-    
+
     /**
      * Will render this option as selected by default
      */

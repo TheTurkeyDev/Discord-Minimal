@@ -1,5 +1,5 @@
-import { DiscordComponentType } from '../custom-types/discord-component-types';
-import DiscordComponent from './discord-component';
+import { DiscordComponentType } from '../custom-types';
+import { DiscordComponent } from './discord-component';
 
 export class DiscordMessageActionRow extends DiscordComponent {
 

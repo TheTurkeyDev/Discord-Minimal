@@ -1,8 +1,8 @@
-import DiscordComponent from './discord-component';
+import { DiscordComponent } from './discord-component';
 import { DiscordEmbed } from './discord-embed';
 
 
-export default class DiscordInteractionResponseMessageData {
+export class DiscordInteractionResponseMessageData {
 
     /**
      * Is the response TTS

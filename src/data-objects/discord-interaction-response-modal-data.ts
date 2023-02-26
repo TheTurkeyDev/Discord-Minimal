@@ -1,6 +1,6 @@
-import DiscordComponent from './discord-component';
+import { DiscordComponent } from './discord-component';
 
-export default class DiscordInteractionResponseModalData {
+export class DiscordInteractionResponseModalData {
 
     /**
      * A developer-defined identifier for the component, max 100 characters

@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import * as DiscordAPI from '../api/discord-api';
-import { Snowflake } from '../custom-types/snowflake';
+import { Snowflake } from '../custom-types';
 import { DiscordEmoji } from './discord-emoji';
 import { DiscordGuildMember } from './discord-guild-member';
 

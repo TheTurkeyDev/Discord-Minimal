@@ -1,20 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import * as DiscordAPI from '../api/discord-api';
 import {
     DiscordComponentType,
-    DiscordGuildMember,
     DiscordInteractionCallbackType,
     DiscordInteractionType,
-    DiscordMessage,
-    DiscordMessageCreate,
     DiscordMessageFlags,
-    DiscordUser,
     Snowflake
-} from '..';
-import DiscordInteractionData from './discord-interaction-data';
-import DiscordInteractionResponseData from './discord-interaction-response-message-data';
-import * as DiscordAPI from '../api/discord-api';
-import DiscordInteractionResponseModalData from './discord-interaction-response-modal-data';
+} from '../custom-types';
+import { DiscordGuildMember } from './discord-guild-member';
+import { DiscordInteractionData } from './discord-interaction-data';
+import { DiscordInteractionResponseMessageData } from './discord-interaction-response-message-data';
+import { DiscordInteractionResponseModalData } from './discord-interaction-response-modal-data';
+import { DiscordMessage } from './discord-message';
+import { DiscordMessageCreate } from './discord-message-create';
+import { DiscordUser } from './discord-user';
 
 export class DiscordInteraction {
 
@@ -108,14 +106,14 @@ export class DiscordInteraction {
         return this.type == DiscordInteractionType.MODAL_SUBMIT;
     }
 
-    public update(data: DiscordInteractionResponseData): Promise<void> {
+    public update(data: DiscordInteractionResponseMessageData): Promise<void> {
         return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.UPDATE_MESSAGE,
             data
         });
     }
 
-    public respond(data: DiscordInteractionResponseData): Promise<void> {
+    public respond(data: DiscordInteractionResponseMessageData): Promise<void> {
         return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.CHANNEL_MESSAGE_WITH_SOURCE,
             data
@@ -130,13 +128,13 @@ export class DiscordInteraction {
     }
 
     public respondText(message: string): Promise<void> {
-        const data = new DiscordInteractionResponseData();
+        const data = new DiscordInteractionResponseMessageData();
         data.content = message;
         return this.respond(data);
     }
 
     public respondTextEphemeral(message: string): Promise<void> {
-        const data = new DiscordInteractionResponseData();
+        const data = new DiscordInteractionResponseMessageData();
         data.content = message;
         data.flags = DiscordMessageFlags.EPHEMERAL;
         return this.respond(data);

@@ -1,4 +1,4 @@
-export default class DiscordEmbedField {
+export class DiscordEmbedField {
 
     /**
      * Name of the field

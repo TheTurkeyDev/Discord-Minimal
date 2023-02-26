@@ -1,8 +1,8 @@
-import DiscordComponent from './discord-component';
+import { DiscordComponent } from './discord-component';
 import { DiscordEmbed } from './discord-embed';
 
 
-export default class DiscordMessageEdit {
+export class DiscordMessageEdit {
 
     /**
      * The message contents(up to 2000 characters)

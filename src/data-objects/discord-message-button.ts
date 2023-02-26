@@ -1,6 +1,5 @@
-import { DiscordButtonStyle } from '../custom-types/discord-button-styles';
-import { DiscordComponentType } from '../custom-types/discord-component-types';
-import DiscordComponent from './discord-component';
+import { DiscordButtonStyle, DiscordComponentType } from '../custom-types';
+import { DiscordComponent } from './discord-component';
 import { DiscordEmoji } from './discord-emoji';
 
 

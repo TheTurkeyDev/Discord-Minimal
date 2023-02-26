@@ -26,7 +26,7 @@ interface MessageMap {
     [key: string]: DiscordMessage;
 }
 
-export default class DiscordInteractionResolvedData {
+export class DiscordInteractionResolvedData {
 
     /**
      * Map of Snowflakes to user objects

@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Snowflake } from '../custom-types/snowflake';
+import { Snowflake } from '../custom-types';
 import { DiscordEmbed } from './discord-embed';
 import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordMessageBase } from './discord-message-base';
-import DiscordReaction from './discord-reaction';
+import { DiscordReaction } from './discord-reaction';
 import { DiscordUser } from './discord-user';
 
 export class DiscordMessageUpdate extends DiscordMessageBase {

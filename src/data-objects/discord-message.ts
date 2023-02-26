@@ -1,9 +1,8 @@
-import { DiscordMessageType } from '../custom-types';
-import { Snowflake } from '../custom-types/snowflake';
+import { DiscordMessageType, Snowflake } from '../custom-types';
 import { DiscordEmbed } from './discord-embed';
 import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordMessageBase } from './discord-message-base';
-import DiscordReaction from './discord-reaction';
+import { DiscordReaction } from './discord-reaction';
 import { DiscordUser } from './discord-user';
 import * as DiscordAPI from '../api/discord-api';
 

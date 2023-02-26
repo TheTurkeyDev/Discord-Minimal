@@ -1,7 +1,7 @@
-import { Snowflake } from '../custom-types/snowflake';
-import DiscordComponent from './discord-component';
+import { Snowflake } from '../custom-types';
+import { DiscordComponent } from './discord-component';
 import { DiscordEmbed } from './discord-embed';
-import DiscordMessageReference from './discord-message-reference';
+import { DiscordMessageReference } from './discord-message-reference';
 
 export class DiscordMessageCreate {
 

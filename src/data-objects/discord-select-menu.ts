@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { DiscordChannelType } from '../custom-types';
-import { DiscordComponentType } from '../custom-types/discord-component-types';
-import DiscordComponent from './discord-component';
+import { DiscordChannelType, DiscordComponentType } from '../custom-types';
+import { DiscordComponent } from './discord-component';
 import { DiscordSelectOption } from './discord-select-option';
 
 export class DiscordSelectMenu extends DiscordComponent {

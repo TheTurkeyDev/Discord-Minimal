@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as DiscordAPI from '../api/discord-api';
-import { DiscordMessageType } from '../custom-types';
-import { Snowflake } from '../custom-types/snowflake';
+import { DiscordMessageType, Snowflake } from '../custom-types';
 import { DiscordEmbed } from './discord-embed';
 import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordMessageCreate } from './discord-message-create';
-import DiscordMessageEdit from './discord-message-edit';
-import DiscordReaction from './discord-reaction';
+import { DiscordMessageEdit } from './discord-message-edit';
+import { DiscordReaction } from './discord-reaction';
 import { DiscordUser } from './discord-user';
 
 export class DiscordMessageBase {

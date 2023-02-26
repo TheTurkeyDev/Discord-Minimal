@@ -3,7 +3,7 @@
 
 import { DiscordApplicationCommandOptionType } from '../custom-types/discord-application-command-option-type';
 
-export default class DiscordApplicationCommandInteractionDataOption {
+export class DiscordApplicationCommandInteractionDataOption {
     /**
      * The name of the parameter
      */

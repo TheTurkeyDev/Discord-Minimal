@@ -1,4 +1,4 @@
-export default class RateLimitBucket {
+export class RateLimitBucket {
     public bucket: string | null = '';
     public limit = 0;
     public remain = 0;

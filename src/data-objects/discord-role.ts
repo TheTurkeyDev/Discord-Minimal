@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Snowflake } from '../custom-types';
 
-import { Snowflake } from '../custom-types/snowflake';
-
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class DiscordRole {
 
     /**

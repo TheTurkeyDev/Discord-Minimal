@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import DiscordApplication from './discord-application';
+import { DiscordApplication } from './discord-application';
 import { DiscordGuild } from './discord-guild';
 import { DiscordUser } from './discord-user';
 

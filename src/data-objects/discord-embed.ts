@@ -1,7 +1,7 @@
-import DiscordEmbedAuthor from './discord-embed-author';
-import DiscordEmbedField from './discord-embed-field';
-import DiscordEmbedFooter from './discord-embed-footer';
-import DiscordEmbedImage from './discord-embed-image';
+import { DiscordEmbedAuthor } from './discord-embed-author';
+import { DiscordEmbedField } from './discord-embed-field';
+import { DiscordEmbedFooter } from './discord-embed-footer';
+import { DiscordEmbedImage } from './discord-embed-image';
 
 export class DiscordEmbed {
 

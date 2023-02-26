@@ -1,4 +1,4 @@
-export default class DiscordEmbedImage {
+export class DiscordEmbedImage {
 
     /**
      * Source url of image (only supports http(s) and attachments)

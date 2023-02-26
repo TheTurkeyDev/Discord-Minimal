@@ -1,4 +1,4 @@
-export default class DiscordEmbedAuthor {
+export class DiscordEmbedAuthor {
 
     /**
      * Name of author

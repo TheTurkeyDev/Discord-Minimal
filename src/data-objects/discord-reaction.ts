@@ -1,6 +1,6 @@
 import { DiscordEmoji } from './discord-emoji';
 
-export default class DiscordReaction {
+export class DiscordReaction {
 
     /**
      * Times this emoji has been used to react

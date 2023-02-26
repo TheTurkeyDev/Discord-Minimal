@@ -1,6 +1,10 @@
-import { DiscordComponentType } from '../custom-types/discord-component-types';
-import { DiscordMessageActionRow, DiscordMessageButton, DiscordSelectMenu, DiscordTextInput } from '..';
-export default class DiscordComponent {
+import { DiscordComponentType } from '../custom-types';
+import { DiscordMessageActionRow } from './discord-message-action-row';
+import { DiscordMessageButton } from './discord-message-button';
+import { DiscordSelectMenu } from './discord-select-menu';
+import { DiscordTextInput } from './discord-text-input';
+
+export class DiscordComponent {
     /**
      * Component type
      */

@@ -1,13 +1,17 @@
 import fetch, { RequestInit, Response } from 'node-fetch';
-import { Snowflake } from '../custom-types/snowflake';
-import DiscordInteractionResponse from '../data-objects/discord-interaction-response';
-import { DiscordMessageCreate } from '../data-objects/discord-message-create';
-import DiscordMessageEdit from '../data-objects/discord-message-edit';
-import { DiscordMessage } from '../data-objects/discord-message';
-import { DiscordAPIError, DiscordChannel, DiscordMinimal } from '..';
-import { DiscordGatewayBotInfo } from '../data-objects/discord-gateway-bot-info';
-import RateLimitBucket from './rate-limit-bucket';
-import { DiscordApplicationCommand } from '../data-objects/discord-application-command';
+import { Snowflake } from '../custom-types';
+import { 
+    DiscordAPIError, 
+    DiscordChannel, 
+    DiscordMessageEdit, 
+    DiscordInteractionResponse, 
+    DiscordMessageCreate,
+    DiscordMessage,
+    DiscordGatewayBotInfo,
+    DiscordApplicationCommand
+} from '../data-objects';
+import { RateLimitBucket } from './rate-limit-bucket';
+import DiscordMinimal from '../discord-minimal';
 
 export const APIVersion = 10;
 const URL_BASE = `https://discord.com/api/v${APIVersion}`;
