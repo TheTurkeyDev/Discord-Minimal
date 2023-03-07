@@ -138,9 +138,8 @@ function genFormData(resp: DiscordInteractionResponse, respData: DiscordInteract
     }));
 
     for (let i = 0; i < (respData.files.length ?? 0); i++) {
-        data.addPart(`files[${i}]`, 'text/plain', 'Testing123...', respData.attachments[i].filename);
+        data.addPart(`files[${i}]`, 'image/png', respData.files[i].toString(), respData.attachments[i].filename);
     }
-    console.log(data.generateBody());
     return data.generateBody();
 }
 
