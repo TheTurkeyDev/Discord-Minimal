@@ -1,3 +1,4 @@
+import { DiscordAttachmentObject } from './discord-attachment-object';
 import { DiscordComponent } from './discord-component';
 import { DiscordEmbed } from './discord-embed';
 
@@ -29,4 +30,24 @@ export class DiscordInteractionResponseMessageData {
      * Message components
      */
     public components?: DiscordComponent[];
+
+    /**
+     * Attachment objects with filename and description
+     */
+    public attachments: DiscordAttachmentObject[] = [];
+
+    /**
+     * Files to be uploaded
+     */
+    public files: Buffer[] = [];
+
+    public addAttachment(filename: string, description: string, fileContents: Buffer) {
+        this.attachments.push({
+            id: this.files.length.toString(),
+            filename,
+            description
+        });
+
+        this.files.push(fileContents);
+    }
 }

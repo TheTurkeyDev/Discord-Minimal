@@ -1,17 +1,19 @@
 import fetch, { RequestInit, Response } from 'node-fetch';
 import { Snowflake } from '../custom-types';
-import { 
-    DiscordAPIError, 
-    DiscordChannel, 
-    DiscordMessageEdit, 
-    DiscordInteractionResponse, 
+import {
+    DiscordAPIError,
+    DiscordChannel,
+    DiscordMessageEdit,
+    DiscordInteractionResponse,
     DiscordMessageCreate,
     DiscordMessage,
     DiscordGatewayBotInfo,
-    DiscordApplicationCommand
+    DiscordApplicationCommand,
+    DiscordInteractionResponseMessageData
 } from '../data-objects';
 import { RateLimitBucket } from './rate-limit-bucket';
 import DiscordMinimal from '../discord-minimal';
+import { MultiPartForm } from './multi-part-form';
 
 export const APIVersion = 10;
 const URL_BASE = `https://discord.com/api/v${APIVersion}`;
@@ -113,9 +115,10 @@ async function makeFetch<T>(
         },
         body: body
     });
-    if (resp.ok)
-        return resp.json().then(json => construct(json));
     const json = await resp.json();
+
+    if (resp.ok)
+        return construct(json);
     throw new DiscordAPIError(json.code, json.message, json.errors, method, `${topLvlUrl}${urlExtra}`);
 }
 
@@ -124,24 +127,46 @@ export async function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
     return makeFetch(url, '', 'GET', json => new DiscordGatewayBotInfo(json));
 }
 
+function genFormData(resp: DiscordInteractionResponse, respData: DiscordInteractionResponseMessageData) {
+    const data = new MultiPartForm();
+    data.addPart('payload_json', 'application/json', JSON.stringify({
+        ...resp,
+        data: {
+            ...resp.data,
+            files: undefined
+        }
+    }));
+
+    for (let i = 0; i < (respData.files.length ?? 0); i++) {
+        data.addPart(`files[${i}]`, 'text/plain', 'Testing123...', respData.attachments[i].filename);
+    }
+    console.log(data.generateBody());
+    return data.generateBody();
+}
+
 export async function interactionCallback(
     interactionId: Snowflake,
     interactionToken: string,
     data: DiscordInteractionResponse
 ): Promise<void> {
     const url = `${URL_BASE}/interactions/${interactionId}/${interactionToken}/callback`;
+    const hasFiles = !!data.data &&
+        data.data instanceof DiscordInteractionResponseMessageData &&
+        (data.data.files.length ?? 0) > 0;
+    const body = hasFiles ? genFormData(data, data.data as DiscordInteractionResponseMessageData) : JSON.stringify(data);
     const resp = await fetch(url, {
         method: 'POST',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
-            'Content-Type': 'application/json',
+            'Content-Type': hasFiles ? 'multipart/form-data' : 'application/json',
         },
-        body: JSON.stringify(data),
+        body: body,
     });
-    if (resp.ok)
-        return new Promise<void>(resolve => resolve());
-    const json = await resp.json();
-    throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
+
+    if (!resp.ok) {
+        const json = await resp.json();
+        throw new DiscordAPIError(json.code, json.message, json.errors, 'POST', url);
+    }
 }
 
 export async function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {

@@ -1,4 +1,4 @@
-export class DiscordEmbedImage {
+export class DiscordEmbedThumbnail {
 
     /**
      * Source url of image (only supports http(s) and attachments)
@@ -25,7 +25,7 @@ export class DiscordEmbedImage {
     }
 
     static fromJson(json: any) {
-        const embedImage = new DiscordEmbedImage(json.url);
+        const embedImage = new DiscordEmbedThumbnail(json.url);
         embedImage.proxy_url = json.proxy_url;
         embedImage.height = json.height;
         embedImage.width = json.width;

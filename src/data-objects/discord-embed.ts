@@ -2,6 +2,7 @@ import { DiscordEmbedAuthor } from './discord-embed-author';
 import { DiscordEmbedField } from './discord-embed-field';
 import { DiscordEmbedFooter } from './discord-embed-footer';
 import { DiscordEmbedImage } from './discord-embed-image';
+import { DiscordEmbedThumbnail } from './discord-embed-thumbnail';
 
 export class DiscordEmbed {
 
@@ -45,7 +46,11 @@ export class DiscordEmbed {
      */
     public image?: DiscordEmbedImage;
 
-    // public thumbnail?	embed thumbnail object	thumbnail information
+    /**
+     * Thumbnail information
+     */
+    public thumbnail?: DiscordEmbedThumbnail;
+    
     // public video?	embed video object	video information
     // public provider?	embed provider object	provider information
 

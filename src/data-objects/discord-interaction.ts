@@ -109,14 +109,14 @@ export class DiscordInteraction {
     public update(data: DiscordInteractionResponseMessageData): Promise<void> {
         return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.UPDATE_MESSAGE,
-            data
+            data: data
         });
     }
 
     public respond(data: DiscordInteractionResponseMessageData): Promise<void> {
         return DiscordAPI.interactionCallback(this.id, this.token, {
             type: DiscordInteractionCallbackType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data
+            data: data
         });
     }
 
