@@ -5,6 +5,7 @@ import { DiscordMessageBase } from './discord-message-base';
 import { DiscordReaction } from './discord-reaction';
 import { DiscordUser } from './discord-user';
 import * as DiscordAPI from '../api/discord-api';
+import { DiscordComponent } from './discord-component';
 
 export class DiscordMessage extends DiscordMessageBase {
 
@@ -72,6 +73,7 @@ export class DiscordMessage extends DiscordMessageBase {
         newInst.nonce = json.nonce;
         newInst.application_id = json.application_id;
         newInst.flags = json.flags;
+        newInst.components = json.components?.map(DiscordComponent.fromJson) ?? [];
         return newInst;
     }
 

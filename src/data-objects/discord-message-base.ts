@@ -1,3 +1,4 @@
+import { DiscordComponent } from '..';
 import * as DiscordAPI from '../api/discord-api';
 import { DiscordMessageType, Snowflake } from '../custom-types';
 import { DiscordEmbed } from './discord-embed';
@@ -112,10 +113,16 @@ export class DiscordMessageBase {
      * Message flags combined as a bitfield
      */
     public flags?: number;
+
     //     public referenced_message ?*****	? message object	the message associated with the message_reference
     //     public interaction ? message interaction object	sent if the message is a response to an Interaction
     //     public thread ? channel object	the thread that was started from this message, includes thread member object
-    //     public components ? Array of message components	sent if the message contains components like buttons, action rows, or other interactive components
+
+    /**
+     * Sent if the message contains components like buttons, action rows, or other interactive components
+     */
+    public components?: DiscordComponent[];
+    
     //     public sticker_items ? array of message sticker item objects	sent if the message contains stickers
     //     public stickers ? array of sticker objects	Deprecated the stickers sent with the message
 

@@ -83,7 +83,7 @@ async function processQueue(
             console.log('ERROR! Bucket mismatch! ', urlGroup, bucketMap[urlGroup].bucket, bucket);
 
         if (r.headers.get('X-RateLimit-Global'))
-            await resp.json().then(json => globalWait = json.retry_after * 1000);
+            await r.json().then(json => globalWait = json.retry_after * 1000);
         if (r.headers.get('X-RateLimit-Scope')) {
             console.log('Rate limit! ', r.headers.get('X-RateLimit-Scope'));
             console.log('\tInfo: ', bucketMap[urlGroup]);

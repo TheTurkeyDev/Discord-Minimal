@@ -1,4 +1,5 @@
 import { Snowflake } from '../custom-types';
+import { DiscordComponent } from './discord-component';
 import { DiscordEmbed } from './discord-embed';
 import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordMessageBase } from './discord-message-base';
@@ -34,6 +35,7 @@ export class DiscordMessageUpdate extends DiscordMessageBase {
         newInst.nonce = json.nonce;
         newInst.application_id = json.application_id;
         newInst.flags = json.flags;
+        newInst.components = json.components?.map(DiscordComponent.fromJson) ?? [];
         return newInst;
     }
 }

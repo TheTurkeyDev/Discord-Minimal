@@ -539,6 +539,7 @@ export class DiscordMinimal extends events.EventEmitter {
                 'GUILD_JOIN_REQUEST_DELETE',
                 'GUILD_APPLICATION_COMMAND_INDEX_UPDATE',
                 'GIFT_CODE_UPDATE',
+                'GUILD_SOUNDBOARD_SOUND_CREATE',
             ].includes(eventId)
         ) {
             //TODO: I've seen these event id's but no idea what their payload is... Can't find docs on them
