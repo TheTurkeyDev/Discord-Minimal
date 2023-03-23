@@ -115,11 +115,20 @@ async function makeFetch<T>(
         },
         body: body
     });
-    const json = await resp.json();
 
-    if (resp.ok)
-        return construct(json);
-    throw new DiscordAPIError(json.code, json.message, json.errors, method, `${topLvlUrl}${urlExtra}`);
+    const ct = resp.headers.get('Content-Type');
+
+    if (ct === 'application/json') {
+        const json = await resp.json();
+
+        if (resp.ok)
+            return construct(json);
+        throw new DiscordAPIError(json.code, json.message, json.errors, method, `${topLvlUrl}${urlExtra}`);
+    }
+    else {
+        // Should this be different?
+        return construct(undefined);
+    }
 }
 
 export async function getGatewayBot(): Promise<DiscordGatewayBotInfo> {
@@ -138,7 +147,7 @@ function genFormData(resp: DiscordInteractionResponse, respData: DiscordInteract
     }));
 
     for (let i = 0; i < (respData.files.length ?? 0); i++) {
-        data.addPart(`files[${i}]`, 'image/png', respData.files[i].toString(), respData.attachments[i].filename);
+        data.addPart(`files[${i}]`, 'plain/txt', respData.files[i].toString(), respData.attachments[i].filename);
     }
     return data.generateBody();
 }
