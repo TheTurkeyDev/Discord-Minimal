@@ -20,6 +20,7 @@ import {
     DiscordMessageReactionRemove,
     DiscordMessageReactionRemoveAll,
     DiscordMessageReactionRemoveEmoji,
+    DiscordPresence,
     DiscordStageInstance,
     DiscordThreadListSync,
     DiscordUser,
@@ -290,6 +291,12 @@ export declare interface DiscordMinimal {
      * @see {@link https://discord.com/developers/docs/topics/gateway-events#user-update}
      */
     on(event: 'userUpdate', listener: (user: DiscordUser) => void): this;
+    /**
+     * Sent when a user's presence or info, such as name or avatar, is updated.
+     * @event DiscordMinimal#presenceUpdate
+     * @see {@link https://discord.com/developers/docs/topics/gateway-events#presence-update}
+     */
+    on(event: 'presenceUpdate', listener: (presence: DiscordPresence) => void): this;
 
     on(event: string, listener: () => void): this;
 }
@@ -348,10 +355,15 @@ addEvent('THREAD_DELETE', 'threadDelete', (d) => DiscordChannel.fromJson(d));
 addEvent('THREAD_UPDATE', 'threadUpdate', (d) => DiscordChannel.fromJson(d));
 addEvent('THREAD_MEMBER_UPDATE', 'threadMemberUpdate', (d) => DiscordThreadMember.fromJson(d));
 addEvent('USER_UPDATE', 'userUpdate', (d) => DiscordUser.fromJson(d));
+addEvent('PRESENCE_UPDATE', 'presenceUpdate', (d) => DiscordPresence.fromJson(d));
 
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
-    private heartbeat: NodeJS.Timer[] = [];
+    private heartbeats: {
+        timer?: NodeJS.Timer
+        lastSend: Date,
+        lastReceive: Date,
+    }[] = [];
     // This should probably be done better...
     // Probably switch to some sort of Request Builder
     public static token?: string;
@@ -436,6 +448,7 @@ export class DiscordMinimal extends events.EventEmitter {
                     );
                 break;
             case 11:
+                this.heartbeats[shardNum].lastReceive = new Date();
                 //Heartbeat ACK
                 break;
             default:
@@ -454,7 +467,8 @@ export class DiscordMinimal extends events.EventEmitter {
     private onClose(event: CloseEvent, shardId: number) {
         const code = event.code;
 
-        clearInterval(this.heartbeat[shardId]);
+        clearInterval(this.heartbeats[shardId].timer);
+        this.heartbeats[shardId].timer = undefined;
 
         this.debug(
             `${this.baseStr('Close')} | Shard: ${shardId} | Code: ${code} | Reason: ${event.reason}`,
@@ -540,6 +554,7 @@ export class DiscordMinimal extends events.EventEmitter {
                 'GUILD_APPLICATION_COMMAND_INDEX_UPDATE',
                 'GIFT_CODE_UPDATE',
                 'GUILD_SOUNDBOARD_SOUND_CREATE',
+                'THREAD_MEMBERS_UPDATE' // Just a list of thread members?
             ].includes(eventId)
         ) {
             //TODO: I've seen these event id's but no idea what their payload is... Can't find docs on them
@@ -549,9 +564,21 @@ export class DiscordMinimal extends events.EventEmitter {
     }
 
     private startHeartbeat(wsd: WebSocketData, shardNum: number, heartbeatDelay: number) {
-        if (this.heartbeat[shardNum]) clearInterval(this.heartbeat[shardNum]);
+        if (!this.heartbeats[shardNum]) {
+            this.heartbeats[shardNum] = {
+                timer: undefined,
+                lastSend: new Date(0),
+                lastReceive: new Date(0),
+            };
+        }
 
-        this.heartbeat[shardNum] = setInterval(() => {
+        const hBData = this.heartbeats[shardNum];
+
+        if (hBData.timer)
+            clearInterval(hBData.timer);
+
+        hBData.timer = setInterval(() => {
+            hBData.lastSend = new Date();
             this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq));
             this.debug(
                 `${this.baseStr('Heartbeat')} | Shard: ${shardNum} | Delay: ${heartbeatDelay}`,
@@ -561,6 +588,15 @@ export class DiscordMinimal extends events.EventEmitter {
 
     private baseStr(str: string): string {
         return str + ' '.repeat(20 - str.length);
+    }
+
+    public getHeartBeatData() {
+        return this.heartbeats.map((hbd, i) => ({
+            shardId: i,
+            lastReceive: hbd.lastReceive,
+            lastSend: hbd.lastSend,
+            timerSet: !!hbd.timer
+        }));
     }
 }
 
