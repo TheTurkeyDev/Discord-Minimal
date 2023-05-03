@@ -423,6 +423,9 @@ export class DiscordMinimal extends events.EventEmitter {
             case 0:
                 this.onEvent(message, wsd);
                 break;
+            case 1:
+                this.sendPayload(wsd.ws, new HeartBeatPayload(wsd.seq));
+                break;
             case 7:
             case 9:
                 if (message.d)
@@ -554,6 +557,8 @@ export class DiscordMinimal extends events.EventEmitter {
                 'GUILD_APPLICATION_COMMAND_INDEX_UPDATE',
                 'GIFT_CODE_UPDATE',
                 'GUILD_SOUNDBOARD_SOUND_CREATE',
+                'GUILD_SOUNDBOARD_SOUND_UPDATE',
+                'GUILD_SOUNDBOARD_SOUND_DELETE',
                 'THREAD_MEMBERS_UPDATE' // Just a list of thread members?
             ].includes(eventId)
         ) {
