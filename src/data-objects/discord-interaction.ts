@@ -150,4 +150,8 @@ export class DiscordInteraction {
             type: DiscordInteractionCallbackType.DEFERRED_UPDATE_MESSAGE
         });
     }
+
+    public deleteOriginalInteraction(): Promise<void> {
+        return DiscordAPI.deleteOriginalInteraction(this.application_id, this.token);
+    }
 }

@@ -177,6 +177,24 @@ export async function interactionCallback(
     }
 }
 
+export async function deleteOriginalInteraction(
+    applicationId: Snowflake,
+    interactionToken: string,
+): Promise<void> {
+    const url = `${URL_BASE}/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+    const resp = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+        },
+    });
+
+    if (!resp.ok) {
+        const json = await resp.json();
+        throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
+    }
+}
+
 export async function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages`;
     return makeFetch(url, '', 'POST', DiscordMessage.fromJson, JSON.stringify(message));
