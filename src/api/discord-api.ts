@@ -14,6 +14,7 @@ import {
 import { RateLimitBucket } from './rate-limit-bucket';
 import DiscordMinimal from '../discord-minimal';
 import { MultiPartForm } from './multi-part-form';
+import { DiscordWebhookEditMessage } from '../data-objects/discord-webhook-edit-message';
 
 export const APIVersion = 10;
 const URL_BASE = `https://discord.com/api/v${APIVersion}`;
@@ -192,6 +193,26 @@ export async function deleteOriginalInteraction(
     if (!resp.ok) {
         const json = await resp.json();
         throw new DiscordAPIError(json.code, json.message, json.errors, 'DELETE', url);
+    }
+}
+
+export async function editOriginalInteraction(
+    applicationId: Snowflake,
+    interactionToken: string,
+    data: DiscordWebhookEditMessage
+): Promise<void> {
+    const url = `${URL_BASE}/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+    const resp = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!resp.ok) {
+        const json = await resp.json();
+        throw new DiscordAPIError(json.code, json.message, json.errors, 'PATCH', url);
     }
 }
 

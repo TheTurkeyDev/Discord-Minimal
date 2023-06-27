@@ -42,3 +42,4 @@ export * from './discord-stage-instance';
 export * from './discord-text-input';
 export * from './discord-thread-list-sync';
 export * from './discord-user';
+export * from './discord-webhook-edit-message';

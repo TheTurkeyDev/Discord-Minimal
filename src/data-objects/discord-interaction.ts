@@ -13,6 +13,7 @@ import { DiscordInteractionResponseModalData } from './discord-interaction-respo
 import { DiscordMessage } from './discord-message';
 import { DiscordMessageCreate } from './discord-message-create';
 import { DiscordUser } from './discord-user';
+import { DiscordWebhookEditMessage } from './discord-webhook-edit-message';
 
 export class DiscordInteraction {
 
@@ -153,5 +154,9 @@ export class DiscordInteraction {
 
     public deleteOriginalInteraction(): Promise<void> {
         return DiscordAPI.deleteOriginalInteraction(this.application_id, this.token);
+    }
+
+    public editOriginalInteraction(data: DiscordWebhookEditMessage): Promise<void> {
+        return DiscordAPI.editOriginalInteraction(this.application_id, this.token, data);
     }
 }
