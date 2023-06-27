@@ -206,6 +206,7 @@ export async function editOriginalInteraction(
         method: 'PATCH',
         headers: {
             'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
     });
