@@ -1,6 +1,6 @@
 {
   "name": "discord-minimal",
-  "version": "0.1.67",
+  "version": "0.1.68",
   "description": "Minimal Discord API library",
   "main": "output/src/index.js",
   "types": "output/src/index.d.ts",
