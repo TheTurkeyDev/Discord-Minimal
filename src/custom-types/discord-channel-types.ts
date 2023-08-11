@@ -50,4 +50,8 @@ export enum DiscordChannelType {
      * Channel that can only contain threads
      */
     GUILD_FORUM = 15,
+    /**
+     * Channel that can only contain threads, similar to GUILD_FORUM channels
+     */
+    GUILD_MEDIA = 16,
 }

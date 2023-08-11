@@ -1,5 +1,5 @@
 /**
- * @see {@link ttps://discord.com/developers/docs/resources/channel#channel-object-video-quality-modes}
+ * @see {@link https://discord.com/developers/docs/resources/channel#channel-object-video-quality-modes}
  */
 export enum DiscordVideoQualityMode {
     /**

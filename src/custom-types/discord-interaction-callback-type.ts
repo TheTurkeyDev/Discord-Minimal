@@ -1,5 +1,5 @@
 /**
- * @see {@link https://discord.com/developers/docs/interactions/message-components#component-object-component-types}
+ * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type}
  */
 export enum DiscordInteractionCallbackType {
     /**

@@ -10,4 +10,8 @@ export enum DiscordChannelFlags {
      * Whether a tag is required to be specified when creating a thread in a GUILD_FORUM channel. Tags are specified in the applied_tags field.
      */
     REQUIRE_TAG = 1 << 4,
+    /**
+     * when set hides the embedded media download options. Available only for media channels
+     */
+    HIDE_MEDIA_DOWNLOAD_OPTIONS = 1 << 15,
 }
