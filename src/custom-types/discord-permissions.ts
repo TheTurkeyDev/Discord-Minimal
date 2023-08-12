@@ -44,7 +44,11 @@ export const PERMISSIONS = {
     SEND_MESSAGES_IN_THREADS: 1n << 38n,
     START_EMBEDDED_ACTIVITIES: 1n << 39n,
     MODERATE_MEMBERS: 1n << 40n,
-    ALL: (1n << 41n) - 1n,
+    VIEW_CREATOR_MONETIZATION_ANALYTICS: 1n << 41n,
+    USE_SOUNDBOARD: 1n << 42n,
+    USE_EXTERNAL_SOUNDS: 1n << 45n,
+    SEND_VOICE_MESSAGES: 1n << 46n,
+    ALL: (1n << 47n) - 1n, //? is this correct
 } as const;
 
 /**
