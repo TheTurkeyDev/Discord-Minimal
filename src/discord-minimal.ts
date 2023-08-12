@@ -559,6 +559,7 @@ export class DiscordMinimal extends events.EventEmitter {
                 'GUILD_SOUNDBOARD_SOUND_CREATE',
                 'GUILD_SOUNDBOARD_SOUND_UPDATE',
                 'GUILD_SOUNDBOARD_SOUND_DELETE',
+                'CHANNEL_TOPIC_UPDATE',
                 'THREAD_MEMBERS_UPDATE' // Just a list of thread members?
             ].includes(eventId)
         ) {
