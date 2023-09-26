@@ -6,6 +6,7 @@ import {
     DiscordMessageFlags,
     Snowflake
 } from '../custom-types';
+import { DiscordEntitlement } from './discord-entitlement';
 import { DiscordGuildMember } from './discord-guild-member';
 import { DiscordInteractionData } from './discord-interaction-data';
 import { DiscordInteractionResponseMessageData } from './discord-interaction-response-message-data';
@@ -72,6 +73,26 @@ export class DiscordInteraction {
      */
     public message?: DiscordMessage;
 
+    /**
+     * Bitwise set of permissions the app or bot has within the channel the interaction was sent from
+     */
+    public app_permissions?: string;
+
+    /**
+     * Selected language of the invoking user
+     */
+    public locale?: string;
+
+    /**
+     * Guild's preferred locale, if invoked in a guild
+     */
+    public guild_locale?: string;
+
+    /**
+     * For monetized apps, any entitlements for the invoking user, representing access to premium SKUs
+     */
+    public entitlements: DiscordEntitlement[] = [];
+
     constructor(id: Snowflake, application_id: Snowflake, type: DiscordInteractionType, token: string) {
         this.id = id;
         this.application_id = application_id;
@@ -88,6 +109,10 @@ export class DiscordInteraction {
         newInst.user = json.user && DiscordUser.fromJson(json.user);
         newInst.version = json.version;
         newInst.message = json.message && DiscordMessage.fromJson(json.message);
+        newInst.app_permissions = json.app_permissions;
+        newInst.locale = json.locale;
+        newInst.guild_locale = json.guild_locale;
+        newInst.entitlements = json.entitlements?.map(DiscordEntitlement.fromJson) ?? [];
         return newInst;
     }
 
