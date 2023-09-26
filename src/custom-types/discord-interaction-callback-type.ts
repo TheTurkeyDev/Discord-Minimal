@@ -30,4 +30,8 @@ export enum DiscordInteractionCallbackType {
      * Respond to an interaction with a popup modal
      */
     MODAL = 9,
+    /**
+     * Respond to an interaction with an upgrade button, only available for apps with monetization enabled
+     */
+    PREMIUM_REQUIRED = 10,
 }
