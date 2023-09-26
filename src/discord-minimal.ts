@@ -560,7 +560,8 @@ export class DiscordMinimal extends events.EventEmitter {
                 'GUILD_SOUNDBOARD_SOUND_UPDATE',
                 'GUILD_SOUNDBOARD_SOUND_DELETE',
                 'CHANNEL_TOPIC_UPDATE',
-                'THREAD_MEMBERS_UPDATE' // Just a list of thread members?
+                'THREAD_MEMBERS_UPDATE', // Just a list of thread members?
+                'VOICE_CHANNEL_STATUS_UPDATE',
             ].includes(eventId)
         ) {
             //TODO: I've seen these event id's but no idea what their payload is... Can't find docs on them

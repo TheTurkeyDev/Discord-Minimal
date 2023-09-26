@@ -153,6 +153,12 @@ export class DiscordInteraction {
         });
     }
 
+    public respondWithPremium(): Promise<void> {
+        return DiscordAPI.interactionCallback(this.id, this.token, {
+            type: DiscordInteractionCallbackType.PREMIUM_REQUIRED
+        });
+    }
+
     public respondText(message: string): Promise<void> {
         const data = new DiscordInteractionResponseMessageData();
         data.content = message;
