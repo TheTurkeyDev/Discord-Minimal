@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Snowflake } from '../custom-types/snowflake';
-import { DiscordRole } from './discord-role';
-import { DiscordUser } from './discord-user';
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class DiscordEntitlement {

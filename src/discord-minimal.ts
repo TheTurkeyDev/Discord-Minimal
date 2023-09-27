@@ -37,6 +37,7 @@ import {
 } from '.';
 import { DiscordMessageUpdate } from './data-objects/discord-message-update';
 import { DiscordThreadMember } from './data-objects/discord-thread-member';
+import { DiscordEntitlement } from './data-objects/discord-entitlement';
 
 type MessageEvent = {
     data: any;
@@ -297,6 +298,25 @@ export declare interface DiscordMinimal {
      * @see {@link https://discord.com/developers/docs/topics/gateway-events#presence-update}
      */
     on(event: 'presenceUpdate', listener: (presence: DiscordPresence) => void): this;
+    /**
+     * Fires when a user subscribes to a SKU. Contains an entitlement object.
+     * @event DiscordMinimal#entitlementCreate
+     * @see {@link https://discord.com/developers/docs/monetization/entitlements#new-entitlement}
+     */
+    on(event: 'entitlementCreate', listener: (entitlement: DiscordEntitlement) => void): this;
+    /**
+     * Fires when a user's subscription renews for the next billing period. The ends_at field will have an updated value with the new expiration date.
+     * @event DiscordMinimal#entitlementUpdate
+     * @see {@link https://discord.com/developers/docs/monetization/entitlements#updated-entitlement}
+     */
+    on(event: 'entitlementUpdate', listener: (entitlement: DiscordEntitlement) => void): this;
+    /**
+     * Fires when a user's entitlement is deleted. Entitlement deletions are infrequent.
+     * @event DiscordMinimal#entitlementDelete
+     * @see {@link https://discord.com/developers/docs/monetization/entitlements#deleted-entitlement}
+     */
+    on(event: 'entitlementDelete', listener: (entitlement: DiscordEntitlement) => void): this;
+        
 
     on(event: string, listener: () => void): this;
 }
@@ -356,6 +376,9 @@ addEvent('THREAD_UPDATE', 'threadUpdate', (d) => DiscordChannel.fromJson(d));
 addEvent('THREAD_MEMBER_UPDATE', 'threadMemberUpdate', (d) => DiscordThreadMember.fromJson(d));
 addEvent('USER_UPDATE', 'userUpdate', (d) => DiscordUser.fromJson(d));
 addEvent('PRESENCE_UPDATE', 'presenceUpdate', (d) => DiscordPresence.fromJson(d));
+addEvent('ENTITLEMENT_CREATE', 'entitlementCreate', (d) => DiscordEntitlement.fromJson(d));
+addEvent('ENTITLEMENT_UPDATE', 'entitlementUpdate', (d) => DiscordEntitlement.fromJson(d));
+addEvent('ENTITLEMENT_DELETE', 'entitlementDelete', (d) => DiscordEntitlement.fromJson(d));
 
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
