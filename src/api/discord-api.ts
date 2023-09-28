@@ -15,6 +15,7 @@ import { RateLimitBucket } from './rate-limit-bucket';
 import DiscordMinimal from '../discord-minimal';
 import { MultiPartForm } from './multi-part-form';
 import { DiscordWebhookEditMessage } from '../data-objects/discord-webhook-edit-message';
+import { DiscordEntitlement } from '../data-objects/discord-entitlement';
 
 export const APIVersion = 10;
 const URL_BASE = `https://discord.com/api/v${APIVersion}`;
@@ -271,12 +272,21 @@ export async function deleteGuildApplicationCommand(appId: Snowflake, guildId: S
     return makeFetch(url, `/${cmdId}`, 'DELETE', () => { });
 }
 
+/**
+ * 
+ * @param channelId 
+ * @param messageId 
+ * @param name 1-100 character channel name
+ * @param autoArchiveDuration The thread will stop showing in the channel list after auto_archive_duration minutes of inactivity, can be set to: 60, 1440, 4320, 10080
+ * @param rateLimitPerUser Amount of seconds a user has to wait before sending another message (0-21600)
+ * @returns 
+ */
 export async function startThreadFromMessage(
     channelId: Snowflake,
     messageId: Snowflake,
-    name: string,                   // 1-100 character channel name
-    autoArchiveDuration?: number,   // The thread will stop showing in the channel list after auto_archive_duration minutes of inactivity, can be set to: 60, 1440, 4320, 10080
-    rateLimitPerUser?: number       // Amount of seconds a user has to wait before sending another message (0-21600)
+    name: string,
+    autoArchiveDuration?: number,
+    rateLimitPerUser?: number
 ): Promise<DiscordChannel> {
     const url = `/channels/${channelId}/messages`;
     return makeFetch(url, `/${messageId}/threads`, 'POST', DiscordChannel.fromJson, JSON.stringify({
@@ -284,4 +294,71 @@ export async function startThreadFromMessage(
         auto_archive_duration: autoArchiveDuration,
         rate_limit_per_user: rateLimitPerUser
     }));
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/monetization/entitlements#list-entitlements}
+ * @param applicationId 
+ * @param userId User ID to look up entitlements for
+ * @param skuIds Optional list of SKU IDs to check entitlements for
+ * @param before Retrieve entitlements before this time
+ * @param after Retrieve entitlements after this time
+ * @param limit Number of entitlements to return, 1-100, default 100
+ * @param guildId Guild ID to look up entitlements for
+ * @param excludeEnded Whether entitlements should be omitted
+ * @returns list of entitlements
+ */
+export async function getEntitlements(
+    applicationId: Snowflake,
+    userId?: Snowflake,
+    skuIds?: Snowflake[],
+    before?: Snowflake,
+    after?: Snowflake,
+    limit?: number,
+    guildId?: Snowflake,
+    excludeEnded?: boolean,
+): Promise<DiscordEntitlement[]> {
+    const url = `/applications/${applicationId}/entitlements`;
+    const params = `?${userId ? `user_id=${userId}&` : ''}\
+    ${skuIds ? `sku_ids=${skuIds.join(',')}&` : ''}\
+    ${before ? `before=${before}&` : ''}\
+    ${after ? `after=${after}&` : ''}\
+    ${limit ? `limit=${limit}&` : ''}\
+    ${guildId ? `guild_id=${guildId}&` : ''}\
+    ${excludeEnded ? `exclude_ended=${excludeEnded}&` : ''}`;
+
+    return makeFetch(url, params, 'GET', (json) => json.map(DiscordEntitlement.fromJson));
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/monetization/entitlements#create-test-entitlement}
+ * @param applicationId 
+ * @param skuId ID of the SKU to grant the entitlement to
+ * @param ownerId ID of the guild or user to grant the entitlement to
+ * @param ownerType 1 for a guild subscription, 2 for a user subscription
+ * @returns 
+ */
+export async function createTestEntitlement(
+    applicationId: Snowflake,
+    skuId: Snowflake,
+    ownerId: Snowflake,
+    ownerType: number,
+): Promise<void> {
+    const url = `/applications/${applicationId}/entitlements`;
+    return makeFetch(url, '', 'POST', () => { }, JSON.stringify({
+        sku_id: skuId,
+        owner_id: ownerId,
+        owner_type: ownerType
+    }));
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/monetization/entitlements#delete-test-entitlement}
+ * @param applicationId 
+ * @param entitlementId ID of the entitlement to delete
+ * @returns 
+ */
+export async function deleteTestEntitlement(applicationId: Snowflake, entitlementId: Snowflake): Promise<void> {
+    const url = `/applications/${applicationId}/entitlements/${entitlementId}`;
+    return makeFetch(url, '', 'DELETE', () => { });
 }
