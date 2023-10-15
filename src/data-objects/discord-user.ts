@@ -1,4 +1,5 @@
 import { Snowflake } from '../custom-types';
+import * as DiscordAPI from '../api/discord-api';
 
 export class DiscordUser {
 
@@ -52,5 +53,13 @@ export class DiscordUser {
 
     public setActivity(activity: string) {
         //TODO
+    }
+
+    public addGuildRole(guildId: Snowflake, roleId: Snowflake): Promise<void> {
+        return DiscordAPI.addGuildMemberRole(guildId, this.id, roleId);
+    }
+
+    public removeGuildRole(guildId: Snowflake, roleId: Snowflake): Promise<void> {
+        return DiscordAPI.removeGuildMemberRole(guildId, this.id, roleId);
     }
 }

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Snowflake } from '../custom-types/snowflake';
 import { DiscordUser } from './discord-user';
 
