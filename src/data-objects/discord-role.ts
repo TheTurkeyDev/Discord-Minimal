@@ -1,3 +1,4 @@
+import * as DiscordAPI from '../api/discord-api';
 import { Snowflake } from '../custom-types';
 
 export class DiscordRole {
@@ -58,5 +59,17 @@ export class DiscordRole {
         newInst.icon = json.icon;
         newInst.unicode_emoji = json.unicode_emoji;
         return newInst;
+    }
+
+    public createRole(guildId: Snowflake): Promise<DiscordRole> {
+        return DiscordAPI.createGuildRole(guildId, this);
+    }
+
+    public updateRole(guildId: Snowflake): Promise<DiscordRole> {
+        return DiscordAPI.modifyGuildRole(guildId, this, this.id);
+    }
+
+    public deleteRole(guildId: Snowflake): Promise<void> {
+        return DiscordAPI.deleteGuildRole(guildId, this.id);
     }
 }

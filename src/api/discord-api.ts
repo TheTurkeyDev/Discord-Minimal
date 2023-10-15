@@ -9,7 +9,8 @@ import {
     DiscordMessage,
     DiscordGatewayBotInfo,
     DiscordApplicationCommand,
-    DiscordInteractionResponseMessageData
+    DiscordInteractionResponseMessageData,
+    DiscordRole
 } from '../data-objects';
 import { RateLimitBucket } from './rate-limit-bucket';
 import DiscordMinimal from '../discord-minimal';
@@ -361,4 +362,50 @@ export async function createTestEntitlement(
 export async function deleteTestEntitlement(applicationId: Snowflake, entitlementId: Snowflake): Promise<void> {
     const url = `/applications/${applicationId}/entitlements/${entitlementId}`;
     return makeFetch(url, '', 'DELETE', () => { });
+}
+
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-roles}
+ * @param guildId ID of the guild to get the roles of
+ * @returns list of roles
+ */
+export async function getGuildRoles(guildId: Snowflake): Promise<DiscordRole[]> {
+    const url = `/guilds/${guildId}/roles`;
+    return makeFetch(url, '', 'GET', (json) => json.map(DiscordRole.fromJson));
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#create-guild-role}
+ * @param guildId ID of the guild to create the role in
+ * @param role data of the role to create
+ * @returns list of roles
+ */
+export async function createGuildRole(guildId: Snowflake, role: DiscordRole): Promise<DiscordRole> {
+    const url = `/guilds/${guildId}/roles`;
+    return makeFetch(url, '', 'POST', DiscordRole.fromJson, JSON.stringify(role));
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-role}
+ * @param guildId ID of the guild to modify the role in
+ * @param role data to update the role with
+ * @param roleId ID of the role to modify. If not specified, will use the id of the passed role parameter
+ * @returns list of roles
+ */
+export async function modifyGuildRole(guildId: Snowflake, role: DiscordRole, roleId?: Snowflake): Promise<DiscordRole> {
+    const url = `/guilds/${guildId}/roles`;
+    return makeFetch(url, `/${roleId ?? role.id}`, 'PATCH', DiscordRole.fromJson, JSON.stringify(role));
+}
+
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#delete-guild-role}
+ * @param guildId ID of the guild to modify the role in
+ * @param roleId ID of the role to delete
+ * @returns list of roles
+ */
+export async function deleteGuildRole(guildId: Snowflake, roleId: Snowflake): Promise<void> {
+    const url = `/guilds/${guildId}/roles`;
+    return makeFetch(url, `/${roleId}`, 'DELETE', () => {});
 }
