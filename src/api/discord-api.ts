@@ -233,6 +233,18 @@ export async function editMessage(
     return makeFetch(url, '', 'PATCH', DiscordMessage.fromJson, JSON.stringify(message));
 }
 
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/channel#delete-message}
+ * @param channelId ID of the channel
+ * @param messageId ID of the message to delete
+ * @returns 
+ */
+export async function deleteMessage(channelId: Snowflake, messageId: Snowflake): Promise<void> {
+    const url = `/channels/${channelId}/messages/${messageId}`;
+    return makeFetch(url, '', 'DELETE', () => {});
+}
+
 export async function addReaction(channelId: Snowflake, messageId: Snowflake, emoji: string): Promise<void> {
     const url = `/channels/${channelId}/messages`;
     return makeFetch(url, `/${messageId}/reactions/${encodeURIComponent(emoji)}/@me`, 'PUT', () => { });
