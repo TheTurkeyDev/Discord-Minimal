@@ -1,4 +1,5 @@
 import * as DiscordAPI from '../api/discord-api';
+import { getOriginalInteractionResponse } from '../api/discord-api';
 import {
     DiscordComponentType,
     DiscordInteractionCallbackType,
@@ -189,5 +190,9 @@ export class DiscordInteraction {
 
     public editOriginalInteraction(data: DiscordWebhookEditMessage): Promise<void> {
         return DiscordAPI.editOriginalInteraction(this.application_id, this.token, data);
+    }
+
+    public getOriginalInteractionResponse(): Promise<DiscordMessage> {
+        return getOriginalInteractionResponse(this.application_id, this.token);
     }
 }

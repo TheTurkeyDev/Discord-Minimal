@@ -219,6 +219,25 @@ export async function editOriginalInteraction(
     }
 }
 
+export async function getOriginalInteractionResponse(
+    applicationId: Snowflake,
+    interactionToken: string
+): Promise<DiscordMessage> {
+    const url = `${URL_BASE}/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+    const resp = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'authorization': `Bot ${DiscordMinimal.token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const json = await resp.json();
+    if (!resp.ok)
+        throw new DiscordAPIError(json.code, json.message, json.errors, 'PATCH', url);
+    return DiscordMessage.fromJson(json);
+}
+
 export async function createMessage(channelId: Snowflake, message: DiscordMessageCreate): Promise<DiscordMessage> {
     const url = `/channels/${channelId}/messages`;
     return makeFetch(url, '', 'POST', DiscordMessage.fromJson, JSON.stringify(message));
