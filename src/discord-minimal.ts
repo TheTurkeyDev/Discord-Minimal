@@ -61,6 +61,10 @@ export declare interface DiscordMinimal {
      */
     on(event: 'debug', listener: (message: string) => void): this;
     /**
+ * @event DiscordMinimal#error
+ */
+    on(event: 'error', listener: (message: string) => void): this;
+    /**
      * The ready event is dispatched when a client has completed the initial handshake with the gateway (for new sessions)
      * @event DiscordMinimal#ready
      * @see {@link https://discord.com/developers/docs/topics/gateway-events#ready}
@@ -316,7 +320,7 @@ export declare interface DiscordMinimal {
      * @see {@link https://discord.com/developers/docs/monetization/entitlements#deleted-entitlement}
      */
     on(event: 'entitlementDelete', listener: (entitlement: DiscordEntitlement) => void): this;
-        
+
 
     on(event: string, listener: () => void): this;
 }
@@ -402,8 +406,8 @@ export class DiscordMinimal extends events.EventEmitter {
     public async login(token: string) {
         DiscordMinimal.token = token;
 
-        const gatewayInfo = await getGatewayBot().catch((e) => {
-            console.log(e);
+        const gatewayInfo = await getGatewayBot().catch(e => {
+            this.error(e);
             return new DiscordGatewayBotInfo({});
         });
 
@@ -433,7 +437,7 @@ export class DiscordMinimal extends events.EventEmitter {
         );
         ws.addEventListener('close', (event: CloseEvent) => this.onClose(event, shardId));
         ws.addEventListener('open', (event: any) => this.onOpen(event, shardId));
-        ws.addEventListener('error', (error: any) => console.error(error));
+        ws.addEventListener('error', (error: any) => this.error(error));
     }
 
     private onMessage(wsd: WebSocketData, event: MessageEvent, shardNum: number) {
@@ -478,12 +482,16 @@ export class DiscordMinimal extends events.EventEmitter {
                 //Heartbeat ACK
                 break;
             default:
-                console.log('[Discord] Unknown OP Code: ' + message.op);
+                this.error('Unknown OP Code: ' + message.op);
         }
     }
 
     private debug(message: string) {
         this.emit('debug', message);
+    }
+
+    private error(message: string) {
+        this.emit('error', message);
     }
 
     private onOpen(event: WebSocket.Event, shardId: number) {
@@ -512,7 +520,6 @@ export class DiscordMinimal extends events.EventEmitter {
                 this.initReconnect(shardId);
                 break;
             default:
-                console.log('[DISCORD] Closed: ' + code + ' - ' + event.reason);
                 this.initReconnectFull();
                 break;
         }
@@ -531,7 +538,7 @@ export class DiscordMinimal extends events.EventEmitter {
                 this.onMessage(socketData, event, shardId),
             );
             ws.addEventListener('close', (event: CloseEvent) => this.onClose(event, shardId));
-            ws.addEventListener('error', (error: any) => console.error(error));
+            ws.addEventListener('error', (error: any) => this.error(error));
         }
     }
 
