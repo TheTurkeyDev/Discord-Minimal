@@ -36,20 +36,18 @@ export class DiscordPremiumGuildSubscription {
     * Partial user object	
     * The user this premium guild subscription is for
     */
-    public user: DiscordUser;
+    public user?: DiscordUser;
 
     constructor(
         id: Snowflake,
         guild_id: Snowflake,
         user_id: Snowflake,
         ended: boolean,
-        user: DiscordUser,
     ) {
         this.id = id;
         this.guild_id = guild_id;
         this.user_id = user_id;
         this.ended = ended;
-        this.user = user;
     }
 
     static fromJson(json: any): DiscordPremiumGuildSubscription {
@@ -57,12 +55,12 @@ export class DiscordPremiumGuildSubscription {
             json.id,
             json.guild_id,
             json.user_id,
-            json.ended,
-            DiscordUser.fromJson(json.user),
+            json.ended
         );
 
         newInst.ends_at = json.ends_at;
         newInst.pause_ends_at = json.pause_ends_at;
+        newInst.user = json.user && DiscordUser.fromJson(json.user);
         return newInst;
     }
 

@@ -6,6 +6,7 @@ export * from './discord-application-command-permissions';
 export * from './discord-channel';
 export * from './discord-channel-pins-update';
 export * from './discord-component';
+export * from './discord-entitlement';
 export * from './discord-embed';
 export * from './discord-embed-image';
 export * from './discord-emoji';
