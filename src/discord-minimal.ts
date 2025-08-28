@@ -11,31 +11,29 @@ import {
     DiscordChannel,
     DiscordChannelPinsUpdate,
     DiscordGatewayBotInfo,
+    DiscordGiftCode,
+    DiscordGuild,
     DiscordGuildMember,
     DiscordGuildMemberRemove,
     DiscordGuildMembersChunk,
     DiscordGuildMemberUpdate,
     DiscordGuildRoleDelete,
     DiscordGuildRoleUpsert,
-    DiscordMessageReactionRemove,
-    DiscordMessageReactionRemoveAll,
-    DiscordMessageReactionRemoveEmoji,
-    DiscordPresence,
-    DiscordStageInstance,
-    DiscordThreadListSync,
-    DiscordUser,
-} from './data-objects';
-import { GatewayPayload, HeartBeatPayload, IdentifyPayload, ResumePayload } from './payloads';
-import {
-    DiscordGiftCode,
-    DiscordGuild,
     DiscordInteraction,
     DiscordMessage,
     DiscordMessageDelete,
     DiscordMessageDeleteBulk,
     DiscordMessageReactionAdd,
+    DiscordMessageReactionRemove,
+    DiscordMessageReactionRemoveAll,
+    DiscordMessageReactionRemoveEmoji,
+    DiscordPresence,
     DiscordReady,
-} from '.';
+    DiscordStageInstance,
+    DiscordThreadListSync,
+    DiscordUser,
+} from './data-objects';
+import { GatewayPayload, HeartBeatPayload, IdentifyPayload, ResumePayload } from './payloads';
 import { DiscordMessageUpdate } from './data-objects/discord-message-update';
 import { DiscordThreadMember } from './data-objects/discord-thread-member';
 import { DiscordEntitlement } from './data-objects/discord-entitlement';
