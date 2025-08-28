@@ -499,7 +499,7 @@ addEvent('GIFT_CODE_UPDATE', 'giftCodeUpdate', DiscordGiftCode.fromJson);
 export class DiscordMinimal extends events.EventEmitter {
     private websocket: WebSocketData[] = [];
     private heartbeats: {
-        timer?: NodeJS.Timer
+        timer?: NodeJS.Timeout
         lastSend: Date,
         lastReceive: Date,
     }[] = [];
