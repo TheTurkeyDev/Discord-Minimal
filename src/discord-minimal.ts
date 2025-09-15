@@ -548,7 +548,7 @@ export class DiscordMinimal extends events.EventEmitter {
         ws.addEventListener('message', (event: MessageEvent) => this.onMessage(wsd, event, shardId));
         ws.addEventListener('close', (event: CloseEvent) => this.onClose(event, shardId));
         ws.addEventListener('open', (event: any) => this.onOpen(event, shardId));
-        ws.addEventListener('error', (error: any) => this.error(error));
+        ws.addEventListener('error', (error: WebSocket.ErrorEvent) => this.error(`Gateway socket init error ${JSON.stringify(error)}`));
     }
 
     private onMessage(wsd: WebSocketData, event: MessageEvent, shardNum: number) {
@@ -648,7 +648,7 @@ export class DiscordMinimal extends events.EventEmitter {
             socketData.ws = ws;
             ws.addEventListener('message', (event: MessageEvent) => this.onMessage(socketData, event, shardId));
             ws.addEventListener('close', (event: CloseEvent) => this.onClose(event, shardId));
-            ws.addEventListener('error', (error: any) => this.error(error));
+            ws.addEventListener('error', (error: WebSocket.ErrorEvent) => this.error(`WebSocket Error! ${JSON.stringify(error)}`));
         }
     }
 
