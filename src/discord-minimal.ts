@@ -521,7 +521,6 @@ export class DiscordMinimal extends events.EventEmitter {
             return new DiscordGatewayBotInfo({});
         });
 
-        gatewayInfo.url;
         this.shards = gatewayInfo.shards;
 
         const interval = setInterval(() => {
@@ -627,6 +626,7 @@ export class DiscordMinimal extends events.EventEmitter {
 
         switch (code) {
             case 4000:
+            case 4003: // Not authenticated
             case 4008:
             case 4009:
                 this.initReconnect(shardId);
@@ -648,7 +648,10 @@ export class DiscordMinimal extends events.EventEmitter {
             socketData.ws = ws;
             ws.addEventListener('message', (event: MessageEvent) => this.onMessage(socketData, event, shardId));
             ws.addEventListener('close', (event: CloseEvent) => this.onClose(event, shardId));
-            ws.addEventListener('error', (error: WebSocket.ErrorEvent) => this.error(`WebSocket Error! ${JSON.stringify(error)}`));
+            ws.addEventListener('error', (error: WebSocket.ErrorEvent) => {
+                this.error(`WebSocket Error! ${JSON.stringify(error)}`);
+                ws.close();
+            });
         }
     }
 
